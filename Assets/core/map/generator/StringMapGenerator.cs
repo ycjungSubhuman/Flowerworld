@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Sprache;
 
 namespace Core.Map.Generator
 {
@@ -37,7 +38,10 @@ namespace Core.Map.Generator
      * 
      *     ...
      * 
-     * 블럭이 여러 개 정의될 경우, 가장 먼저 정의된 block이 메인 맵으로 정해진다. 나머지는 드래그 가능한 서브 맵으로 할당된다.
+     * 유의사항)
+     * 1. 블럭이 여러 개 정의될 경우, 가장 먼저 정의된 block이 메인 맵으로 정해진다. 나머지는 드래그 가능한 서브 맵으로 할당된다.
+     * 2. 빈 row는 모두 EMPTY인 한 row로 여겨진다.
+     * 3. 각 row의 길이는 똑같지 않아도 된다.
      */
     public class StringMapGenerator : MapGenerator
     {
