@@ -36,6 +36,8 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+InitTestScene*
+
 [merge]
 tool = unityyamlmerge
 

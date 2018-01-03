@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace Core.Map
@@ -9,9 +10,23 @@ namespace Core.Map
     {
         private Cell [,] map;
 
-        public MapBlock(Vector2Int size)
+        public MapBlock(IEnumerable<IEnumerable<Cell>> block)
         {
-            map = new Cell [size.x, size.y];
+            var iteratedBlock = block.Select (row => row.ToArray ()).ToArray ();
+            var rowCount = iteratedBlock.Count ();
+            var maxRowLength = iteratedBlock.Select (row => row.Count ()).Max ();
+
+            map = new Cell [rowCount, maxRowLength];
+
+            for(int i=0; i<rowCount; i++)
+            {
+                var row = iteratedBlock [i];
+                for(int j=0; j<row.Count(); j++)
+                {
+                    map [i, j] = row [j];
+                    map [i, j].Position = new Vector2Int (i, j);
+                }
+            }
         }
 
         public Cell GetCell(Vector2Int position)
@@ -21,17 +36,15 @@ namespace Core.Map
 
         public class Cell
         {
-            public Vector2Int Position { get { return position; } } // 왼쪽 위가 (0, 0)인 좌표계에서 표시된 칸의 위치.
+            public Vector2Int Position { get; set; } // 왼쪽 위가 (0, 0)인 좌표계에서 표시된 칸의 위치.
             public Label CellLabel { get { return label; } }
 
-            private Vector2Int position;
             private Label label;
-            private MapBlock parent;
+            private MapBlock Parent { get; set; }
 
-            public Cell(MapBlock map, Label label, Vector2Int position)
+            public Cell(Label label)
             {
                 this.label = label;
-                this.position = position;
             }
 
             /* 각 칸의 색, 또는 역할을 나타내는 라벨 */
@@ -90,6 +103,11 @@ namespace Core.Map
                 public Label Or(Label label)
                 {
                     return new Label (label.value | this.value);
+                }
+
+                public static Label Combined(IEnumerable<Label> labels)
+                {
+                    return labels.Aggregate ((a, b) => a.Or(b));
                 }
             }
         }
