@@ -62,25 +62,31 @@ module Main where
     update dstDir event =
         case event of
             Added src t -> do
-                let dst = src2dst src dstDir
-                putStrLn $ "<" ++ (readDayTime t) ++ ">" ++ " File Added " ++ src
-                threadDelay 1000
-                compile src dst
+                if ".map" == (takeExtension src) then do
+                    let dst = src2dst src dstDir
+                    putStrLn $ "<" ++ (readDayTime t) ++ ">" ++ " File Added " ++ src
+                    threadDelay 1000
+                    compile src dst
+                else return ()
             Modified src t -> do
-                let dst = src2dst src dstDir
-                putStrLn $ "<" ++ (readDayTime t) ++ ">" ++ " File Modified " ++ src
-                compile src dst
+                if ".map" == (takeExtension src) then do
+                    let dst = src2dst src dstDir
+                    putStrLn $ "<" ++ (readDayTime t) ++ ">" ++ " File Modified " ++ src
+                    compile src dst
+                else return ()
             Removed src t -> do
-                let dst = src2dst src dstDir
-                putStrLn $ "<" ++ (readDayTime t) ++ ">" ++ " File Removed " ++ src
-                removeFile dst
+                if ".map" == (takeExtension src) then do
+                    let dst = src2dst src dstDir
+                    putStrLn $ "<" ++ (readDayTime t) ++ ">" ++ " File Removed " ++ src
+                    removeFile dst
+                else return ()
 
     compileAll :: FilePath -> FilePath -> IO()
     compileAll srcDir dstDir = do
         oldFiles <- listDirectory dstDir
         (\f -> removeFile $ dstDir </> f) `mapM_` oldFiles
         files <- listDirectory srcDir
-        let targets = (\f -> (srcDir </> f, src2dst f dstDir)) `map` files
+        let targets = (\f -> (srcDir </> f, src2dst f dstDir)) `map` ((\f -> ".map" == (takeExtension f)) `filter` files)
         (\(src, dst) -> compile src dst) `mapM_` targets
 
     src2dst :: FilePath -> FilePath -> FilePath
