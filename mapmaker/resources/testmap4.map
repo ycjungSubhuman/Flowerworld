@@ -1,0 +1,20 @@
+﻿
+
+
+title 테스트맵 4
+
+type CONSTRUCT
+pattern A,B,C,D
+
+
+block
+    A ,  START|   B   |   C   |   D   |     
+           |   A   |     
+
+       
+       
+           |   A   | 
+
+           |   G,GOAL   | 
+
+

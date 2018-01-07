@@ -1,0 +1,11 @@
+title hohoho
+type NORMAL
+pattern A,B,C,D
+block
+    A,START|   B   |   C   |   D   |
+           |   A   |
+           |   A   | 
+block
+    A,START|   B   |   C   |   D   |
+           |   A   |
+           |   A   | 

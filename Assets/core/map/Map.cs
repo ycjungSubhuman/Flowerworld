@@ -4,22 +4,25 @@ using System.Linq;
 
 namespace Core.Map
 {
-    using Generator;
 
     /** 스테이지 하나에 해당하는 맵을 나타낸다. */
     public class Map
     {
-        public MapBlock Main;
-        public List<MapBlock> SubMaps = new List<MapBlock>();
-        public string Title { get; set; }
-        public Type MapType { get; set; }
+        public MapBlock main;
+        public List<MapBlock> subMaps = new List<MapBlock>();
+        public List<Label> pattern = new List<Label>();
+        public string title { get; set; }
+        public Type mapType { get; set; }
 
-        public Map(string title, Type type, IEnumerable<MapBlock> blocks)
+        public Map() { }
+
+        public Map(string title, Type type, IEnumerable<Label> pattern, IEnumerable<MapBlock> blocks)
         {
-            Title = title;
-            MapType = type;
-            Main = blocks.First ();
-            SubMaps = blocks.Skip (1).ToList ();
+            this.title = title;
+            this.mapType = type;
+            this.main = blocks.First ();
+            this.subMaps = blocks.Skip (1).ToList ();
+            this.pattern = pattern.ToList();
         }
 
         public enum Type

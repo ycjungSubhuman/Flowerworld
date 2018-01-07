@@ -1,0 +1,8 @@
+
+title hohoh
+pattern A,B,C,D
+block
+    A,START|   B   |   C   |   D   |
+           |   A   |
+           |   A   | 
+

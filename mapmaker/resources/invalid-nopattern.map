@@ -1,0 +1,7 @@
+title 테스트맵 1
+type NORMAL
+block
+    A,START|   B   |   C   |   D   |
+           |   A   |
+           |   A,GOAL   | 
+
