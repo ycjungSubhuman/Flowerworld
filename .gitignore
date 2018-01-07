@@ -45,4 +45,7 @@ tool = unityyamlmerge
 trustExitCode = false
 cmd = '<path to UnityYAMLMerge>' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
 
+# vim
+*~
+
 # End of https://www.gitignore.io/api/unity

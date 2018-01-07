@@ -1,9 +1,10 @@
+﻿
 
-
-title 테스트맵 2
+title 테스트맵 22
 
 type CONSTRUCT
 pattern A,B,C,D
+
 
 
 block

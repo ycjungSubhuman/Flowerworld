@@ -45,6 +45,10 @@ executables:
     - mapmaker
     - bytestring
     - optparse-applicative
+    - fsnotify
+    - directory
+    - filepath
+    - time
 
 tests:
   mapmaker-test:
