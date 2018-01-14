@@ -1,0 +1,11 @@
+title Escape 1
+type NORMAL
+pattern C,A,C,A,B
+block
+        A | B | B | C | A | B | C,GOAL |
+        C | A | C | A | B | C | B |
+        B | A | A | C | B | A | C |
+        C | C | B |   | A | C | A |
+        A | B | C | B | C | B | B |
+        C | A | C | C | A | A | C |
+START,ANY | C | B | A | C | B | A |

@@ -1,8 +1,0 @@
-title 테스트맵 1
-type NORMAL
-pattern A,B,C,D
-block
-    A,START|   B   |   C   |   D   |
-           |   C   |
-           |   A,GOAL   | 
-

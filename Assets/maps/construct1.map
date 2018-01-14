@@ -1,0 +1,19 @@
+title Construct 1
+type CONSTRUCT
+pattern B,C,C,A
+block
+        A |   |   | B | A | C | A,GOAL |
+        B |   |   |   | C | C | B |
+        C | C |   |   | A | B | A |
+        A | A |   |   |   | B | C |
+        C | C | B |   |   | B | C |
+        B | A | C |   |   |   | A |
+START,ANY | B | C | A |   |   | B |
+
+block
+C | A |
+B | C |
+
+block
+C | A |
+A | B |
