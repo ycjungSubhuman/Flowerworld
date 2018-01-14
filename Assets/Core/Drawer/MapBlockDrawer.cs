@@ -33,7 +33,7 @@ namespace Assets.Core.Drawer
                 var rowGameObject = new GameObject ();
                 rowGameObject.transform.parent = rootGameObject.transform;
                 rowGameObject.transform.localPosition = 
-                    new Vector2 (0, i*(cellHeight+verticalSpace));
+                    new Vector2 (0, -i*(cellHeight+verticalSpace));
                 for (int j=0; j<row.Count; j++)
                 {
                     var cell = row [j];

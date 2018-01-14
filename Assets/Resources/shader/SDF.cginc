@@ -21,6 +21,17 @@ float sdfLine(float2 p1, float2 p2, float width, float2 p)
 	return dist - width;
 }
 
+float sdfBox(float2 leftBottom, float2 rightTop, float2 p) 
+{
+	float dLeft = leftBottom.x - p.x;
+	float dRight = p.x - rightTop.x;
+	float dTop = p.y - rightTop.y;
+	float dBottom = leftBottom.y - p.y;
+	float vertical = sdfIntersect(dLeft, dRight);
+	float horizontal = sdfIntersect(dTop, dBottom);
+	return sdfIntersect(vertical, horizontal);
+}
+
 /* Don't Overuse this function. It is heavy(uses fwidth) */
 fixed4 sdfRenderFill(float4 color, float d) 
 {

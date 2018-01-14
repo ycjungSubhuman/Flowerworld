@@ -32,6 +32,8 @@ namespace Assets.Core.Data
         public static readonly Label ANY = A.Or (B).Or (C).Or (D).Or (E).Or (F).Or (G);       // 아무 색이나 다 허용. 단, 알파벳 레이블만 허용한다.
         public static readonly Label GOAL = genLabel (1 << 30);
 
+        public int Value { get { return value; } }
+
         [JsonProperty]
         private int value;
 
