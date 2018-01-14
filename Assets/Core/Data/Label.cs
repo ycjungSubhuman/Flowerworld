@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Core.Map
+namespace Assets.Core.Data
 {
     /* 각 칸의 색, 또는 역할을 나타내는 라벨 */
     public class Label

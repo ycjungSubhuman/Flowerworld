@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Core.Map
+namespace Assets.Core.Data
 {
     public class Cell
     {

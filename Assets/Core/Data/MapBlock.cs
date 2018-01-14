@@ -4,13 +4,12 @@ using System.Linq;
 using Newtonsoft.Json;
 
 
-namespace Core.Map
+namespace Assets.Core.Data
 {
     /* Map 조각 하나를 표현하는 데이터 구조. */
     public class MapBlock
     {
-        [JsonProperty]
-        private List<List<Cell>> mat;
+        public List<List<Cell>> mat;
 
         public MapBlock(List<List<Cell>> block)
         {
