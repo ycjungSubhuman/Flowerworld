@@ -4,7 +4,8 @@
 	{
 		_LIneColor ("Line Color", Color) = (0.1, 0.2, 0.6)
 		_BorderWidth ("Border Width", Float) = 0.2
-		_Speed ("Speed", Float) = 0.
+		_Thickness ("Thickness", Float) = 0.3
+		_Speed ("Speed", Float) = 0.5
 	}
 	SubShader
 	{
@@ -19,7 +20,6 @@
 			#pragma fragment frag
 			#include "UnityCG.cginc"
 			#include "SDF.cginc"
-			#define COUNT 100
 
 			struct appdata
 			{
@@ -44,39 +44,22 @@
 			float4 _LIneColor;
 			float _BorderWidth;
 			float _Speed;
-
-			float rectOf(float ind, float2 uv) 
-			{
-				float t = _Time.y;
-				float pos = sin(0.06*ind - _Speed*t);
-
-				float2 rectLeftBottom = float2(pos, pos);
-				float2 rectRightTop = float2(1-pos, 1-pos);
-				return sdfBox(rectLeftBottom, rectRightTop, uv);
-			}
+			float _Thickness;
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
 				float2 uv = i.uv;
 
-				float d = 10000000;
-				for (uint j=0; j<COUNT/2; j++) 
-				{
-					float ind1 = float(2*j);
-					float ind2 = float(2*j+1);
-					float rect1 = rectOf(ind1, uv);
-					float rect2 = rectOf(ind2, uv);
-					float rect = sdfDiff(rect1, rect2);
-					d = sdfUnion(rect, d);
-				}
-
-				float4 bg = float4(1,1,1,1);
+				float2 offset = abs(uv - float2(0.5, 0.5));
+				float r = max(offset.x, offset.y);
+				float t = _Time.y;
+				float v = step(0, sin((r - _Speed*t)/(0.1*_Thickness)));
+				float4 layer0 = float4(v, v, v, v);
 				float mask = sdfBox(float2(_BorderWidth, _BorderWidth), float2(1-_BorderWidth, 1-_BorderWidth), uv);
-				float res = sdfDiff(d, mask);
-				float4 layer1 = sdfRenderFill(_LIneColor, res);
+				float4 layer1 = sdfRenderFill(float4(0,0,0,1), mask);
+				float4 res = float4(layer0.rgb, min(layer0.a, 1-layer1.a));
 
-				float4 result = float4(lerp(bg.rgb, layer1.rgb, layer1.a), layer1.a);
-				return result;
+				return res;
 			}
 			ENDCG
 		}
