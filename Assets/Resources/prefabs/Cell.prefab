@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33766737860560494}
   - component: {fileID: 64222741209831874}
   - component: {fileID: 23396157141250094}
-  - component: {fileID: 114726606870783754}
+  - component: {fileID: 95029194162870236}
   m_Layer: 0
   m_Name: Cell
   m_TagString: Untagged
@@ -98,14 +98,20 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &114726606870783754
-MonoBehaviour:
+--- !u!95 &95029194162870236
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1752406619000166}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4acce69b154d36e499af3a8320cffa86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b85f888154ca70b44bc981adc4dbf219, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1

@@ -54,7 +54,7 @@
 				float r = max(offset.x, offset.y);
 				float t = _Time.y;
 				float v = step(0, sin((r - _Speed*t)/(0.1*_Thickness)));
-				float4 layer0 = float4(v, v, v, v);
+				float4 layer0 = float4(_LIneColor.rgb, v);
 				float mask = sdfBox(float2(_BorderWidth, _BorderWidth), float2(1-_BorderWidth, 1-_BorderWidth), uv);
 				float4 layer1 = sdfRenderFill(float4(0,0,0,1), mask);
 				float4 res = float4(layer0.rgb, min(layer0.a, 1-layer1.a));
