@@ -22,7 +22,7 @@ namespace Assets.Core.Drawer
             root.AddComponent<RectTransform> ();
             for(int i=0; i<pattern.Count(); i++) {
                 var uiCell = cellDrawer.Draw (pattern [i], i);
-                uiCell.transform.parent = root.transform;
+                uiCell.transform.SetParent(root.transform);
                 uiCell.transform.localPosition = new Vector2 (i*0.8f, 0f);
             }
             return root;

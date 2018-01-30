@@ -5,6 +5,7 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Assets.Core.Data;
 using Assets.Core.Drawer;
+using Assets.Core.Sound;
 
 public class MapScript : MonoBehaviour {
 
@@ -23,6 +24,7 @@ public class MapScript : MonoBehaviour {
 
         var player = GameObject.Instantiate(Resources.Load<GameObject> ("prefabs/player"));
         var playerScript = player.GetComponent<PlayerControlScript> ();
+        playerScript.soundController = new PlayerSoundController (player);
         playerScript.map = map;
         playerScript.mapGameObject = mapGameObject;
     }

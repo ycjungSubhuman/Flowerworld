@@ -4,17 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Core.Data;
 using Assets.Util;
+using Assets.Core.Sound;
+using Assets.Core.Animation;
 
 public class PlayerControlScript : MonoBehaviour
 {
+    /* Initialize public members on instantiation */
     public Map map;
     public GameObject mapGameObject;
-
-    public AudioClip Refuse;
-    public AudioClip Restart;
-    public AudioClip A;
-    public AudioClip B;
-    public AudioClip C;
+    public IPlayerSoundController soundController;
 
     private Vector2Int pos;
     private int patternIndex = -1;
@@ -24,11 +22,6 @@ public class PlayerControlScript : MonoBehaviour
         pos = getInitPosition ();
 
         Debug.Assert (mapGameObject != null);
-        soundMap = new Dictionary<int, AudioClip>() {
-            { Label.A.Value, A },
-            { Label.B.Value, B },
-            { Label.C.Value, C },
-        };
         updateCurrentLabel ();
     }
 
@@ -75,7 +68,7 @@ public class PlayerControlScript : MonoBehaviour
         updatePlayerPosition (getInitPosition());
         patternIndex = -1;
         updateCurrentLabel ();
-        gameObject.GetComponent<AudioSource> ().PlayOneShot (Restart, 0.4f);
+        soundController.OnRestart ();
     }
 
     void updatePlayerPosition(Vector2Int newPos)
@@ -104,40 +97,23 @@ public class PlayerControlScript : MonoBehaviour
         Vector2 newScenePos = targetCell.transform.position;
 
         StopAllCoroutines ();
-        StartCoroutine (MoveInterpolate(currScenePos, newScenePos, 0.5f));
+        StartCoroutine (Move.QuadOut(gameObject, currScenePos, newScenePos, 0.5f));
 
         this.pos = newPos;
         gameObject.GetComponent<Animator> ().SetTrigger ("Move");
         targetCell.GetComponent<Animator> ().SetTrigger ("Stomp");
     }
 
-    Dictionary<int, AudioClip> soundMap;
     void playMoveSound()
     {
         var label = map.pattern [patternIndex];
-        gameObject.GetComponent<AudioSource> ().PlayOneShot (soundMap[label.Value]);
-    }
-
-    IEnumerator MoveInterpolate(Vector2 start, Vector2 goal, float duration)
-    {
-        float t = 0;
-        float time = 0;
-
-        while(time <= duration)
-        {
-            time += Time.deltaTime;
-            t = time / duration;
-            gameObject.transform.position = Vector2.Lerp (start, goal, -(t-1)*(t-1)+1);
-            yield return null;
-        }
-
-        gameObject.transform.position = goal;
+        soundController.OnLabelSound (label);
     }
 
     void refuseMove()
     {
         gameObject.GetComponent<Animator> ().SetTrigger ("Refuse");
-        gameObject.GetComponent<AudioSource> ().PlayOneShot (Refuse);
+        soundController.OnRefuse ();
     }
 
     void updateCurrentLabel()
@@ -169,11 +145,5 @@ public class PlayerControlScript : MonoBehaviour
         var validLabel = map.pattern [patternIndex];
         var actualLabel = map.LabelOf (newPos);
         return actualLabel.FallIn (validLabel);
-    }
-
-    void Init(Map map, GameObject mapGameObject)
-    {
-        this.map = map;
-        this.mapGameObject = mapGameObject;
     }
 }
