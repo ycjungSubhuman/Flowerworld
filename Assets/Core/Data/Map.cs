@@ -48,10 +48,10 @@ namespace Assets.Core.Data
             return labels.First ();
         }
 
-        public IEnumerable<Vector2Int> LabelGlobalPositionsOf(Label l)
+        public IEnumerable<Vector2Int> GlobalPositionsOf(Label l)
         {
             return activeMaps.SelectMany (mb => 
-                    mb.LabelLocalPositionsOf (l)
+                    mb.LocalPositionsOf (l)
                         .Select (pos => pos + offsetMap [mb]));
         }
 

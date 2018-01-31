@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-namespace Assets.Core.Animation
+namespace Assets.Core.Animation.Coroutines
 {
     /** GameObject의 움직임을 나타내는 코루틴들의 모음 */
     public class Move

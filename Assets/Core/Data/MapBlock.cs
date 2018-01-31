@@ -21,7 +21,7 @@ namespace Assets.Core.Data
             return mat [position.x] [position.y].label;
         }
 
-        public IEnumerable<Vector2Int> LabelLocalPositionsOf(Label l)
+        public IEnumerable<Vector2Int> LocalPositionsOf(Label l)
         {
             List<Vector2Int> result = new List<Vector2Int> ();
             for (int i=0; i<mat.Count; i++)

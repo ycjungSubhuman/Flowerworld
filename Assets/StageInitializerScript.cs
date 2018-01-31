@@ -6,27 +6,39 @@ using Newtonsoft.Json;
 using Assets.Core.Data;
 using Assets.Core.Drawer;
 using Assets.Core.Sound;
+using Assets.Core.Animation;
 
-public class MapScript : MonoBehaviour {
+//씬 초기화 후 게임을 초기화해주는 스크립트
+public class StageInitializerScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        // 맵 불러오기
         TextAsset json = Resources.Load<TextAsset> ("maps/map1");
         var map = JsonConvert.DeserializeObject<Map> (json.text);
         map.Init ();
+
+        // 맵 Scene에 그리기
         var mapDrawer = new MapDrawer(new MapBlockDrawer(new CellDrawer()));
         var mapGameObject = mapDrawer.Draw (map);
+        mapGameObject.AddComponent<StageScript> ();
+        var stageScript = mapGameObject.GetComponent<StageScript> ();
+        stageScript.map = map;
+        stageScript.mapAnimationController = new MapAnimationController (mapGameObject);
+
+
+        //UI 생성
         var uiPatternDrawer = new UIPatternDrawer (new UICellDrawer ());
         var uiPattern = uiPatternDrawer.Draw (map.pattern);
         uiPattern.transform.parent = GameObject.Find ("PatternRoot").transform;
         uiPattern.GetComponent<RectTransform>().anchoredPosition = new Vector2 (0, 0);
         uiPattern.name = "PatternUI";
 
+        //플레이어 생성 및 초기화 
         var player = GameObject.Instantiate(Resources.Load<GameObject> ("prefabs/player"));
         var playerScript = player.GetComponent<PlayerControlScript> ();
+        playerScript.stageRoot = mapGameObject;
         playerScript.soundController = new PlayerSoundController (player);
-        playerScript.map = map;
-        playerScript.mapGameObject = mapGameObject;
     }
 	
 	// Update is called once per frame
