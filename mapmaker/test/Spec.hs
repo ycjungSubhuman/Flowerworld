@@ -44,16 +44,14 @@ testMapGroundTruth3 = ([A,B,C,D],
 testMapGroundTruth4 = testMapGroundTruth2
 
 notitleMsg = invalidMapHeader ++ (titleErrorMsg 0)
-nomaptypeMsg = invalidMapHeader ++ (mapTypeErrorMsg 0)
+nogoalcountMsg = invalidMapHeader ++ (goalCountErrorMsg 0)
 nopatternMsg = invalidMapHeader ++ (patternCountErrorMsg 0)
 badpatternMsg = invalidMapHeader ++ badPatternErrorMsg
-noblockMsg = invalidMapHeader ++ (blockCountErrorMsg NORMAL 0)
-noblock2Msg = invalidMapHeader ++ (blockCountErrorMsg CONSTRUCT 0)
-toomanyblockMsg = invalidMapHeader ++ (blockCountErrorMsg NORMAL 2)
+noblockMsg = invalidMapHeader ++ (blockCountErrorMsg 0)
+toomanyblockMsg = invalidMapHeader ++ (blockCountErrorMsg 2)
 emptyblockMsg = invalidMapHeader ++ blockSizeErrorMsg
-nogoalMsg = invalidMapHeader ++ (goalCountErrorMsg NORMAL 0)
-twogoalMsg = invalidMapHeader ++ (goalCountErrorMsg NORMAL 2)
-goalindodgeMsg = invalidMapHeader ++ (goalCountErrorMsg DODGE 1)
+nogoalMsg = invalidMapHeader ++ (goalErrorMsg 0)
+twogoalMsg = invalidMapHeader ++ (goalErrorMsg 2)
 nostartMsg = invalidMapHeader ++ (startCountErrorMsg 0)
 twostartMsg = invalidMapHeader ++ (startCountErrorMsg 2)
 
@@ -78,21 +76,18 @@ main = hspec $ do
     describe "parseMapText" $ do
         runTestOnMap "testmap1" $ Right testMapGroundTruth1
         runTestOnMap "testmap2" $ Right testMapGroundTruth2
-        runTestOnMap "testmap3" $ Right testMapGroundTruth3
         runTestOnMap "testmap4" $ Right testMapGroundTruth4
 
     describe "validate parseMapText" $ do
         runTestOnMap "invalid-notitle" $ Left notitleMsg
-        runTestOnMap "invalid-nomaptype" $ Left nomaptypeMsg
+        runTestOnMap "invalid-nogoalcount" $ Left nogoalcountMsg
         runTestOnMap "invalid-nopattern" $ Left nopatternMsg
         runTestOnMap "invalid-badpattern" $ Left badpatternMsg
         runTestOnMap "invalid-noblock" $ Left noblockMsg
-        runTestOnMap "invalid-noblock2" $ Left noblock2Msg
         runTestOnMap "invalid-toomanyblock" $ Left toomanyblockMsg
         runTestOnMap "invalid-emptyblock" $ Left emptyblockMsg
         runTestOnMap "invalid-nogoal" $ Left nogoalMsg
         runTestOnMap "invalid-twogoal" $ Left twogoalMsg
-        runTestOnMap "invalid-goalindodge" $ Left goalindodgeMsg
         runTestOnMap "invalid-nostart" $ Left nostartMsg
         runTestOnMap "invalid-twostart" $ Left twostartMsg
 

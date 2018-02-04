@@ -15,25 +15,25 @@ module MapDSL.DSLValidate where
     titleErrorMsg actualCount = 
         show $ format "It has {} 'title' statements. should be 1." [actualCount]
 
-    mapTypeErrorMsg :: Int -> String
-    mapTypeErrorMsg actualCount =
-        show $ format "It has {} 'title' statements. should be 1." [actualCount]
+    goalCountErrorMsg :: Int -> String
+    goalCountErrorMsg actualCount =
+        show $ format "It has {} 'goalcount' statements. should be 1." [actualCount]
 
     patternCountErrorMsg :: Int -> String
     patternCountErrorMsg actualCount =
         show $ format "It has {} 'pattern' statements. should be 1." [actualCount]
 
-    blockCountErrorMsg :: MapType -> Int -> String
-    blockCountErrorMsg mapType actualCount =
-        show $ format "Map type is {}, but the map contains {} map blocks" [show mapType, show actualCount]
+    blockCountErrorMsg :: Int -> String
+    blockCountErrorMsg actualCount =
+        show $ format "Map contains {} map blocks, should be 1" [show actualCount]
 
     startCountErrorMsg :: Int -> String
     startCountErrorMsg actualCount = 
         show $ format "The map contains {} STARTs. should be 1" [actualCount]
 
-    goalCountErrorMsg :: MapType -> Int -> String
-    goalCountErrorMsg mapType actualCount = 
-        show $ format "Map type is {}, but the map contains {} GOALs." [show mapType, show actualCount]
+    goalErrorMsg :: Int -> String
+    goalErrorMsg actualCount = 
+        show $ format "The map contains {} GOALs, should be 1" [show actualCount]
 
     blockSizeErrorMsg = "One or more blocks have zero rows. should have at least one row" :: String
     badPatternErrorMsg = 
@@ -43,11 +43,11 @@ module MapDSL.DSLValidate where
 
     checks = [
         hasOneTitle, 
+        hasOneGoalCount,
         sequenceCheck hasOnePattern hasValidPattern,
-        sequenceCheck hasOneMapType $ 
-            sequenceCheck hasValidBlockCount $
-                sequenceCheck hasValidBlockSize $
-                    sequenceCheck hasValidStart hasValidGoal
+        sequenceCheck hasValidBlockCount $
+            sequenceCheck hasValidBlockSize $
+                sequenceCheck hasValidStart hasValidGoal
             ]
 
     sequenceCheck :: (Expr a -> Maybe String) -> (Expr a -> Maybe String) -> Expr a -> Maybe String
@@ -68,8 +68,8 @@ module MapDSL.DSLValidate where
     hasOneTitle :: Expr a -> Maybe String
     hasOneTitle expr = hasOne stmtToTitle titleErrorMsg expr
 
-    hasOneMapType :: Expr a -> Maybe String
-    hasOneMapType expr = hasOne stmtToMapType mapTypeErrorMsg expr
+    hasOneGoalCount :: Expr a -> Maybe String
+    hasOneGoalCount expr = hasOne stmtToGoalCount goalCountErrorMsg expr
 
     concreteLabels = [A, B, C, D, E, F, G]
 
@@ -86,14 +86,10 @@ module MapDSL.DSLValidate where
 
     hasValidBlockCount :: Expr a -> Maybe String
     hasValidBlockCount expr =
-        let mapType = mapTypeOf expr
-        in let isConstruct = mapType == CONSTRUCT  
-        in let isValidCount = if isConstruct then (>=1) else (==1)
-        in let blockCount = length $ blocksOf expr
-        in let valid = isValidCount blockCount
-        in if valid
+        let blockCount = length $ blocksOf expr
+        in if blockCount==1
             then Nothing
-            else Just $ blockCountErrorMsg mapType blockCount
+            else Just $ blockCountErrorMsg blockCount
 
     hasValidBlockSize :: Expr a -> Maybe String
     hasValidBlockSize expr =
@@ -119,13 +115,11 @@ module MapDSL.DSLValidate where
         let blocks = blocksOf expr
         in let cells = flattenBlocks blocks
         in let goals = (==GOAL) `filter` cells
-        in let mapType = mapTypeOf expr
-        in let isValidCount = if mapType==DODGE then (==0) else (==1)
         in let count = length goals
-        in let valid = isValidCount count
+        in let valid = 1 == count
         in if valid
             then Nothing
-            else Just $ goalCountErrorMsg mapType count
+            else Just $ goalErrorMsg count
 
     flattenBlocks bs = (concat . concat . concat) bs
 

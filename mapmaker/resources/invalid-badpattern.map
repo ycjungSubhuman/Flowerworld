@@ -1,6 +1,6 @@
 title 테스트맵 1
-type NORMAL
 pattern *,B,C,D
+goalcount 10
 block
     A,^|   B   |   C   |   D   |
            |   A   |

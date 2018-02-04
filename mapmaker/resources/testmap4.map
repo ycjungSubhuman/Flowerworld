@@ -3,7 +3,7 @@
 
 title 테스트맵 4
 
-type CONSTRUCT
+goalcount 20
 pattern A,B,C,D
 
 

@@ -11,8 +11,6 @@ module MapData(src2map) where
         toEncoding = genericToEncoding defaultOptions
     instance ToJSON MapBlock where
         toEncoding = genericToEncoding defaultOptions
-    instance ToJSON StageType where
-        toEncoding = genericToEncoding defaultOptions
     instance ToJSON Cell where
         toEncoding = genericToEncoding defaultOptions
     instance ToJSON Label where
@@ -26,18 +24,13 @@ module MapData(src2map) where
             main :: MapBlock,
             subMaps :: [MapBlock],
             title :: String,
-            mapType :: StageType,
+            goalCount :: Int,
             pattern :: [Label]
         } deriving (Generic, Show)
 
     data MapBlock = MapBlock {
             mat :: [[Cell]]
         } deriving (Generic, Show)
-
-    data StageType = NORMAL 
-                    | CONSTRUCT
-                    | DODGE
-                    deriving (Generic, Show)
 
     data Cell = Cell {
             label :: Label
@@ -50,25 +43,19 @@ module MapData(src2map) where
     expr2map :: Ast.Expr Validated -> Map
     expr2map expr =
         let title = titleOf expr
-        in let astMapType = mapTypeOf expr
         in let astPattern = patternOf expr
         in let astBlocks = blocksOf expr
+        in let goalCount = goalCountOf expr
         in let mapblocks = astblock2mapblock `map` astBlocks
         in let (main:submaps) = mapblocks
-        in let mapType = astmaptype2stagetype astMapType
         in let pattern = (\l -> astlabels2label [l]) `map` astPattern
         in Map {
             main = main,
             subMaps = submaps,
             title = title,
-            mapType = mapType,
+            goalCount = goalCount,
             pattern = pattern
             }
-
-    astmaptype2stagetype mapType = case mapType of
-        Ast.NORMAL -> NORMAL
-        Ast.CONSTRUCT -> CONSTRUCT
-        Ast.DODGE -> DODGE
 
     astblock2mapblock :: Ast.Block -> MapBlock
     astblock2mapblock block = MapBlock { mat = (astrow2row `map` block) }

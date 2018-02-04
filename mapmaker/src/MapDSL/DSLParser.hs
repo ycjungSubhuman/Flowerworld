@@ -32,7 +32,7 @@ module MapDSL.DSLParser(
 
     singleStmtParser :: CharParser st Stmt
     singleStmtParser = 
-        try titleStmtParser <|> try typeStmtParser <|> try patternStmtParser <|> try blockStmtParser
+        try titleStmtParser <|> try goalCountStmtParser <|> try patternStmtParser <|> try blockStmtParser
         <?> "single statement"
 
     titleStmtParser :: CharParser st Stmt
@@ -44,19 +44,16 @@ module MapDSL.DSLParser(
             title <- many (noneOf "\r\n")
             return $ TitleStmt title
 
-    typeStmtParser :: CharParser st Stmt
-    typeStmtParser =
+    goalCountStmtParser :: CharParser st Stmt
+    goalCountStmtParser =
         do 
             spacesOrLineEnds
-            string "type"
+            string "goalcount"
             space
-            t <- mapTypeParser
-            return $ TypeStmt t
-    mapTypeParser :: CharParser st MapType
-    mapTypeParser =
-        NORMAL <$ string "NORMAL"
-        <|> CONSTRUCT <$ string "CONSTRUCT"
-        <|> DODGE <$ string "DODGE"
+            t <- goalCountParser
+            return $ GoalCountStmt t
+    goalCountParser :: CharParser st Int
+    goalCountParser = read <$> many1 digit
 
     patternStmtParser :: CharParser st Stmt
     patternStmtParser =

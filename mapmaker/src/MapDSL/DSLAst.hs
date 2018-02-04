@@ -3,19 +3,16 @@ module MapDSL.DSLAst where
 
     newtype Expr a = Expr [Stmt]
     data Stmt = TitleStmt Title
-                | TypeStmt Type
+                | GoalCountStmt GoalCount
                 | PatternStmt Pattern
                 | BlockStmt Block
                 deriving (Eq, Show)
 
+    type GoalCount = Int
     type Title = String
-    type Type = MapType
     type Block = [[Cell]]
     type Cell = [Label]
     type Pattern = [Label]
-
-    data MapType = NORMAL | CONSTRUCT | DODGE
-                    deriving (Eq, Show)
 
     data Label = START
                 | A | B | C | D | E | F | G

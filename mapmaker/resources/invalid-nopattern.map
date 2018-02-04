@@ -1,5 +1,5 @@
 title 테스트맵 1
-type NORMAL
+goalcount 1
 block
     A,^|   B   |   C   |   D   |
            |   A   |

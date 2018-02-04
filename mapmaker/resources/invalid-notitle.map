@@ -1,5 +1,5 @@
 
-type NORMAL
+goalcount 1
 pattern A,B,C,D
 block
     A,^|   B   |   C   |   D   |
