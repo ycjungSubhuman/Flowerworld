@@ -22,6 +22,10 @@ namespace Assets
             }
         }
 
+        /** GameplayScene 의 초기화 과정에서 참조하는 맵 소스.
+         * GameplayScene을 불러오기 전에 미리 정해놓으면 
+         * 로딩 후 해당 소스의 스테이지가 Scene에 나타나게 된다.
+         */
         public TextAsset activatedMapSource;
     }
 }
