@@ -2,7 +2,7 @@ title 테스트맵 1
 type NORMAL
 pattern A,B,C,D
 block
-    A,GOAL |   B   |   C,START   |   D   |
+    A,$ |   B   |   C,^   |   D   |
            |   A   |
-           |   A,GOAL   | 
+           |   A,$   | 
 

@@ -99,15 +99,15 @@ module MapDSL.DSLParser(
 
     attrParser :: CharParser st Label
     attrParser = 
-        START <$ try (string "START")
-        <|> ANY <$ try (string "ANY")
+        START <$ try (string "^")
+        <|> ANY <$ try (string "*")
         <|> A <$ string "A"
         <|> B <$ string "B"
         <|> C <$ string "C"
         <|> D <$ string "D"
         <|> E <$ string "E"
         <|> F <$ string "F"
-        <|> GOAL <$ try (string "GOAL")
+        <|> GOAL <$ try (string "$")
         <|> G <$ string "G"
 
 

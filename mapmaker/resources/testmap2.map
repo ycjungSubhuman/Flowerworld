@@ -8,12 +8,12 @@ pattern A,B,C,D
 
 
 block
-    A,START|   B   |   C   |   D   |     
+    A,^|   B   |   C   |   D   |     
            |   A   |     
 
        
        
            |   A   | 
 
-           |   G,GOAL   | 
+           |   G,$   | 
 

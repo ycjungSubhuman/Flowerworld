@@ -2,7 +2,7 @@ title 테스트맵 1
 type DODGE
 pattern A,B,C,D
 block
-    A,START|   B   |   C   |   D   |
+    A,^|   B   |   C   |   D   |
            |   A   |
-           |   A,GOAL   | 
+           |   A,$   | 
 

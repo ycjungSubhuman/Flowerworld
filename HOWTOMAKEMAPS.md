@@ -20,6 +20,9 @@
 
 ## .map 문법
 
+*는 ANY,
+^는 START,
+$는 GOAL을 의미합니다.
 
 
 ```
@@ -37,7 +40,7 @@ block
 
 ...
 
-((여기에서 레이블은 A | B | C | D | E | F | G | START | GOAL | ANY 중 하나))
+((여기에서 레이블은 A | B | C | D | E | F | G | ^ | $ | * 중 하나))
 ```
 
 빠르게 작성을 시작하고 싶다면 밑 문단의 예제를 살펴보시기 바랍니다.
@@ -49,8 +52,8 @@ block
 1. title, maptype, pattern을 딱 하나씩 반드시 가져야 한다.
 1. maptype이 NORMAL 또는 DODGE일 경우, 딱 하나의 block만을 가져야 한다. 
 1. maptype이 CONSTRUCT일 경우, 하나 이상의 block을 가져야 한다. 이 때 맨 첫번째 block이 메인 맵이 된다. 나머지는 드래그 가능한 맵 조각이 된다.
-1. maptype이 NORMAL 또는 CONSTRUCT일 경우 전 block을 통틀어 반드시 하나의 START와 하나의 GOAL을 가져야 한다. 
-1. maptype이 DODGE일 경우 하나의 START와 0개의 GOAL을 가져야 한다. 
+1. maptype이 NORMAL 또는 CONSTRUCT일 경우 전 block을 통틀어 반드시 하나의 ^와 하나의 $을 가져야 한다. 
+1. maptype이 DODGE일 경우 하나의 ^와 0개의 $을 가져야 한다. 
 1. pattern은 A | B | C | D | E | F | G 로만 이루어진다. 길이는 1 이상이어야 한다. 
 
 ### 예제
@@ -60,9 +63,9 @@ title 테스트맵 1
 type NORMAL
 pattern A,B,C,D
 block
-    A,START|   B   |   C   |   D   |
+    A,^|   B   |   C   |   D   |
            |   A   |
-          |  A,GOAL | 
+          |  A,$ | 
 ```
 
 ```
@@ -70,9 +73,9 @@ title 테스트맵 2
 type CONSTRUCT
 pattern A,B,C,D
 block
-    A,START|   B   |   C   |   D   |
+    A,^|   B   |   C   |   D   |
            |   A   |
-          |  A,GOAL | 
+          |  A,$ | 
 
 block
    A  |   B   | 
@@ -88,7 +91,7 @@ title 테스트맵 3
 type DODGE
 pattern A,B,C,D
 block
-    A,START|   B   |   C   |   D   |
+    A,^|   B   |   C   |   D   |
       C    |   A   |   C   |   D   |
       A    |  A    |   B   |   A   |
 ```
