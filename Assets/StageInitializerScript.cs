@@ -23,7 +23,6 @@ public class StageInitializerScript : MonoBehaviour {
             json = Resources.Load<TextAsset> ("maps/map1");
         }
         var map = JsonConvert.DeserializeObject<Map> (json.text);
-        map.Init ();
 
         // 맵 Scene에 그리기
         var mapDrawer = new MapDrawer(new MapBlockDrawer(new CellDrawer()));

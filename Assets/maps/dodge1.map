@@ -1,8 +1,0 @@
-title Dodge 1
-type DODGE 
-pattern A,A,B
-block
-        A | A | B | A |
- ^, B | A | A | A |
-        A | A | A | B |
-        A | B | A | A |

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 using Assets.Core.Data;
 using Assets.Util;
@@ -16,9 +17,11 @@ public class StageScript : MonoBehaviour {
     public IMapAnimationController mapAnimationController;
 
     private int patternIndex = -1;
+    private int moveCount = 0;
 
 	// Use this for initialization
 	void Start () {
+        initGoalCount ();
 	}
 	
 	// Update is called once per frame
@@ -30,12 +33,13 @@ public class StageScript : MonoBehaviour {
     public void ResetStage()
     {
         patternIndex = -1;
+        moveCount = 0;
     }
     /** START 레이블의 포지션을 불러온다 */
     public Vector2Int GetInitPosition()
     {
         Debug.Assert (map != null);
-        var startPositions = map.GlobalPositionsOf (Label.START);
+        var startPositions = map.PositionsOf (Label.START);
         Debug.Assert (startPositions.Count () == 1);
         return startPositions.First ();
     }
@@ -65,6 +69,8 @@ public class StageScript : MonoBehaviour {
         updatePattern ();
         updateCellColor ();
         updateUI ();
+        updateMoveCount ();
+        moveCount++;
         if(checkGoal (position))
         {
             //TODO : 게임 끝났을 때 할 것 
@@ -82,7 +88,7 @@ public class StageScript : MonoBehaviour {
     }
     private void updateCellColor()
     {
-        var newAvailabePositions = map.GlobalPositionsOf (map.pattern [patternIndex]);
+        var newAvailabePositions = map.PositionsOf (map.pattern [patternIndex]);
         foreach (var go in MapGameObjectUtil.GetAllCells (gameObject))
         {
             go.GetComponent<Animator> ().SetBool ("Onoff", false);
@@ -110,5 +116,15 @@ public class StageScript : MonoBehaviour {
         var validLabel = map.pattern [patternIndex];
         var actualLabel = map.LabelOf (newPos);
         return actualLabel.FallIn (validLabel);
+    }
+    void initGoalCount()
+    {
+        var text = GameObject.Find ("GoalCountText").GetComponent<Text>();
+        text.text = map.goalCount.ToString ();
+    }
+    void updateMoveCount()
+    {
+        var text = GameObject.Find ("MoveCountText").GetComponent<Text>();
+        text.text = moveCount.ToString ();
     }
 }

@@ -20,7 +20,6 @@ public class PlayerControlScript : MonoBehaviour
 
     private Vector2Int pos;
     private StageScript stage;
-    private int moveCount = 0;
 
     void Start()
     {
@@ -52,7 +51,6 @@ public class PlayerControlScript : MonoBehaviour
         }
 
         updatePlayerPosition (newPos);
-        updateMoveCount ();
 
         if(Input.GetKeyDown(KeyCode.R))
         {
@@ -66,7 +64,6 @@ public class PlayerControlScript : MonoBehaviour
         stage.ResetStage ();
         stage.UpdateStage (pos);
         soundController.OnRestart ();
-        moveCount = 0;
     }
 
     void updatePlayerPosition(Vector2Int newPos)
@@ -88,18 +85,10 @@ public class PlayerControlScript : MonoBehaviour
         }
     }
 
-    void updateMoveCount()
-    {
-        var text = GameObject.Find ("MoveCountText").GetComponent<Text>();
-        text.text = moveCount.ToString ();
-    }
-
     void movePlayer(Vector2Int newPos)
     {
         Vector2 currScenePos = gameObject.transform.position;
         Vector2 newScenePos = stage.ScenePosOf (newPos);
-
-        moveCount++;
 
         StopAllCoroutines ();
         StartCoroutine (Move.QuadOut(gameObject, currScenePos, newScenePos, 0.5f));

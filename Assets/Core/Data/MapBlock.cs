@@ -23,7 +23,7 @@ namespace Assets.Core.Data
         }
 
         /** l 레이블을 가지는 모든 cell들의 위치를 리턴한다 */
-        public IEnumerable<Vector2Int> LocalPositionsOf(Label l)
+        public IEnumerable<Vector2Int> PositionsOf(Label l)
         {
             List<Vector2Int> result = new List<Vector2Int> ();
             for (int i=0; i<mat.Count; i++)
