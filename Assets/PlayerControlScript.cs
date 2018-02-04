@@ -26,6 +26,8 @@ public class PlayerControlScript : MonoBehaviour
         Debug.Assert (stageRoot != null);
         stage = stageRoot.GetComponent<StageScript> ();
         pos = stage.GetInitPosition ();
+        Vector2 initScenepos = stage.ScenePosOf (pos);
+        gameObject.transform.localPosition = initScenepos;
         stage.UpdateStage (pos);
     }
 
