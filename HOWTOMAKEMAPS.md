@@ -31,13 +31,6 @@ maptype (NORMAL | CONSTRUCT | DODGE)
 pattern (","로 구별된 레이블)
 block
     ("줄바꿈"으로 구별된 ("|"로 구별된 (","로 구별된 레이블)))
-
-block
-    ("줄바꿈"으로 구별된 ("|"로 구별된 (","로 구별된 레이블)))
-
-block
-    ("줄바꿈"으로 구별된 ("|"로 구별된 (","로 구별된 레이블)))
-
 ...
 
 ((여기에서 레이블은 A | B | C | D | E | F | G | ^ | $ | * 중 하나))
@@ -45,55 +38,30 @@ block
 
 빠르게 작성을 시작하고 싶다면 밑 문단의 예제를 살펴보시기 바랍니다.
 
-### 만족해야 하는 규칙
+### 규칙 검사
 
-변환기가 알아서 어긴 규칙을 알려주겠지만, 참고 사항으로 적습니다. 
-
-1. title, maptype, pattern을 딱 하나씩 반드시 가져야 한다.
-1. maptype이 NORMAL 또는 DODGE일 경우, 딱 하나의 block만을 가져야 한다. 
-1. maptype이 CONSTRUCT일 경우, 하나 이상의 block을 가져야 한다. 이 때 맨 첫번째 block이 메인 맵이 된다. 나머지는 드래그 가능한 맵 조각이 된다.
-1. maptype이 NORMAL 또는 CONSTRUCT일 경우 전 block을 통틀어 반드시 하나의 ^와 하나의 $을 가져야 한다. 
-1. maptype이 DODGE일 경우 하나의 ^와 0개의 $을 가져야 한다. 
-1. pattern은 A | B | C | D | E | F | G 로만 이루어진다. 길이는 1 이상이어야 한다. 
+변환기가 몇 가지 규칙을 어기면 에러를 뱉어주니 확인하시면 됩니다.
 
 ### 예제
 
 ```
 title 테스트맵 1
-type NORMAL
+goalcount 20
 pattern A,B,C,D
 block
     A,^|   B   |   C   |   D   |
            |   A   |
           |  A,$ | 
-```
-
-```
-title 테스트맵 2
-type CONSTRUCT
-pattern A,B,C,D
-block
-    A,^|   B   |   C   |   D   |
-           |   A   |
-          |  A,$ | 
-
-block
-   A  |   B   | 
-   A  |   C   |
-
-block
-   C  |   C   | 
-   C  |   C   |
 ```
 
 ```
 title 테스트맵 3
-type DODGE
+goalcount 20
 pattern A,B,C,D
 block
     A,^|   B   |   C   |   D   |
       C    |   A   |   C   |   D   |
-      A    |  A    |   B   |   A   |
+      A    |  A    |   B   |   A,$   |
 ```
 
 
