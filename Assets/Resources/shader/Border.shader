@@ -1,5 +1,6 @@
 ﻿Shader "Unlit/Border"
 {
+	/* 가운데에서 가장자리로 사각형이 서서히 퍼져나가는 텍스쳐에 대한 코드 */
 	Properties
 	{
 		_LIneColor ("Line Color", Color) = (0.1, 0.2, 0.6)

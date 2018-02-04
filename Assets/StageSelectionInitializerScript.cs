@@ -7,7 +7,7 @@ using Assets.Util;
 using Assets;
 
 
-// 디버그용 스테이지 선택 씬 초기화 스크립트 
+// 디버그용 스테이지 선택 씬 초기화 스크립트 (main 씬)
 public class StageSelectionInitializerScript : MonoBehaviour {
 
     List<TextAsset> mapList = new List<TextAsset> ();

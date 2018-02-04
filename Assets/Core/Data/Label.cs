@@ -68,6 +68,9 @@ namespace Assets.Core.Data
             return new Label (label.value | this.value);
         }
 
+        /**
+         * labels의 모든 레이블을 합친 Label을 리턴
+         */
         public static Label Combined(IEnumerable<Label> labels)
         {
             return labels.Aggregate ((a, b) => a.Or (b));

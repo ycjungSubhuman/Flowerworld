@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace Assets.Util
 {
+    /** 맵 파일들의 리스트에 접근하는 함수들의 모음 */
     public class MapFileUtil
     {
         public static List<TextAsset> GetAllMapSources()

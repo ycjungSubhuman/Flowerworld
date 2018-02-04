@@ -7,8 +7,12 @@ using UnityEngine;
 
 namespace Assets.Core.Drawer
 {
+    /**
+     * Label에 따른 Cell들의 색을 모아놓은 오브젝트
+     */
     class CellColor
     {
+        // 전경색
         public static Dictionary<int, Color> lineColorMap =
             new Dictionary<int, Color> ()
             {
@@ -20,6 +24,7 @@ namespace Assets.Core.Drawer
                 {Label.EMPTY.Value, rgba(255, 255, 255, 0)},
             };
 
+        // 배경색
         public static Dictionary<int, Color> bgColorMap =
             new Dictionary<int, Color> ()
             {

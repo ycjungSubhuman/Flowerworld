@@ -1,5 +1,8 @@
 ﻿Shader "Unlit/Cell"
 {
+	/**
+	 * 시간에 따라 굵기와 위치가 변하는 수직선들을 그리는 셰이더
+	 */
 	Properties
 	{
 		_LineColor ("Line Color", Color) = (1.0, 0.5, 0.5, 1)

@@ -1,5 +1,9 @@
 ﻿Shader "Unlit/BornoiRipple"
 {
+	/* 제목은 BornoiRipple이지만 가운데에서 가장자리로 서서히 퍼져나가는 부드러운 원을
+	 * 그리는 셰이더
+	 * TODO : 여기에 보르노이 세그먼테이션을 잘 적용해서 멋진 후처리 효과 추가
+	 */
 	Properties
 	{
 		_Speed ("Speed", Float) = 1

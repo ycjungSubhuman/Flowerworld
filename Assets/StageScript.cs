@@ -6,6 +6,9 @@ using Assets.Core.Data;
 using Assets.Util;
 using Assets.Core.Animation;
 
+/**
+ * 스테이지의 로직과 스테이지 로직 상태에 따른 그래픽 이벤트 발생을 관리하는 스크립트
+ */
 public class StageScript : MonoBehaviour {
 
     /* Initialize public members on instantiation */
@@ -23,10 +26,12 @@ public class StageScript : MonoBehaviour {
 		
 	}
 
+    /** 스테이지를 초기 상태로 되돌린다 */
     public void ResetStage()
     {
         patternIndex = -1;
     }
+    /** START 레이블의 포지션을 불러온다 */
     public Vector2Int GetInitPosition()
     {
         Debug.Assert (map != null);
@@ -34,20 +39,27 @@ public class StageScript : MonoBehaviour {
         Debug.Assert (startPositions.Count () == 1);
         return startPositions.First ();
     }
+    /** newPos가 현재 스테이지 상태에서 다음 위치로 적합한지 체크한다 */
     public bool IsValidPos(Vector2Int newPos)
     {
         return map.IsInside (newPos) && checkLogic (newPos);
     }
+    /** 
+     * 그래픽 상으로 나타나는 Cell의 Transform Position을 불러온다. 
+     * TODO : 추후에 Logic과 분리 필요
+     */ 
     public Vector2 ScenePosOf(Vector2Int pos)
     {
         var targetCell =  MapGameObjectUtil.GetCellGameObject (gameObject, pos);
         Vector2 scenePos = targetCell.transform.position;
         return scenePos;
     }
+    /** pos에 있는 Cell의 Stomp 애니메이션을 시작한다 */
     public void AnimateCellStomp(Vector2Int pos)
     {
         mapAnimationController.SetTrigger (pos, "Stomp");
     }
+    /** position에 플레이어가 갔을 때 스테이지를 업데이트한다 */
     public void UpdateStage(Vector2Int position)
     {
         updatePattern ();
@@ -59,6 +71,7 @@ public class StageScript : MonoBehaviour {
             Debug.Log ("GOAL");
         }
     }
+    /** 현재 패턴에서 활성화된 레이블을 가져온다 */ 
     public Label CurrentPatternLabel()
     {
         return map.pattern [patternIndex];
