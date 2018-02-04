@@ -27,7 +27,7 @@ $는 GOAL을 의미합니다.
 
 ```
 title (타이틀)
-maptype (NORMAL | CONSTRUCT | DODGE)
+goalcount (목표 이동 수 숫자)
 pattern (","로 구별된 레이블)
 block
     ("줄바꿈"으로 구별된 ("|"로 구별된 (","로 구별된 레이블)))

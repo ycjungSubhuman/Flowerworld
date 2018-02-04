@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /** 그래픽 상으로 나타나는 Cell을 켜고 끄는데 활용되는 스크립트 */
-public class UICellScript : MonoBehaviour {
+public class CellScript : MonoBehaviour {
 
     public int index;
 
