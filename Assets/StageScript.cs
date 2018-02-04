@@ -48,11 +48,16 @@ public class StageScript : MonoBehaviour {
     {
         mapAnimationController.SetTrigger (pos, "Stomp");
     }
-    public void UpdateStage()
+    public void UpdateStage(Vector2Int position)
     {
         updatePattern ();
         updateCellColor ();
         updateUI ();
+        if(checkGoal (position))
+        {
+            //TODO : 게임 끝났을 때 할 것 
+            Debug.Log ("GOAL");
+        }
     }
     public Label CurrentPatternLabel()
     {
@@ -82,6 +87,10 @@ public class StageScript : MonoBehaviour {
         {
             patternUI.transform.GetChild (i).SendMessage ("SetOnoff", patternIndex);
         }
+    }
+    private bool checkGoal (Vector2Int position)
+    {
+        return map.LabelOf (position).FallIn (Label.GOAL);
     }
     private bool checkLogic(Vector2Int newPos)
     {

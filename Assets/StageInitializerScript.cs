@@ -11,10 +11,17 @@ using Assets.Core.Animation;
 //씬 초기화 후 게임을 초기화해주는 스크립트
 public class StageInitializerScript : MonoBehaviour {
 
+    private Assets.Configuration configuration = Assets.Configuration.Instance;
+
 	// Use this for initialization
 	void Start () {
         // 맵 불러오기
-        TextAsset json = Resources.Load<TextAsset> ("maps/map1");
+        TextAsset json = configuration.activatedMapSource;
+        if(json==null)
+        {
+            // 디버그용 (GameplayScene을 바로 플레이할 때)
+            json = Resources.Load<TextAsset> ("maps/map1");
+        }
         var map = JsonConvert.DeserializeObject<Map> (json.text);
         map.Init ();
 
@@ -30,7 +37,7 @@ public class StageInitializerScript : MonoBehaviour {
         //UI 생성
         var uiPatternDrawer = new UIPatternDrawer (new UICellDrawer ());
         var uiPattern = uiPatternDrawer.Draw (map.pattern);
-        uiPattern.transform.parent = GameObject.Find ("PatternRoot").transform;
+        uiPattern.transform.SetParent(GameObject.Find ("PatternRoot").transform);
         uiPattern.GetComponent<RectTransform>().anchoredPosition = new Vector2 (0, 0);
         uiPattern.name = "PatternUI";
 
