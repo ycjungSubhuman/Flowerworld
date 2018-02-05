@@ -1,0 +1,9 @@
+title Practice 1
+goalcount 30
+pattern A,B,C,C,B
+block 
+         A | A | B | B | A |
+         B | B | B | C | C | 
+         C | C | C,^ | A | B | 
+         C | B | B | C | A | 
+         B,$ | B | A | C | B | 

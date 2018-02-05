@@ -62,20 +62,20 @@ public class PlayerControlScript : MonoBehaviour
 
     private void onResetKey()
     {
-        updatePlayerPosition (stage.GetInitPosition());
+        updatePlayerPosition (stage.GetInitPosition(), true);
         stage.ResetStage ();
         stage.UpdateStage (pos);
         soundController.OnRestart ();
     }
 
-    void updatePlayerPosition(Vector2Int newPos)
+    void updatePlayerPosition(Vector2Int newPos, bool isReset=false)
     {
         if (newPos.Equals(pos))
         {
             return;
         }
 
-        if(stage.IsValidPos(newPos))
+        if(stage.IsValidPos(newPos) || isReset)
         {
             playMoveSound ();
             stage.UpdateStage (newPos);

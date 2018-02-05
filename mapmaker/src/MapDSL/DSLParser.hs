@@ -51,6 +51,7 @@ module MapDSL.DSLParser(
             string "goalcount"
             space
             t <- goalCountParser
+            spaces
             return $ GoalCountStmt t
     goalCountParser :: CharParser st Int
     goalCountParser = read <$> many1 digit
@@ -61,8 +62,14 @@ module MapDSL.DSLParser(
             spacesOrLineEnds
             string "pattern"
             space
-            labels <- attrParser `sepBy` (spaces >> char ',' >> spaces)
+            labels <- patternLabelParser `sepBy` (spaces >> char ',' >> spaces)
             return $ PatternStmt labels
+    patternLabelParser :: CharParser st Label
+    patternLabelParser =
+        do
+            l <- attrParser
+            spaces
+            return l
 
     blockStmtParser :: CharParser st Stmt
     blockStmtParser = 

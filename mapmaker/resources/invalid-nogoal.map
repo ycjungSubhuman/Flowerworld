@@ -1,6 +1,6 @@
 title 테스트맵 1
 goalcount 20
-pattern A,B,C,D
+pattern A,B,C,D 
 block
     A,^|   B   |   C   |   D   |
            |   A   |
