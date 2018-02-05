@@ -50,6 +50,10 @@ namespace Assets.Core.Sound
                 {Label.A.Value,  A},
                 {Label.B.Value,  B},
                 {Label.C.Value,  C},
+                {Label.D.Value,  D},
+                {Label.E.Value,  E},
+                {Label.F.Value,  F},
+                {Label.G.Value,  G},
             };
         }
 
