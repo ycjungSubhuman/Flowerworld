@@ -23,6 +23,10 @@ namespace Assets.Core.Sound
         private AudioClip A;
         private AudioClip B;
         private AudioClip C;
+        private AudioClip D;
+        private AudioClip E;
+        private AudioClip F;
+        private AudioClip G;
         private AudioClip Refuse;
         private AudioClip Restart;
 
@@ -34,6 +38,10 @@ namespace Assets.Core.Sound
             A = Resources.Load<AudioClip> ("sounds/A");
             B = Resources.Load<AudioClip> ("sounds/B");
             C = Resources.Load<AudioClip> ("sounds/C");
+            D = Resources.Load<AudioClip> ("sounds/D");
+            E = Resources.Load<AudioClip> ("sounds/E");
+            F = Resources.Load<AudioClip> ("sounds/F");
+            G = Resources.Load<AudioClip> ("sounds/G");
             Refuse = Resources.Load<AudioClip> ("sounds/refuse");
             Restart = Resources.Load<AudioClip> ("sounds/restart");
 
@@ -42,6 +50,10 @@ namespace Assets.Core.Sound
                 {Label.A.Value,  A},
                 {Label.B.Value,  B},
                 {Label.C.Value,  C},
+                {Label.D.Value,  D},
+                {Label.E.Value,  E},
+                {Label.F.Value,  F},
+                {Label.G.Value,  G},
             };
         }
 

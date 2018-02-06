@@ -29,6 +29,8 @@ public class StageSelectionInitializerScript : MonoBehaviour {
             mapList.Add (mapSource);
             button.onClick.AddListener (StartStage);
         }
+        dropdown.value = 0;
+        dropdown.RefreshShownValue ();
 	}
 
     void StartStage()

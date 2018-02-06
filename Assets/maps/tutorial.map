@@ -1,0 +1,7 @@
+ title Tutorial 1 
+ goalcount 11 
+ pattern A,B,C
+ block 
+
+         A | B | B | C | C | B | B,$ | 
+       ^,* | C | A | A | B | C | A | 

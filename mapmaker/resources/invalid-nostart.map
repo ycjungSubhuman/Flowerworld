@@ -1,5 +1,5 @@
 title 테스트맵 1
-goalcount 2
+goalcount 2 
 pattern A,B,C,D
 block
     A      |   B   |   C   |   D   |

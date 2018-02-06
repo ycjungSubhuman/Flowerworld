@@ -20,6 +20,9 @@ namespace Assets.Core.Drawer
                 {Label.B.Value, rgb(144, 224, 0)},
                 {Label.C.Value, rgb(241, 129, 0)},
                 {Label.D.Value, rgb(3, 103, 152)},
+                {Label.E.Value, rgb(90, 90, 90)}, //TODO : 정하기
+                {Label.F.Value, rgb(90, 90, 90)}, //TODO : 정하기
+                {Label.G.Value, rgb(90, 90, 90)}, //TODO : 정하기
                 {Label.ANY.Value, rgb(33, 33, 33)},
                 {Label.EMPTY.Value, rgba(255, 255, 255, 0)},
             };
@@ -32,6 +35,9 @@ namespace Assets.Core.Drawer
                 {Label.B.Value, rgb(160, 249, 0)},
                 {Label.C.Value, rgb(255, 137, 0)},
                 {Label.D.Value, rgb(8, 154, 225)},
+                {Label.E.Value, rgb(90, 90, 90)}, //TODO : 정하기
+                {Label.F.Value, rgb(90, 90, 90)}, //TODO : 정하기
+                {Label.G.Value, rgb(90, 90, 90)}, //TODO : 정하기
                 {Label.ANY.Value, rgb(0, 0, 0)},
                 {Label.EMPTY.Value, rgba(200, 200, 200, 0)},
             };
