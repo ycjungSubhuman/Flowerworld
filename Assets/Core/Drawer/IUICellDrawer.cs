@@ -9,6 +9,6 @@ namespace Assets.Core.Drawer
 {
     interface IUICellDrawer
     {
-        GameObject Draw(Label label, int index);
+        GameObject Draw(Label label, int index, int Maxindex);
     }
 }

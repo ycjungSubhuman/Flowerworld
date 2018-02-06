@@ -11,6 +11,7 @@ namespace Assets.Core.Animation.Coroutines
     {
         public static IEnumerator QuadOut(GameObject gameObject, Vector2 start, Vector2 goal, float duration)
         {
+            //움직임을 기술하는 함수(지금은 볼록한 2차함수)
             Func<float,float> tModifier = t => -(t - 1) * (t - 1) + 1;
             return Interpolate (gameObject, start, goal, duration, tModifier);
         }

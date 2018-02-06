@@ -11,6 +11,7 @@ using Assets.Core.Animation;
 //씬 초기화 후 게임을 초기화해주는 스크립트
 public class StageInitializerScript : MonoBehaviour {
 
+    //Main씬에서 넘겨준 데이터
     private Assets.Configuration configuration = Assets.Configuration.Instance;
 
 	// Use this for initialization
@@ -25,6 +26,10 @@ public class StageInitializerScript : MonoBehaviour {
         var map = JsonConvert.DeserializeObject<Map> (json.text);
 
         // 맵 Scene에 그리기
+
+        //CellDrawer : 한 셀
+        //MapBlockDrawer : 그리드
+        //MapDrawer : 나머지 전부
         var mapDrawer = new MapDrawer(new MapBlockDrawer(new CellDrawer()));
         var mapGameObject = mapDrawer.Draw (map);
         mapGameObject.AddComponent<StageScript> ();

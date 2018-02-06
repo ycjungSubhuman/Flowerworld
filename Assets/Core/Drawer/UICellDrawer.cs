@@ -9,7 +9,7 @@ namespace Assets.Core.Drawer
 {
     class UICellDrawer : IUICellDrawer
     {
-        public GameObject Draw(Label label, int index)
+        public GameObject Draw(Label label, int index,int Maxindex)
         {
             var uiCell = GameObject.Instantiate(Resources.Load<GameObject> ("prefabs/UICell"));
             var material = uiCell.GetComponent<MeshRenderer> ().material;
@@ -17,6 +17,7 @@ namespace Assets.Core.Drawer
             material.SetColor ("_BackgroundColor", CellColor.getBackgroundColorOf (label));
             material.SetFloat ("_Offset", UnityEngine.Random.value);
             uiCell.GetComponent<UICellScript> ().index = index;
+            uiCell.GetComponent<UICellScript>().Maxindex = Maxindex;
             return uiCell;
         }
     }

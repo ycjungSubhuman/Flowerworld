@@ -66,9 +66,10 @@ public class StageScript : MonoBehaviour {
     /** position에 플레이어가 갔을 때 스테이지를 업데이트한다 */
     public void UpdateStage(Vector2Int position)
     {
-        updatePattern ();
-        updateCellColor ();
+        updatePattern();
+        updateCellColor();
         updateUI ();
+
         updateMoveCount ();
         moveCount++;
         if(checkGoal (position))

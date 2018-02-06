@@ -11,6 +11,6 @@ namespace Assets.Core.Animation
     {
         void SetTrigger(Vector2Int pos, string name);
         void SetBool(Vector2Int pos, string name, bool value);
-        void SetFloat(Vector2Int pos, string name, bool value);
+        void SetFloat(Vector2Int pos, string name, float value);
     }
 }

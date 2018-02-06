@@ -21,7 +21,7 @@ namespace Assets.Core.Animation
             throw new NotImplementedException ();
         }
 
-        public void SetFloat(Vector2Int pos, string name, bool value)
+        public void SetFloat(Vector2Int pos, string name, float value)
         {
             throw new NotImplementedException ();
         }

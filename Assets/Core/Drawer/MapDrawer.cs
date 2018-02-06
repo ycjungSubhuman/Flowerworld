@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Assets.Core.Drawer
 {
+    //맵을 그리는 Class, 컨셉에 따라 다른 Class를 선언하는 것도 생각해보자
     class MapDrawer : IMapDrawer
     {
         IMapBlockDrawer mapBlockDrawer;
@@ -18,7 +19,7 @@ namespace Assets.Core.Drawer
 
         public GameObject Draw(Map map)
         {
-            //TODO : Construct mode
+            //진짜로 그리고 리턴
             return mapBlockDrawer.Draw (map.main);
         }
     }
