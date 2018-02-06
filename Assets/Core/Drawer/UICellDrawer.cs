@@ -17,8 +17,8 @@ namespace Assets.Core.Drawer
             material.SetColor ("_BackgroundColor", CellColor.getBackgroundColorOf (label));
             material.SetFloat ("_Offset", UnityEngine.Random.value);
 
-            uiCell.GetComponent<UICellScript> ().index = index;
-            uiCell.GetComponent<UICellScript>().Maxindex = Maxindex;
+           uiCell.GetComponent<CellScript>().index = index;
+            uiCell.GetComponent<CellScript>().Maxindex = Maxindex;
 
             return uiCell;
         }
