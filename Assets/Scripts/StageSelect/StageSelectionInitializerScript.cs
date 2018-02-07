@@ -15,14 +15,19 @@ public class StageSelectionInitializerScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        //미리 저장된 Map 파일을 읽은 뒤 
-        var mapSources = MapFileUtil.GetAllMapSources ();
-        var mapSelection = GameObject.Find ("MapSelection");
-        var startButton = GameObject.Find ("StartButton");
-        var button = startButton.GetComponent<Button> ();
+        //미리 저장된 Map 파일을 읽은 뒤
+        List<TextAsset> mapSources = MapFileUtil.GetAllMapSources ();
+        GameObject mapSelection = GameObject.Find ("MapSelection");
+        GameObject startButton = GameObject.Find ("StartButton");
+        Button button = startButton.GetComponent<Button> ();
         dropdown = mapSelection.GetComponent<Dropdown> ();
+
+        //파일 명: map-(대분류)-(소분류)
+        //분류하고
+        //버튼을 만든다
+        
         //Dropbox에 넣어준다
-        foreach (var mapSource in mapSources)
+        foreach (TextAsset mapSource in mapSources)
         {
             var title = MapFileUtil.mapTitleOfFile (mapSource);
             dropdown.options.Add (new Dropdown.OptionData(title));
