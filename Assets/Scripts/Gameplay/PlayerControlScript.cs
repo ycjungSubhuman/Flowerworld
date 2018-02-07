@@ -21,8 +21,13 @@ public class PlayerControlScript : MonoBehaviour
     private Vector2Int pos;
     private StageScript stage;
 
+    private GameObject Reset, BacktoMain;
+
     void Start()
     {
+        Reset = GameObject.Find("ResetIndicator");
+        BacktoMain = GameObject.Find("BacktoMainIndicator");
+
         Debug.Assert (stageRoot != null);
         stage = stageRoot.GetComponent<StageScript> ();
         pos = stage.GetInitPosition ();
@@ -54,13 +59,41 @@ public class PlayerControlScript : MonoBehaviour
 
         updatePlayerPosition (newPos);
 
-        if(Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKey(KeyCode.R))
         {
-            onResetKey ();
+            Reset.GetComponent<Reset>().Pressed = true;
+        }
+        else
+        {
+            Reset.GetComponent<Reset>().Pressed = false;
+        }
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            BacktoMain.GetComponent<Reset>().Pressed = true;
+        }
+        else
+        {
+            BacktoMain.GetComponent<Reset>().Pressed = false;
+        }   
+    }
+    public void onGotoStageSelect()
+    {
+        onResetKey();
+        StartCoroutine(LoadYourAsyncScene());
+    }
+    IEnumerator LoadYourAsyncScene()
+    {
+        // The Application loads the Scene in the background at the same time as the current Scene.
+        //This is particularly good for creating loading screens. You could also load the Scene by build //number.
+        AsyncOperation asyncLoad = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("main");
+
+        //Wait until the last operation fully loads to return anything
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
         }
     }
-
-    private void onResetKey()
+    public void onResetKey()
     {
         updatePlayerPosition (stage.GetInitPosition(), true);
         stage.ResetStage ();
