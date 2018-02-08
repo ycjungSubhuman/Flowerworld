@@ -16,14 +16,16 @@ module MapData(src2map) where
     instance ToJSON Label where
         toEncoding = genericToEncoding defaultOptions
 
-    src2map :: String -> Either String Map
-    src2map srcString = expr2map `fmap` parseMapText srcString
+    src2map :: (String, String) -> String -> Either String Map
+    src2map (world,stage) srcString = (expr2map (world,stage)) `fmap` parseMapText srcString
 
     {- Map Data Representation for Deserialization in Unity -}
     data Map = Map {
             main :: MapBlock,
             subMaps :: [MapBlock],
             title :: String,
+            world :: String,
+            stage :: String,
             goalCount :: Int,
             pattern :: [Label]
         } deriving (Generic, Show)
@@ -40,8 +42,8 @@ module MapData(src2map) where
             value :: Int
         } deriving (Generic, Show)
 
-    expr2map :: Ast.Expr Validated -> Map
-    expr2map expr =
+    expr2map :: (String,String) -> Ast.Expr Validated -> Map
+    expr2map (world,stage) expr =
         let title = titleOf expr
         in let astPattern = patternOf expr
         in let astBlocks = blocksOf expr
@@ -53,6 +55,8 @@ module MapData(src2map) where
             main = main,
             subMaps = submaps,
             title = title,
+            world = world,
+            stage = stage,
             goalCount = goalCount,
             pattern = pattern
             }

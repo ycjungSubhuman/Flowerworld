@@ -12,6 +12,7 @@ module Main where
     import System.FSNotify
     import Control.Concurrent (threadDelay)
     import Control.Monad (forever)
+    import FilenameLexer
 
     data Args = Compile FilePath FilePath
                 | CompileAll FilePath FilePath
@@ -92,6 +93,13 @@ module Main where
     src2dst :: FilePath -> FilePath -> FilePath
     src2dst src dstDir = dstDir </> (takeBaseName src) <.> "json"
 
+    src2worldstage :: FilePath -> (String, String)
+    src2worldstage src = 
+        let base = takeBaseName src
+        in case lexFilename base of
+            Just result -> result
+            Nothing -> ("0", "0")
+
     readDayTime :: UTCTime -> String
     readDayTime t = formatTime defaultTimeLocale "%T" t
 
@@ -101,7 +109,8 @@ module Main where
         srcHandle <- openFile src ReadMode
         hSetEncoding srcHandle utf8_bom
         srcString <- hGetContents srcHandle
-        let res = encode `fmap` M.src2map srcString
+        let (world, stage) = src2worldstage src
+        let res = encode `fmap` M.src2map (world,stage) srcString
         case res of
             Right m -> 
                 putStrLn "Success" >> BS.writeFile dst m

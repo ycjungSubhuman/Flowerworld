@@ -7,7 +7,7 @@ import System.IO
 import Data.Text.Format
 import Control.Exception
 import Control.Monad
-
+{- TODO : Add Test Cases for World-Map -}
 readMapText :: String -> IO String
 readMapText mapName = 
     let mapFileName = "resources/" ++ mapName ++ ".map"
