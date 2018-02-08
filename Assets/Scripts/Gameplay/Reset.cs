@@ -16,13 +16,14 @@ public class Reset : MonoBehaviour
 
     public GameObject Player;
 
-    float SLIDER_DELTA = 0.5f;//초당 0.5
+    float SLIDER_DELTA;//초당 0.5
+
 
     // Use this for initialization
     void Start()
     {
         ResetProgress = transform.Find("ProgressBar").GetComponent<Slider>();
-        SLIDER_DELTA = 0.5f;
+        SLIDER_DELTA = 2f;
        // StartCoroutine(DetectMouseHovering());
     }
 
