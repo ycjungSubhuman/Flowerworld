@@ -21,7 +21,7 @@ public class StageInitializerScript : MonoBehaviour {
         if(json==null)
         {
             // 디버그용 (GameplayScene을 바로 플레이할 때)
-            json = Resources.Load<TextAsset> ("maps/map1");
+            json = Resources.Load<TextAsset> ("maps/map-1-1");
         }
         var map = JsonConvert.DeserializeObject<Map> (json.text);
 

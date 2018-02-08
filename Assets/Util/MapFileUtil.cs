@@ -25,5 +25,15 @@ namespace Assets.Util
             var map = JsonConvert.DeserializeObject<Map> (mapSource.text);
             return map.title;
         }
+        public static string mapWorld(TextAsset mapSource)
+        {
+            var map = JsonConvert.DeserializeObject<Map>(mapSource.text);
+            return map.world;
+        }
+        public static string mapStage(TextAsset mapSource)
+        {
+            var map = JsonConvert.DeserializeObject<Map>(mapSource.text);
+            return map.stage;
+        }
     }
 }
