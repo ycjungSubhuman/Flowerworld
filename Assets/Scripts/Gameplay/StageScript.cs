@@ -114,8 +114,17 @@ public class StageScript : MonoBehaviour {
     }
     private bool checkLogic(Vector2Int newPos)
     {
-        var validLabel = map.pattern [patternIndex];
-        var actualLabel = map.LabelOf (newPos);
+        //기본적으로는 이미 지정된 Label의 데이터와 비교해서 True/false를 리턴한다.
+        //마법신발이 적용되어있으면 무조건 True를 리턴하고
+        //newPos에 색유리가 깔려 있으면 그 지점을 대신 비교한다.
+
+        var validLabel = map.pattern [patternIndex];//다음에 갈 수 있는 칸
+
+        var actualLabel = map.LabelOf (newPos);//플레이어가 입력한 칸(여기로 가고 싶어요)
+
+        //마법신발이 있으면 True를 리턴
+
+        //아니면 두개를 비교한다.
         return actualLabel.FallIn (validLabel);
     }
     void initGoalCount()
