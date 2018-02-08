@@ -12,6 +12,8 @@ namespace Assets.Core.Data
         public List<Label> pattern = new List<Label>();
         public string title { get; set; }
         public int goalCount;
+        public string world;
+        public string stage;
 
         public Map()
         {
