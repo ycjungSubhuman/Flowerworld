@@ -26,6 +26,7 @@ public class StageSelectionInitializerScript : MonoBehaviour {
         //분류하고
         //버튼을 만든다
         
+
         //Dropbox에 넣어준다
         foreach (TextAsset mapSource in mapSources)
         {
