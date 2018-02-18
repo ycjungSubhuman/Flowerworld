@@ -1,0 +1,10 @@
+ title Practice 5 
+ goalcount 17 
+ item 1/(0,0,0,0)/0
+ pattern A,B,B,C,A
+ block 
+         B | B | C | A | B,$ |
+         A | B | B | C | B |
+         A | C | B | A | B |
+         B | B | B | B | C |
+         A,^ | A | C | A | A |

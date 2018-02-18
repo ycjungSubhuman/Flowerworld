@@ -12,6 +12,15 @@ namespace Assets.Core.Data
         public List<Label> pattern = new List<Label>();
         public string title { get; set; }
         public int goalCount;
+        public int springsAvailable;
+        /**
+         * 각 유리에 접근하는 법
+         * glassAvailable["A"]  : A 글래스의 개수
+         * glassAvailable["B"]  : B 글래스의 개수
+         * ...
+         */
+        public Dictionary<string, int> glassAvailable;
+        public int watchesAvailable;
         public string world;
         public string stage;
 

@@ -1,0 +1,7 @@
+title 테스트-아이템-글래스 선언 이상
+item 1/(2,3,4)/5
+goalcount 20
+pattern A,C,A
+block
+    A  | B,$ | C | D |
+    A,^| C   | C | D |

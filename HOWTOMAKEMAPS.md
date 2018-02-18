@@ -28,6 +28,7 @@ $는 GOAL을 의미합니다.
 ```
 title (타이틀)
 goalcount (목표 이동 수 숫자)
+(옵셔널, 선언 안하면 전부 0) item 스프링 수/(A 글래스 수, B 글래스 수, C 글래스 수, D 글래스 수)/시계 수
 pattern (","로 구별된 레이블)
 block
     ("줄바꿈"으로 구별된 ("|"로 구별된 (","로 구별된 레이블)))
@@ -62,6 +63,16 @@ block
     A,^|   B   |   C   |   D   |
       C    |   A   |   C   |   D   |
       A    |  A    |   B   |   A,$   |
+```
+
+```
+title 테스트-아이템 선언
+item 1/(2,3,4,5)/6
+goalcount 20
+pattern A,C,A
+block
+    A  | B,$ | C | D |
+    A,^| C   | C | D |
 ```
 
 

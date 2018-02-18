@@ -5,12 +5,14 @@ module MapDSL.DSLAst where
     data Stmt = TitleStmt Title
                 | GoalCountStmt GoalCount
                 | PatternStmt Pattern
+                | ItemStmt Items
                 | BlockStmt Block
                 deriving (Eq, Show)
 
     type GoalCount = Int
     type Title = String
     type Block = [[Cell]]
+    type Items = (Int, [Int], Int)
     type Cell = [Label]
     type Pattern = [Label]
 

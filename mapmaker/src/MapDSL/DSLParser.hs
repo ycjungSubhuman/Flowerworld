@@ -1,3 +1,4 @@
+{-# LANGUAGE Rank2Types #-}
 module MapDSL.DSLParser(
     parseMapText
     ) where
@@ -33,37 +34,40 @@ module MapDSL.DSLParser(
     singleStmtParser :: CharParser st Stmt
     singleStmtParser = 
         try titleStmtParser <|> try goalCountStmtParser <|> try patternStmtParser <|> try blockStmtParser
+            <|> try itemStmtParser
         <?> "single statement"
 
-    titleStmtParser :: CharParser st Stmt
-    titleStmtParser =
-        do 
+    simpleFieldParser :: String -> (forall st. CharParser st b) -> (b -> Stmt) -> CharParser st Stmt
+    simpleFieldParser keyword innerParser stmtBuilder =
+        do
             spacesOrLineEnds
-            string "title"
+            string keyword
             space
-            title <- many (noneOf "\r\n")
-            return $ TitleStmt title
+            inner <- innerParser
+            spacesOrLineEnds
+            return $ stmtBuilder inner
 
-    goalCountStmtParser :: CharParser st Stmt
-    goalCountStmtParser =
-        do 
-            spacesOrLineEnds
-            string "goalcount"
-            space
-            t <- goalCountParser
-            spaces
-            return $ GoalCountStmt t
+    itemStmtParser = simpleFieldParser "item" itemParser (\items -> ItemStmt items)
+    itemParser :: CharParser st Items
+    itemParser =
+        do
+            springs <- read <$> many1 digit
+            string "/("
+            glassCounts <- (read <$> many1 digit) `sepBy` (spaces >> char ',' >> spaces)
+            string ")/"
+            watches <- read <$> many1 digit
+            return (springs, glassCounts, watches)
+
+    titleStmtParser = simpleFieldParser "title" (many $ noneOf "\r\n") (\title -> TitleStmt title)
+
+    goalCountStmtParser = simpleFieldParser "goalcount" goalCountParser (\gc -> GoalCountStmt gc)
     goalCountParser :: CharParser st Int
     goalCountParser = read <$> many1 digit
 
     patternStmtParser :: CharParser st Stmt
-    patternStmtParser =
-        do 
-            spacesOrLineEnds
-            string "pattern"
-            space
-            labels <- patternLabelParser `sepBy` (spaces >> char ',' >> spaces)
-            return $ PatternStmt labels
+    patternStmtParser = simpleFieldParser "pattern" patternParser (\pattern -> PatternStmt pattern)
+    patternParser :: CharParser st Pattern
+    patternParser = patternLabelParser `sepBy` (spaces >> char ',' >> spaces)
     patternLabelParser :: CharParser st Label
     patternLabelParser =
         do

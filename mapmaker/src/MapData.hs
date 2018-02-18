@@ -3,6 +3,7 @@ module MapData(src2map) where
     import GHC.Generics
     import Data.Aeson
     import qualified MapDSL.DSLAst as Ast
+    import qualified Data.Map as Dict
     import MapDSL.DSLAstHelper
     import MapDSL.DSLValidate
     import MapDSL.DSLParser
@@ -27,6 +28,9 @@ module MapData(src2map) where
             world :: String,
             stage :: String,
             goalCount :: Int,
+            springsAvailable :: Int,
+            glassAvailable :: Dict.Map String Int,
+            watchesAvailable :: Int,
             pattern :: [Label]
         } deriving (Generic, Show)
 
@@ -49,6 +53,8 @@ module MapData(src2map) where
         in let astBlocks = blocksOf expr
         in let goalCount = goalCountOf expr
         in let mapblocks = astblock2mapblock `map` astBlocks
+        in let (springsAvailable, glassCounts, watchesAvailable) = itemsOf expr
+        in let glassAvailable = glassCountList2Map glassCounts
         in let (main:submaps) = mapblocks
         in let pattern = (\l -> astlabels2label [l]) `map` astPattern
         in Map {
@@ -57,9 +63,18 @@ module MapData(src2map) where
             title = title,
             world = world,
             stage = stage,
+            springsAvailable = springsAvailable,
+            glassAvailable = glassAvailable,
+            watchesAvailable = watchesAvailable,
             goalCount = goalCount,
             pattern = pattern
             }
+
+    glassCountList2Map :: [Int] -> Dict.Map String Int
+    glassCountList2Map glassCounts = 
+        let labels = ["A", "B", "C", "D"]
+        in let pairList = zip labels glassCounts
+        in Dict.fromList pairList
 
     astblock2mapblock :: Ast.Block -> MapBlock
     astblock2mapblock block = MapBlock { mat = (astrow2row `map` block) }

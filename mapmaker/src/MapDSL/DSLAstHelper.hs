@@ -25,6 +25,11 @@ module MapDSL.DSLAstHelper where
         case stmt of
             BlockStmt t -> Just t
             _ -> Nothing
+    stmtToItems :: Stmt -> Maybe Items
+    stmtToItems stmt =
+        case stmt of
+            ItemStmt items -> Just items
+            _ -> Nothing
 
     extractSingleField :: (Stmt -> Maybe a) -> Expr b -> a
     extractSingleField f expr = 
@@ -44,6 +49,14 @@ module MapDSL.DSLAstHelper where
 
     patternOf :: Expr a -> Pattern
     patternOf expr = extractSingleField stmtToPattern expr
+
+    itemsOf :: Expr a -> Items
+    itemsOf expr =
+        let itemStmtLines = extractMultipleField stmtToItems expr
+        in let lineCount = length itemStmtLines
+        in case lineCount of
+            0 -> (0, [0, 0, 0, 0], 0)
+            _ -> head itemStmtLines
 
     goalCountOf :: Expr a -> GoalCount
     goalCountOf expr = extractSingleField stmtToGoalCount expr

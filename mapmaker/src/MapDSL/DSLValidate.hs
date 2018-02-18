@@ -31,6 +31,13 @@ module MapDSL.DSLValidate where
     startCountErrorMsg actualCount = 
         show $ format "The map contains {} STARTs. should be 1" [actualCount]
 
+    itemCountErrorMsg :: Int -> String
+    itemCountErrorMsg actualCount =
+        show $ format "The map has {} item declarations. should be 0 or 1" [actualCount]
+    glassCountErrorMsg :: Int -> String
+    glassCountErrorMsg actualCount = 
+        show $ format "Item declaration has {} glass entries. should be 4(eg .../(1, 1, 1, 1)/...)" [actualCount]
+
     goalErrorMsg :: Int -> String
     goalErrorMsg actualCount = 
         show $ format "The map contains {} GOALs, should be 1" [show actualCount]
@@ -44,6 +51,7 @@ module MapDSL.DSLValidate where
     checks = [
         hasOneTitle, 
         hasOneGoalCount,
+        sequenceCheck hasOneOrZeroItemCount hasFourGlassCounts,
         sequenceCheck hasOnePattern hasValidPattern,
         sequenceCheck hasValidBlockCount $
             sequenceCheck hasValidBlockSize $
@@ -64,6 +72,16 @@ module MapDSL.DSLValidate where
         in if valid 
             then Nothing 
             else Just $ msgGen count
+
+    hasOneOrZeroItemCount :: Expr a -> Maybe String
+    hasOneOrZeroItemCount expr = 
+        let count = length $ extractMultipleField stmtToItems expr
+        in if count > 1 then Just $ itemCountErrorMsg count else Nothing
+    hasFourGlassCounts :: Expr a -> Maybe String
+    hasFourGlassCounts expr =
+        let (_,glassCounts,_) = itemsOf expr
+        in let count = length glassCounts
+        in if count /= 4 then Just $ glassCountErrorMsg count else Nothing
 
     hasOneTitle :: Expr a -> Maybe String
     hasOneTitle expr = hasOne stmtToTitle titleErrorMsg expr
