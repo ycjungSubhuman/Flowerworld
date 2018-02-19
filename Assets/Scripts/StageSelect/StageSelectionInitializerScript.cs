@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Assets.Util;
 using Assets;
-
+using UnityEngine.Events;
 
 // 디버그용 스테이지 선택 씬 초기화 스크립트 (main 씬)
 public class StageSelectionInitializerScript : MonoBehaviour {
@@ -17,9 +17,13 @@ public class StageSelectionInitializerScript : MonoBehaviour {
     public GameObject StageScroll;
 
     RectTransform WorldScrollContentRect;
+    RectTransform StageScrollContentRect;
+    GameObject StageButtonTemplate;
+    GameObject Protector;
+
     float WorldScrollRect_Height;
 
-    Dictionary<string, List<TextAsset>> WorldList = new Dictionary<string, List<TextAsset>>();
+    SortedList<string, List<TextAsset>> WorldList = new SortedList<string, List<TextAsset>>();
 
 
     // Use this for initialization
@@ -27,6 +31,15 @@ public class StageSelectionInitializerScript : MonoBehaviour {
 
 
         WorldScrollContentRect = WorldScroll.transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
+        StageScrollContentRect = StageScroll.transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
+
+        StageButtonTemplate = StageScrollContentRect.gameObject.transform.Find("Button").gameObject;
+        StageButtonTemplate.SetActive(false);
+
+        Protector = GameObject.Find("Protector");
+        Protector.SetActive(false);
+
+        StageScroll.SetActive(false);
 
         WorldScrollRect_Height = WorldScrollContentRect.rect.height;
         //미리 저장된 Map 파일을 읽은 뒤 분류한다
@@ -60,11 +73,30 @@ public class StageSelectionInitializerScript : MonoBehaviour {
         dropdown.value = 0;
         dropdown.RefreshShownValue ();
 	}
+    public void OnClick_WorldButton(string WorldName)
+    {
+        int i = WorldList.IndexOfKey(WorldName);
+        Protector.SetActive(true);
+        //Debug.Log(WorldName + " Pressed");
+        StageScroll.SetActive(true);
+        //위치를 지정한다.
+        float WorldButtonWidth = WorldScrollContentRect.rect.height * 0.8f;
+        float WorldScrollX = WorldScroll.transform.Find("Viewport").Find("Content").gameObject.GetComponent<RectTransform>().rect.x;
+        StageScroll.GetComponent<RectTransform>().anchoredPosition = new Vector2(WorldScrollX + (16 + WorldButtonWidth) * i + 16, 0f);
+        Debug.Log(i);
+        Debug.Log((16 + WorldButtonWidth) * i + 16);
+        //버튼을 만들어준다.
+        Create_StageSelect(WorldName);
+
+    }
+
+
 
     //이미 만들어진 StageSelect 창을 버튼으로 채워주는 Method
-    void Create_StageSelect(string World,RectTransform StageScrollContentRect, GameObject StageButtonTemplate)
+    void Create_StageSelect(string World)
     {
-        if(WorldList.ContainsKey(World))
+
+        if (WorldList.ContainsKey(World))
         {
             //월드 정보를 받아온다.
             List<TextAsset> StageList = WorldList[World];
@@ -76,6 +108,7 @@ public class StageSelectionInitializerScript : MonoBehaviour {
                 string title = MapFileUtil.mapTitleOfFile(Stage);
 
                 GameObject temp = Instantiate(StageButtonTemplate);
+                temp.SetActive(true);
                 RectTransform tempRect = temp.GetComponent<RectTransform>();
 
                 //부모를 설정하고
@@ -92,8 +125,12 @@ public class StageSelectionInitializerScript : MonoBehaviour {
                 tempRect.gameObject.SetActive(true);
                 //Init을 실행한다.
                 temp.GetComponent<StageSelectButton>().Init(title,Stage);
+
+                UnityAction Call = delegate { StartStage(Stage);  };
+                temp.GetComponent<Button>().onClick.AddListener(Call);
                 i++;
             }
+  
         }
         else
         {
@@ -101,7 +138,7 @@ public class StageSelectionInitializerScript : MonoBehaviour {
         }
     }
 
-    void Create_WorldSelect(Dictionary<string, List<TextAsset>> WorldList)
+    void Create_WorldSelect(SortedList<string, List<TextAsset>> WorldList)
     {
         //맵 상에 있는 대분류 버튼을 찾는다.
         GameObject WorldButtonTemplate = WorldScrollContentRect.gameObject.transform.Find("Button").gameObject;
@@ -127,17 +164,22 @@ public class StageSelectionInitializerScript : MonoBehaviour {
                 tempRect.gameObject.SetActive(true);
                 //Init을 실행한다.
                 temp.GetComponent<WorldSelectButton>().Init(Stage.Key, Stage.Value);
+
+
+                UnityAction Call = delegate { OnClick_WorldButton(Stage.Key); };
+                temp.GetComponent<Button>().onClick.AddListener(Call);
+                
                 i++;
             }
         }
 
     }
 
-    void Classify_Map(out Dictionary<string, List<TextAsset>> WorldList, List<TextAsset> mapSources)
+    void Classify_Map(out SortedList<string, List<TextAsset>> WorldList, List<TextAsset> mapSources)
     {
-        Dictionary<string, List<TextAsset>> tempWorldList = new Dictionary<string, List<TextAsset>>();
+        SortedList<string, List<TextAsset>> tempWorldList = new SortedList<string, List<TextAsset>>();
         //파일 명: map-(대분류)-(소분류)
-        //KeyValueDictionary 만들어서 쓰자
+        //KeyValueSortedList 만들어서 쓰자
         //string : 대분류를 나타내는 문자열
         //맵들을 대분류에 맞게 분류한다.
         foreach (TextAsset mapSource in mapSources)
@@ -184,6 +226,11 @@ public class StageSelectionInitializerScript : MonoBehaviour {
         WorldList = tempWorldList;
     }
 
+    void StartStage(TextAsset selection)
+    {
+        Configuration.Instance.activatedMapSource = selection;
+        SceneManager.LoadScene("GameplayScene");
+    }
 
     void StartStage()
     {
