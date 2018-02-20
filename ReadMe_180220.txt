@@ -1,0 +1,4 @@
+아이템을 맵에 배치하는 것 /  사용 / 효과 발동을 전부 관장하는 ItemManagerScript를 추가해서 GameManager에 추가했습니다.
+
+StageScript의 checkLogic Method는 나중에 이동할 예정입니다.
+
