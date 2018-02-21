@@ -1,0 +1,6 @@
+title Tutorial 2
+goalcount 8
+pattern A,B,A
+block
+      A,^ | B | A | B | A | B |
+      A | B | A | B | A | B,$ |

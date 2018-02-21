@@ -21,6 +21,8 @@ public class StageSelectionInitializerScript : MonoBehaviour {
     GameObject StageButtonTemplate;
     GameObject Protector;
 
+    List<GameObject> Prv_StageButton = new List<GameObject>();
+
     float WorldScrollRect_Height;
 
     SortedList<string, List<TextAsset>> WorldList = new SortedList<string, List<TextAsset>>();
@@ -29,7 +31,7 @@ public class StageSelectionInitializerScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
 
-
+        Prv_StageButton.Clear();
         WorldScrollContentRect = WorldScroll.transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
         StageScrollContentRect = StageScroll.transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
 
@@ -96,8 +98,17 @@ public class StageSelectionInitializerScript : MonoBehaviour {
     void Create_StageSelect(string World)
     {
 
+
         if (WorldList.ContainsKey(World))
         {
+            //이미 만들어진 버튼을 비활성화 한다.
+            if( Prv_StageButton.Count != 0 ) {
+                for( int j = 0; j < Prv_StageButton.Count; j++ ) {
+                    Destroy( Prv_StageButton[ j ] );
+                }
+            }
+            Prv_StageButton.Clear();
+
             //월드 정보를 받아온다.
             List<TextAsset> StageList = WorldList[World];
             int i = 0;
@@ -129,6 +140,9 @@ public class StageSelectionInitializerScript : MonoBehaviour {
                 UnityAction Call = delegate { StartStage(Stage);  };
                 temp.GetComponent<Button>().onClick.AddListener(Call);
                 i++;
+
+                //버튼 리스트에 추가한다.
+                Prv_StageButton.Add( temp );
             }
   
         }

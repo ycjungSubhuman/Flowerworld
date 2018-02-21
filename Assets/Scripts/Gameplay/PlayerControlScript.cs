@@ -22,12 +22,14 @@ public class PlayerControlScript : MonoBehaviour
     private StageScript stage;
 
     private GameObject Reset, BacktoMain;
+    private ItemManager IM;
     int PosDelta;
 
     void Start()
     {
         Reset = GameObject.Find("ResetIndicator");
         BacktoMain = GameObject.Find("BacktoMainIndicator");
+        IM = GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>();
 
         Debug.Assert (stageRoot != null);
         stage = stageRoot.GetComponent<StageScript> ();
@@ -43,15 +45,15 @@ public class PlayerControlScript : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
-            newPos += new Vector2Int( PosDelta * -1, 0);
+            newPos += new Vector2Int(PosDelta * -1, 0);
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            newPos += new Vector2Int( PosDelta, 0);
+            newPos += new Vector2Int(PosDelta, 0);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            newPos += new Vector2Int(0, PosDelta );
+            newPos += new Vector2Int(0, PosDelta);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
@@ -109,18 +111,27 @@ public class PlayerControlScript : MonoBehaviour
         soundController.OnRestart ();
     }
 
+    //
     void updatePlayerPosition(Vector2Int newPos, bool isReset=false)
     {
         if (newPos.Equals(pos))
         {
             return;
         }
+        //일반적으로 갈 수 있는 장소인가?
+        bool IsValidPos = stage.IsValidPos( newPos );
 
-        if(stage.IsValidPos(newPos) || isReset)
+
+        if(IsValidPos || isReset)
         {
             playMoveSound ();
             stage.UpdateStage (newPos);
             movePlayer (newPos);
+            //움직인 뒤에 스프링이 켜져있으면 끄고 1 차감한다.
+            if(PosDelta != 1 && !isReset) {
+                IM.Set_Spring( false );
+                IM.Change_SpringValue( -1 );
+            }
         }
         else
         {

@@ -9,6 +9,9 @@ namespace Assets.Core.Data
     public class Map
     {
         public MapBlock main;
+        List<List<Cell>> temp = new List<List<Cell>>();
+        public MapBlock Glass;
+
         public List<Label> pattern = new List<Label>();
         public string title { get; set; }
         public int goalCount;
@@ -26,6 +29,7 @@ namespace Assets.Core.Data
 
         public Map()
         {
+
         }
 
         public Map(string title, IEnumerable<Label> pattern, IEnumerable<MapBlock> blocks)
@@ -33,6 +37,15 @@ namespace Assets.Core.Data
             this.title = title;
             this.main = blocks.First ();
             this.pattern = pattern.ToList();
+            Glass = new MapBlock( temp );
+            for(int i=0;i<Glass.mat.Count;i++) {
+                List<Cell> t = new List<Cell>();
+                for(int j=0;j<Glass.mat[i].Count;j++) {
+                    Cell temp_cell = new Cell( Label.ANY );
+                    t.Add( temp_cell );
+                }
+               Glass.mat.Add( t );
+            }    
         }
 
         /** 현재 맵의 position에 있는 cell의 label을 리턴 */
@@ -40,7 +53,9 @@ namespace Assets.Core.Data
         {
             return main.LabelOf (position);
         }
-
+        public Label GlassLabelOf( Vector2Int position ) {
+            return Glass.LabelOf( position );
+        }
         /** l 레이블을 가지는 cell들의 position을 리턴 */
         public IEnumerable<Vector2Int> PositionsOf(Label l)
         {

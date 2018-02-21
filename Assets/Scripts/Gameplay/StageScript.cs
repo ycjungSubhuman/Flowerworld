@@ -121,11 +121,13 @@ public class StageScript : MonoBehaviour {
         var validLabel = map.pattern [patternIndex];//다음에 갈 수 있는 칸
 
         var actualLabel = map.LabelOf (newPos);//플레이어가 입력한 칸(여기로 가고 싶어요)
+        var glassLabel = map.GlassLabelOf( newPos );
 
-        //마법신발이 있으면 True를 리턴
+        if( glassLabel.Value == Label.ANY.Value )
+            return actualLabel.FallIn( validLabel );
+        else
+            return glassLabel.FallIn( validLabel );
 
-        //아니면 두개를 비교한다.
-        return actualLabel.FallIn (validLabel);
     }
     void initGoalCount()
     {
