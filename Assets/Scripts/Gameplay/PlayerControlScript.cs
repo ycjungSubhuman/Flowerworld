@@ -22,6 +22,7 @@ public class PlayerControlScript : MonoBehaviour
     private StageScript stage;
 
     private GameObject Reset, BacktoMain;
+    int PosDelta;
 
     void Start()
     {
@@ -42,19 +43,19 @@ public class PlayerControlScript : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.UpArrow))
         {
-            newPos += new Vector2Int(-1, 0);
+            newPos += new Vector2Int( PosDelta * -1, 0);
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            newPos += new Vector2Int(1, 0);
+            newPos += new Vector2Int( PosDelta, 0);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            newPos += new Vector2Int(0, 1);
+            newPos += new Vector2Int(0, PosDelta );
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            newPos += new Vector2Int(0, -1);
+            newPos += new Vector2Int(0, PosDelta * -1);
         }
 
         updatePlayerPosition (newPos);
@@ -75,6 +76,13 @@ public class PlayerControlScript : MonoBehaviour
         {
             BacktoMain.GetComponent<Reset>().Pressed = false;
         }   
+    }
+
+    public void Set_SpringState(bool On) {
+        if( On )
+            PosDelta = 2;
+        else
+            PosDelta = 1;
     }
     public void onGotoStageSelect()
     {
