@@ -13,6 +13,7 @@ public class ItemManager : MonoBehaviour {
     public bool Spring = false;
     GameObject Player;
     int SpringCount;
+    int Init_SpringCount;
     Text Temp_SpringCount;
 
 
@@ -22,8 +23,8 @@ public class ItemManager : MonoBehaviour {
         Player = GameObject.FindWithTag( "Player" );
         Set_Spring( false );
         Temp_SpringCount = GameObject.Find( "Temp_SpringCount" ).GetComponent<Text>();
-        Set_SpringValue( 5 );
 	}
+
     private void Update() {
         Temp_SpringCount.text = SpringCount.ToString();
     }
@@ -32,6 +33,18 @@ public class ItemManager : MonoBehaviour {
 
     public void Temp_Onclick_ToggleSpring() {
         GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>().Toggle_Spring();
+    }
+    
+
+
+    public void Set_InitSpringCount(int value) {
+        
+        Init_SpringCount = value;
+        SpringCount = Init_SpringCount;
+    }
+
+    public void Reset_SpringCount() {
+        SpringCount = Init_SpringCount;
     }
 
     //남은 스프링의 개수를 설정하는 Method

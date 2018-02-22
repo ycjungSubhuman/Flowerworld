@@ -19,6 +19,7 @@ public class StageScript : MonoBehaviour {
     private int patternIndex = -1;
     private int moveCount = 0;
 
+
 	// Use this for initialization
 	void Start () {
         initGoalCount ();

@@ -1,0 +1,7 @@
+title Tutorial 3
+goalcount 8
+pattern A,B,A
+block
+        A,^ | B | A |
+        A | * | A |
+        A | A | B,$ |

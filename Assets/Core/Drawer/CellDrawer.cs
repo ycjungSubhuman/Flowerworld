@@ -31,6 +31,7 @@ namespace Assets.Core.Drawer
                     goalMarker.GetComponent<MeshRenderer>().material = goalMarkerMaterial;
                     goalMarker.transform.parent = cellGameObject.transform;
                 }
+
             } else {
                 cellPrefab = Resources.Load<GameObject>( "prefabs/ImageCell" );
                 cellGameObject = GameObject.Instantiate( cellPrefab );
@@ -41,9 +42,22 @@ namespace Assets.Core.Drawer
                 if( cell.label.FallIn( Label.GOAL ) ) {
                     var goalMarker = GameObject.Instantiate( cellGameObject );
                     var goalMarkerMaterial = Resources.Load<Material>( "materials/BorderMaterial" );
-                   // goalMarker.GetComponent<MeshRenderer>().material = goalMarkerMaterial;
-                   // goalMarker.transform.parent = cellGameObject.transform;
+                    goalMarker.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>( "Sprite/CellFlower/" + "GOAL" );
+                    goalMarker.transform.parent = cellGameObject.transform;
+                    goalMarker.GetComponent<SpriteRenderer>().sortingLayerName = "GoalMarker";
+                    // goalMarker.GetComponent<MeshRenderer>().material = goalMarkerMaterial;
+                    // goalMarker.transform.parent = cellGameObject.transform;
                 }
+                /*
+                if( cell.label.FallIn( Label.START ) ) {
+                    var goalMarker = GameObject.Instantiate( cellGameObject );
+                    var goalMarkerMaterial = Resources.Load<Material>( "materials/BorderMaterial" );
+                    goalMarker.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>( "Sprite/CellFlower/" + "START" );
+                    goalMarker.transform.parent = cellGameObject.transform;
+                    goalMarker.GetComponent<SpriteRenderer>().sortingLayerName = "GoalMarker";
+                    // goalMarker.GetComponent<MeshRenderer>().material = goalMarkerMaterial;
+                    // goalMarker.transform.parent = cellGameObject.transform;
+                }*/
             }
             return cellGameObject;
         }
@@ -51,17 +65,19 @@ namespace Assets.Core.Drawer
         Sprite FlowerFetcher( Label label ) {
 
             string FlowerName;
-            if( label.Value == Label.A.Value ) {
+            if( label.FallIn(Label.A) ) {
                 FlowerName = "A";
-            } else if( label.Value == Label.B.Value ) {
+            } else if( label.FallIn( Label.B ) ) {
                 FlowerName = "B";
-            } else if( label.Value == Label.C.Value ) {
+            } else if( label.FallIn( Label.C ) ) {
                 FlowerName = "C";
-            } else if( label.Value == Label.D.Value ) {
+            } else if( label.FallIn( Label.D ) ) {
                 FlowerName = "D";
             } else {
-                FlowerName = "D";
+                FlowerName = "NONE";
             }
+            if( label.Value == Label.ANY.Value )
+                FlowerName = "ANY";
             Sprite temp = Resources.Load<Sprite>( "Sprite/CellFlower/" + FlowerName );
 
             return temp;

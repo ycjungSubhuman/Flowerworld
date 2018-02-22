@@ -14,6 +14,9 @@ public class StageInitializerScript : MonoBehaviour {
     //Main씬에서 넘겨준 데이터
     private Assets.Configuration configuration = Assets.Configuration.Instance;
 
+    //스프링 개수
+    int SpringCount;
+
 	// Use this for initialization
 	void Start () {
         // 맵 불러오기
@@ -35,9 +38,15 @@ public class StageInitializerScript : MonoBehaviour {
         mapGameObject.AddComponent<StageScript> ();
         var stageScript = mapGameObject.GetComponent<StageScript> ();
 
+
         stageScript.map = map;
 
         stageScript.mapAnimationController = new MapAnimationController (mapGameObject);
+
+        //맵의 유리 정보 초기화
+        map.GlassMap();
+        //맵에서 사용가능한 스프링 개수 받아와서 할당
+        SpringCount=map.springsAvailable;
 
 
         //UI 생성
@@ -52,8 +61,14 @@ public class StageInitializerScript : MonoBehaviour {
         var playerScript = player.GetComponent<PlayerControlScript> ();
         playerScript.stageRoot = mapGameObject;
         playerScript.soundController = new PlayerSoundController (player);
+
+        Invoke( "Set_ItemValue", 0.2f );
     }
 	
+    void Set_ItemValue() {
+        GetComponent<ItemManager>().Set_InitSpringCount( SpringCount );
+    }
+
 	// Update is called once per frame
 	void Update () {
 		

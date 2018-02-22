@@ -32,6 +32,26 @@ namespace Assets.Core.Data
         public static readonly Label ANY = A.Or (B).Or (C).Or (D).Or (E).Or (F).Or (G);       // 아무 색이나 다 허용. 단, 알파벳 레이블만 허용한다.
         public static readonly Label GOAL = genLabel (1 << 30);
 
+        //필드 위에 올라와 있는 아이템에 관한 label
+        public static readonly Label ITEM_SPRING = genLabel( 1 << 10 );
+        public static readonly Label ITEM_GLASS_A = genLabel( 1 << 11 + 1 << 1 );
+        public static readonly Label ITEM_GLASS_B = genLabel( 1 << 11 + 1 << 2 );
+        public static readonly Label ITEM_GLASS_C = genLabel( 1 << 11 + 1 << 3 );
+        public static readonly Label ITEM_GLASS_D = genLabel( 1 << 11 + 1 << 4 );
+        public static readonly Label ITEM_GLASS_E = genLabel( 1 << 11 + 1 << 5 );
+        public static readonly Label ITEM_GLASS_F = genLabel( 1 << 11 + 1 << 6 );
+        public static readonly Label ITEM_GLASS_G = genLabel( 1 << 11 + 1 << 7 );
+
+        //설치되어 있는 아이템에 관한 Label
+        public static readonly Label DEPLOYED_GLASS_A = genLabel( 1 << 12 + 1 << 1 );
+        public static readonly Label DEPLOYED_GLASS_B = genLabel( 1 << 12 + 1 << 2 );
+        public static readonly Label DEPLOYED_GLASS_C = genLabel( 1 << 12 + 1 << 3 );
+        public static readonly Label DEPLOYED_GLASS_D = genLabel( 1 << 12 + 1 << 4 );
+        public static readonly Label DEPLOYED_GLASS_E = genLabel( 1 << 12 + 1 << 5 );
+        public static readonly Label DEPLOYED_GLASS_F = genLabel( 1 << 12 + 1 << 6 );
+        public static readonly Label DEPLOYED_GLASS_G = genLabel( 1 << 12 + 1 << 7 );
+
+
         public int Value { get { return value; } }
 
         [JsonProperty]

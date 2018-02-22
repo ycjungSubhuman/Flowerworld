@@ -9,12 +9,16 @@ namespace Assets.Core.Data
     public class Map
     {
         public MapBlock main;
-        List<List<Cell>> temp = new List<List<Cell>>();
-        public MapBlock Glass;
+        //깔 유리들
+        List<List<Label>> Glass = new List<List<Label>>();
+        //필드 위에 올라와 있는 아이템들
+        List<List<Label>> Item = new List<List<Label>>();
+        // public MapBlock Glass;
 
         public List<Label> pattern = new List<Label>();
         public string title { get; set; }
         public int goalCount;
+
         public int springsAvailable;
         /**
          * 각 유리에 접근하는 법
@@ -29,23 +33,30 @@ namespace Assets.Core.Data
 
         public Map()
         {
-
+            //Debug.Log( "Loaded" );
         }
 
         public Map(string title, IEnumerable<Label> pattern, IEnumerable<MapBlock> blocks)
         {
+           // Debug.Log( "Loaded" );
             this.title = title;
             this.main = blocks.First ();
+            GlassMap();
+        }
+        //유리 라벨링
+        public void GlassMap() {
+            Debug.Log( "GlassMapLoaded" );
+           // main.mat.CopyTo( this.Glass );
+
             this.pattern = pattern.ToList();
-            Glass = new MapBlock( temp );
-            for(int i=0;i<Glass.mat.Count;i++) {
-                List<Cell> t = new List<Cell>();
-                for(int j=0;j<Glass.mat[i].Count;j++) {
-                    Cell temp_cell = new Cell( Label.ANY );
-                    t.Add( temp_cell );
+
+            for( int i = 0; i < main.mat.Count; i++ ) {
+                List<Label> temp_Cell = new List<Label>();
+                for( int j = 0; j < main.mat[ i ].Count; j++ ) {
+                    temp_Cell.Add( Label.ANY );
                 }
-               Glass.mat.Add( t );
-            }    
+                Glass.Add( temp_Cell );
+            }
         }
 
         /** 현재 맵의 position에 있는 cell의 label을 리턴 */
@@ -54,7 +65,7 @@ namespace Assets.Core.Data
             return main.LabelOf (position);
         }
         public Label GlassLabelOf( Vector2Int position ) {
-            return Glass.LabelOf( position );
+            return Glass[ position.x ][ position.y ];
         }
         /** l 레이블을 가지는 cell들의 position을 리턴 */
         public IEnumerable<Vector2Int> PositionsOf(Label l)

@@ -46,8 +46,10 @@ public class Reset : MonoBehaviour
         }
         if (ResetProgress.value >= 1f)
         {
-            if (Is_Reset)
+            if( Is_Reset ) {
                 Player.GetComponent<PlayerControlScript>().onResetKey();
+                GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>().Reset_SpringCount();
+            }
             if (Is_BacktoMain)
                 Player.GetComponent<PlayerControlScript>().onGotoStageSelect();
             ResetProgress.value = 0;
