@@ -1,7 +1,6 @@
 title Tutorial 3
-goalcount 8
-pattern A,B,A
+goalcount 9
+pattern A,A,B
 block
-        A,^ | B | A |
-        A | * | A |
-        A | A | B,$ |
+        A,^ | B |  |  |  |
+        A | * | A | A | B,$ |
