@@ -49,6 +49,10 @@ public class StageScript : MonoBehaviour {
     {
         return map.IsInside (newPos) && checkLogic (newPos);
     }
+    public bool IsValidGlassPos(Vector2Int newPos) {
+        return map.IsInside( newPos ) && map.IsGlassDeployed(newPos);
+    }
+
     /** 
      * 그래픽 상으로 나타나는 Cell의 Transform Position을 불러온다. 
      * TODO : 추후에 Logic과 분리 필요

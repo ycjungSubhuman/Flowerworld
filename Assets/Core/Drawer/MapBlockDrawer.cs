@@ -27,10 +27,12 @@ namespace Assets.Core.Drawer
         public GameObject Draw(MapBlock m)
         {
             GameObject rootGameObject = new GameObject ();
+            rootGameObject.name = "Cell_Head";
             for (int i=0; i<m.mat.Count; i++)
             {
                 var row = m.mat [i];
                 var rowGameObject = new GameObject ();
+                rowGameObject.name = "Cell_Row_" + i.ToString();
                 rowGameObject.transform.parent = rootGameObject.transform;
                 rowGameObject.transform.localPosition = 
                     new Vector2 (0, -i*(cellHeight+verticalSpace));
@@ -38,6 +40,7 @@ namespace Assets.Core.Drawer
                 {
                     var cell = row [j];
                     var cellGameObject = cellDrawer.Draw (cell);
+                    cellGameObject.name = "Cell_Column_" + j.ToString();
                     cellGameObject.transform.parent = rowGameObject.transform;
                     cellGameObject.transform.localPosition = 
                         new Vector2 (j*(cellWidth+horitozontalSpace), 0);

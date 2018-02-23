@@ -17,49 +17,64 @@ public class ItemManager : MonoBehaviour {
     int SpringCount;
     int Init_SpringCount;
     static readonly int GLASS_VARIATION = 4;
-    Dictionary<string, int> Init_GlassCount = new Dictionary<string, int>();
-    Dictionary<string, int> GlassCount = new Dictionary<string, int>();
+    SortedList<string, int> Init_GlassCount = new SortedList<string, int>();
+    SortedList<string, int> GlassCount = new SortedList<string, int>();
     Text SpringCount_Text;
-    Text[] GlassCount_Text = new Text[GLASS_VARIATION];
+    Text[] GlassCount_Text = new Text[ GLASS_VARIATION ];
     string[] FlowerType = { "A", "B", "C", "D", "E", "F" };
 
     public string Queued_Glass;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start() {
         Spring = false;
         Player = GameObject.FindWithTag( "Player" );
         Set_Spring( false );
 
         SpringCount_Text = GameObject.Find( "SpringCount_Text" ).GetComponent<Text>();
 
-        for(int i=0;i<GLASS_VARIATION;i++) {
-            GlassCount_Text[ i ] = GameObject.Find( "GlassCount_Text_" + FlowerType[i] ).GetComponent<Text>();
+        for( int i = 0; i < GLASS_VARIATION; i++ ) {
+            GlassCount_Text[ i ] = GameObject.Find( "GlassCount_Text_" + FlowerType[ i ] ).GetComponent<Text>();
         }
-	}
-    
+    }
+
     private void Update() {
         Text_Updater();
     }
-    public void Set_Mapinfo(Map map_data) {
+    public void Set_Mapinfo( Map map_data ) {
         map = map_data;
     }
     public void Text_Updater() {
         SpringCount_Text.text = SpringCount.ToString();
         for( int i = 0; i < GLASS_VARIATION; i++ ) {
-            GlassCount_Text[ i ].text = FlowerType[ i ] + " : " + GlassCount[FlowerType[i]].ToString();
+            GlassCount_Text[ i ].text = FlowerType[ i ] + " : " + GlassCount[ FlowerType[ i ] ].ToString();
         }
     }
 
     //색유리 아이템 관련 함수
 
     //유리의 초기 정보(각 유리별 사용 가능 개수)
-    public void Set_Glassinfo(Dictionary<string,int> Info) {
-        Init_GlassCount = Info;
-        GlassCount = Init_GlassCount;
+    public void Set_Glassinfo( SortedList<string, int> Info ) {
+        foreach( KeyValuePair<string, int> GlassInfo in Info ) {
+            Init_GlassCount.Add( GlassInfo.Key, GlassInfo.Value );
+            GlassCount.Add( GlassInfo.Key, GlassInfo.Value );
+        }
 
     }
-    
+
+    public void Reset_Glassinfo() {
+        foreach( KeyValuePair<string, int> GlassInfo in Init_GlassCount ) {
+            GlassCount[ GlassInfo.Key ] = GlassInfo.Value;
+        }
+        Queued_Glass = null;
+    }
+
+
+    public string Current_Glass() {
+        return Queued_Glass;
+    }
+
+
     //유리 쓸 수 있나요?(쓸 개수가 남아있나요)
     public bool Is_GlassAvailable(string FlowerType) {
         if( !GlassCount.ContainsKey( FlowerType ) || GlassCount[ FlowerType ] <= 0 )
@@ -68,7 +83,13 @@ public class ItemManager : MonoBehaviour {
             return true;
     }
 
-    //모든 유리를 비활성화 상태로 만들어 줍니다
+    //유리를 썼어요
+    public void Use_Glass( string FlowerType ) {
+        if( GlassCount.ContainsKey( FlowerType ) )
+            GlassCount[ FlowerType ]--;
+    }
+
+    //유리를 비활성화 상태로 만들어 줍니다
     public void TurnOff_Glass() {
         Queued_Glass = null;
     }

@@ -39,6 +39,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Cell
+    uniqueID: 1672664477
+    locked: 0
+  - name: GlassCell
+    uniqueID: 2568136109
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

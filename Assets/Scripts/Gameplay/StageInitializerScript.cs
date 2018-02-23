@@ -67,7 +67,7 @@ public class StageInitializerScript : MonoBehaviour {
     }
 
     void Set_ItemValue() {
-        Dictionary<string, int> temp = new Dictionary<string, int>();
+        SortedList<string, int> temp = new SortedList<string, int>();
         GetComponent<ItemManager>().Set_InitSpringCount( SpringCount );
         temp = map.glassAvailable;
         GetComponent<ItemManager>().Set_Glassinfo( temp );

@@ -58,6 +58,7 @@ namespace Assets.Core.Drawer
                     // goalMarker.GetComponent<MeshRenderer>().material = goalMarkerMaterial;
                     // goalMarker.transform.parent = cellGameObject.transform;
                 }*/
+                cellGameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Cell";
             }
             return cellGameObject;
         }

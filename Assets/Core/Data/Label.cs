@@ -43,13 +43,13 @@ namespace Assets.Core.Data
         public static readonly Label ITEM_GLASS_G = genLabel( 1 << 21 + 1 << 17 );
 
         //사용자가 설치한 아이템에 관한 Label(일반적으로는 맵 파일에서 읽어올 일이 없으며 Map 내 main이 아니라 다른 2차원 label 배열에 정보가 저장됩니다)
-        public static readonly Label DEPLOYED_GLASS_A = genLabel( 1 << 22 + 1 << 11 );
-        public static readonly Label DEPLOYED_GLASS_B = genLabel( 1 << 22 + 1 << 12 );
-        public static readonly Label DEPLOYED_GLASS_C = genLabel( 1 << 22 + 1 << 13 );
-        public static readonly Label DEPLOYED_GLASS_D = genLabel( 1 << 22 + 1 << 14 );
-        public static readonly Label DEPLOYED_GLASS_E = genLabel( 1 << 22 + 1 << 15 );
-        public static readonly Label DEPLOYED_GLASS_F = genLabel( 1 << 22 + 1 << 16 );
-        public static readonly Label DEPLOYED_GLASS_G = genLabel( 1 << 22 + 1 << 17 );
+        public static readonly Label DEPLOYED_GLASS_A = genLabel( 1 << 22 + 1 << 1 );
+        public static readonly Label DEPLOYED_GLASS_B = genLabel( 1 << 22 + 1 << 2 );
+        public static readonly Label DEPLOYED_GLASS_C = genLabel( 1 << 22 + 1 << 3 );
+        public static readonly Label DEPLOYED_GLASS_D = genLabel( 1 << 22 + 1 << 4 );
+        public static readonly Label DEPLOYED_GLASS_E = genLabel( 1 << 22 + 1 << 5 );
+        public static readonly Label DEPLOYED_GLASS_F = genLabel( 1 << 22 + 1 << 6 );
+        public static readonly Label DEPLOYED_GLASS_G = genLabel( 1 << 22 + 1 << 7 );
 
 
         public int Value { get { return value; } }
