@@ -24,6 +24,9 @@ public class PlayerControlScript : MonoBehaviour
     private GameObject Reset, BacktoMain;
     private ItemManager IM;
 
+    private bool Glass_Selecting = false;
+    private bool Glass_Deploying = false;
+
     private bool Already_Deployed = false;
 
 
@@ -40,66 +43,126 @@ public class PlayerControlScript : MonoBehaviour
         pos = stage.GetInitPosition ();
         Vector2 initScenepos = stage.ScenePosOf (pos);
         gameObject.transform.localPosition = initScenepos;
-        stage.UpdateStage (pos);
+        stage.UpdateStage (pos,1);
     }
 
     void Update()
     {
         Vector2Int newPos = pos;
         Vector2Int glassPos = pos;
-        if(Input.GetKeyDown(KeyCode.UpArrow))
+        if ( !Glass_Deploying )
         {
-            newPos += new Vector2Int(PosDelta * -1, 0);
+            if ( Input.GetKeyDown (KeyCode.UpArrow) )
+            {
+                newPos += new Vector2Int (PosDelta * -1, 0);
+            }
+            else if ( Input.GetKeyDown (KeyCode.DownArrow) )
+            {
+                newPos += new Vector2Int (PosDelta, 0);
+            }
+            else if ( Input.GetKeyDown (KeyCode.RightArrow) )
+            {
+                newPos += new Vector2Int (0, PosDelta);
+            }
+            else if ( Input.GetKeyDown (KeyCode.LeftArrow) )
+            {
+                newPos += new Vector2Int (0, PosDelta * -1);
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        if(Input.GetKeyDown(KeyCode.A))
         {
-            newPos += new Vector2Int(PosDelta, 0);
+            IM.Onclick_ToggleSpring ();
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        if ( Input.GetKeyUp (KeyCode.S) )
         {
-            newPos += new Vector2Int(0, PosDelta);
+            Glass_Selecting = true;
         }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if ( Glass_Deploying )
         {
-            newPos += new Vector2Int(0, PosDelta * -1);
-        }
+            if ( Input.GetKeyDown (KeyCode.S) )
+            {
+                Glass_Selecting = false;
+                Glass_Deploying = false;
+            }
+            else if ( Input.GetKeyDown (KeyCode.UpArrow) )
+            {
+                glassPos += new Vector2Int (PosDelta * -1, 0);
+            }
+            else if ( Input.GetKeyDown (KeyCode.DownArrow) )
+            {
+                glassPos += new Vector2Int (PosDelta, 0);
+            }
+            else if ( Input.GetKeyDown (KeyCode.RightArrow) )
+            {
+                glassPos += new Vector2Int (0, PosDelta);
+            }
+            else if ( Input.GetKeyDown (KeyCode.LeftArrow) )
+            {
+                glassPos += new Vector2Int (0, PosDelta * -1);
+            }
 
-        if( Input.GetKeyDown( KeyCode.W ) ) {
-            glassPos += new Vector2Int( PosDelta * -1, 0 );
-        } else if( Input.GetKeyDown( KeyCode.S ) ) {
-            glassPos += new Vector2Int( PosDelta, 0 );
-        } else if( Input.GetKeyDown( KeyCode.D ) ) {
-            glassPos += new Vector2Int( 0, PosDelta );
-        } else if( Input.GetKeyDown( KeyCode.A ) ) {
-            glassPos += new Vector2Int( 0, PosDelta * -1 );
-        }
+            //glassPos가 변경되었다 : 유리를 놓을 것이다.
+            if ( glassPos != pos && !Already_Deployed )
+            {
+                //놓을 수 있는 위치인가?
+                if ( stage.IsValidGlassPos (glassPos) )
+                {
+                    ItemManager Current_ItemManager = GameObject.Find ("StageInitializer").GetComponent<ItemManager> ();
+                    //ItemManager에게 지금 활성화된 유리를 받아온다
+                    string Current_Glass_Name = Current_ItemManager.Current_Glass ();
 
-        //glassPos가 변경되었다 : 유리를 놓을 것이다.
-        if(glassPos != pos && !Already_Deployed ) {
-            //놓을 수 있는 위치인가?
-            if(stage.IsValidGlassPos( glassPos)) {
-                ItemManager Current_ItemManager = GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>();
-                //ItemManager에게 지금 활성화된 유리를 받아온다
-                string Current_Glass_Name = Current_ItemManager.Current_Glass();
-
-                if( Current_ItemManager.Is_GlassAvailable( Current_Glass_Name ) ) {
-                    //유리를 놓는 함수를 호출한다(현재 켜진 유리를 Deploy하는 함수)
-                    Label temp = new Label();
-                    if( Current_Glass_Name == "A" )
-                        temp = Label.A;
-                    if( Current_Glass_Name == "B" )
-                        temp = Label.B;
-                    if( Current_Glass_Name == "C" )
-                        temp = Label.C;
-                    if( Current_Glass_Name == "D" )
-                        temp = Label.D;
-                    stage.map.Deploy_Glass( glassPos, temp );
-                    Current_ItemManager.Use_Glass( Current_Glass_Name );
-                    Already_Deployed = true;
+                    if ( Current_ItemManager.Is_GlassAvailable (Current_Glass_Name) )
+                    {
+                        //유리를 놓는 함수를 호출한다(현재 켜진 유리를 Deploy하는 함수)
+                        Label temp = new Label ();
+                        if ( Current_Glass_Name == "A" )
+                            temp = Label.A;
+                        if ( Current_Glass_Name == "B" )
+                            temp = Label.B;
+                        if ( Current_Glass_Name == "C" )
+                            temp = Label.C;
+                        if ( Current_Glass_Name == "D" )
+                            temp = Label.D;
+                        stage.map.Deploy_Glass (glassPos, temp);
+                        Current_ItemManager.Use_Glass (Current_Glass_Name);
+                        Already_Deployed = true;
+                        Glass_Selecting = false;
+                        Glass_Deploying = false;
+                    }
                 }
             }
         }
 
+        if ( Glass_Selecting)
+        {
+            if(Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                IM.Toggle_Glass ("A");
+                Glass_Selecting = false;
+                Glass_Deploying = true;
+                
+            }
+            else if ( Input.GetKeyDown (KeyCode.Alpha2) )
+            {
+                IM.Toggle_Glass ("B");
+                Glass_Selecting = false;
+                Glass_Deploying = true;
+
+            }
+            else if ( Input.GetKeyDown (KeyCode.Alpha3) )
+            {
+                IM.Toggle_Glass ("C");
+                Glass_Selecting = false;
+                Glass_Deploying = true;
+
+            }
+            else if(Input.GetKeyDown(KeyCode.S))
+            {
+                Glass_Selecting = false;
+                Glass_Deploying = false;
+            }
+
+        }
 
         updatePlayerPosition (newPos);
 
@@ -127,6 +190,7 @@ public class PlayerControlScript : MonoBehaviour
             PosDelta = 2;
         else
             PosDelta = 1;
+        stage.UpdateMapHighlight (pos, PosDelta);
     }
     public void onGotoStageSelect()
     {
@@ -150,7 +214,7 @@ public class PlayerControlScript : MonoBehaviour
         GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>().Reset_Glassinfo();
         updatePlayerPosition (stage.GetInitPosition(), true);
         stage.ResetStage ();
-        stage.UpdateStage (pos);
+        stage.UpdateStage (pos,1);
         soundController.OnRestart ();
         //모든 유리를 철거한다.
         stage.map.Remove_All_Glass();
@@ -176,7 +240,7 @@ public class PlayerControlScript : MonoBehaviour
             stage.map.Remove_Glass( pos );
 
             playMoveSound ();
-            stage.UpdateStage (newPos);
+            stage.UpdateStage (newPos,1);
             movePlayer (newPos);
             //움직인 뒤에 스프링이 켜져있으면 끄고 1 차감한다.
             if(PosDelta != 1 && !isReset) {

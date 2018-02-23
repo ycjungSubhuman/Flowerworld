@@ -68,11 +68,16 @@ public class StageScript : MonoBehaviour {
     {
         //mapAnimationController.SetTrigger (pos, "Stomp");
     }
+    //플레이어의 위치는 그대로인데 스테이지 하이라이팅만 바꿔야 할 떄 호출한다.
+    public void UpdateMapHighlight(Vector2Int position, int Delta)
+    {
+        updateCellColor (position, Delta);
+    }
     /** position에 플레이어가 갔을 때 스테이지를 업데이트한다 */
-    public void UpdateStage(Vector2Int position)
+    public void UpdateStage(Vector2Int position,int Delta)
     {
         updatePattern();
-        updateCellColor();
+        updateCellColor(position,Delta);
         updateUI ();
 
         updateMoveCount ();
@@ -92,7 +97,7 @@ public class StageScript : MonoBehaviour {
     {
         patternIndex = (patternIndex + 1) % map.pattern.Count;
     }
-    private void updateCellColor()
+    private void updateCellColor(Vector2Int position,int Delta)
     {
         var newAvailabePositions = map.PositionsOf (map.pattern [patternIndex]);
         foreach (var go in MapGameObjectUtil.GetAllCells (gameObject))
@@ -101,8 +106,12 @@ public class StageScript : MonoBehaviour {
         }
         foreach(var pos in newAvailabePositions)
         {
-            var go = MapGameObjectUtil.GetCellGameObject (gameObject, pos);
-            go.GetComponent<Animator> ().SetBool ("Onoff", true);
+            //이 셀의 상하좌우 중 한칸에 플레이어가 있을 때만
+            if ( ((pos.x - position.x) * (pos.x - position.x) == Delta * Delta || (pos.y - position.y) * (pos.y - position.y) == Delta * Delta ) && (pos.x - position.x) * (pos.y - position.y) == 0)
+            {
+                var go = MapGameObjectUtil.GetCellGameObject (gameObject, pos);
+                go.GetComponent<Animator> ().SetBool ("Onoff", true);
+            }
         }
     }
     private void updateUI()

@@ -45,6 +45,7 @@ namespace Assets.Core.Drawer
                     goalMarker.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>( "Sprite/CellFlower/" + "GOAL" );
                     goalMarker.transform.parent = cellGameObject.transform;
                     goalMarker.GetComponent<SpriteRenderer>().sortingLayerName = "GoalMarker";
+                    goalMarker.transform.Find ("Lightbox").gameObject.SetActive (false);
                     // goalMarker.GetComponent<MeshRenderer>().material = goalMarkerMaterial;
                     // goalMarker.transform.parent = cellGameObject.transform;
                 }

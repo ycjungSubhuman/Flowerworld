@@ -26,28 +26,37 @@ public class ItemManager : MonoBehaviour {
     public string Queued_Glass;
 
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
+        SpringCount = 0;
         Spring = false;
-        Player = GameObject.FindWithTag( "Player" );
-        Set_Spring( false );
-
-        SpringCount_Text = GameObject.Find( "SpringCount_Text" ).GetComponent<Text>();
-
-        for( int i = 0; i < GLASS_VARIATION; i++ ) {
-            GlassCount_Text[ i ] = GameObject.Find( "GlassCount_Text_" + FlowerType[ i ] ).GetComponent<Text>();
-        }
+        Player = GameObject.FindWithTag ("Player");
+        Set_Spring (false);
     }
 
-    private void Update() {
-        Text_Updater();
+    void Update() {
+
+        Text_Updater ();
     }
     public void Set_Mapinfo( Map map_data ) {
         map = map_data;
     }
-    public void Text_Updater() {
-        SpringCount_Text.text = SpringCount.ToString();
-        for( int i = 0; i < GLASS_VARIATION; i++ ) {
-            GlassCount_Text[ i ].text = FlowerType[ i ] + " : " + GlassCount[ FlowerType[ i ] ].ToString();
+
+    public void Text_Updater()
+    {
+
+        if(SpringCount_Text == null)
+        SpringCount_Text = GameObject.Find ("SpringCount_Text").GetComponent<Text> ();
+        if ( GlassCount_Text[0] == null )
+            for ( int i = 0; i < GLASS_VARIATION; i++ )
+        {
+            GlassCount_Text [i] = GameObject.Find ("GlassCount_Text_" + FlowerType [i]).GetComponent<Text> ();
+        }
+
+        SpringCount_Text.text = SpringCount.ToString ();
+        for ( int i = 0; i < GLASS_VARIATION; i++ )
+        {
+            GlassCount_Text [i].text = FlowerType [i] + " : " + GlassCount [FlowerType [i]].ToString ();
         }
     }
 
@@ -101,7 +110,7 @@ public class ItemManager : MonoBehaviour {
 
 
     //스프링 아이템 (기능) 관련 함수
-    public void Temp_Onclick_ToggleSpring() {
+    public void Onclick_ToggleSpring() {
         GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>().Toggle_Spring();
     }
     public void Set_InitSpringCount(int value) {
