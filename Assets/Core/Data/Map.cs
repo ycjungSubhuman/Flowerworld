@@ -43,7 +43,8 @@ namespace Assets.Core.Data
             this.main = blocks.First ();
             GlassMap();
         }
-        //유리 라벨링
+
+        //유리 초기화
         public void GlassMap() {
             Debug.Log( "GlassMapLoaded" );
            // main.mat.CopyTo( this.Glass );
@@ -58,6 +59,8 @@ namespace Assets.Core.Data
                 Glass.Add( temp_Cell );
             }
         }
+        //아이템 설치
+
 
         /** 현재 맵의 position에 있는 cell의 label을 리턴 */
         public Label LabelOf(Vector2Int position)
