@@ -17,60 +17,60 @@ public class StageInitializerScript : MonoBehaviour {
     //스프링 개수
     int SpringCount;
 
-	// Use this for initialization
-	void Start () {
+    Map map;
+
+    // Use this for initialization
+    void Start() {
         // 맵 불러오기
         TextAsset json = configuration.activatedMapSource;
-        if(json==null)
-        {
+        if( json == null ) {
             // 디버그용 (GameplayScene을 바로 플레이할 때)
-            json = Resources.Load<TextAsset> ("maps/map-1-1");
+            json = Resources.Load<TextAsset>( "maps/map-1-1" );
         }
-        var map = JsonConvert.DeserializeObject<Map> (json.text);
-        
+        map = JsonConvert.DeserializeObject<Map>( json.text );
+
         // 맵 Scene에 그리기
 
         //CellDrawer : 한 셀
         //MapBlockDrawer : 그리드
         //MapDrawer : 나머지 전부
-        var mapDrawer = new MapDrawer(new MapBlockDrawer(new CellDrawer()));
-        var mapGameObject = mapDrawer.Draw (map);
-        mapGameObject.AddComponent<StageScript> ();
-        var stageScript = mapGameObject.GetComponent<StageScript> ();
+        var mapDrawer = new MapDrawer( new MapBlockDrawer( new CellDrawer() ) );
+        var mapGameObject = mapDrawer.Draw( map );
+        mapGameObject.AddComponent<StageScript>();
+        var stageScript = mapGameObject.GetComponent<StageScript>();
 
 
         stageScript.map = map;
 
-        stageScript.mapAnimationController = new MapAnimationController (mapGameObject);
+        stageScript.mapAnimationController = new MapAnimationController( mapGameObject );
 
         //맵의 유리 정보 초기화
         map.GlassMap();
         //맵에서 사용가능한 스프링 개수 받아와서 할당
-        SpringCount=map.springsAvailable;
+        SpringCount = map.springsAvailable;
 
 
         //UI 생성
-        var uiPatternDrawer = new UIPatternDrawer (new UICellDrawer ());
-        var uiPattern = uiPatternDrawer.Draw (map.pattern);
-        uiPattern.transform.SetParent(GameObject.Find ("PatternRoot").transform);
-        uiPattern.GetComponent<RectTransform>().anchoredPosition = new Vector2 (0, 0);
+        var uiPatternDrawer = new UIPatternDrawer( new UICellDrawer() );
+        var uiPattern = uiPatternDrawer.Draw( map.pattern );
+        uiPattern.transform.SetParent( GameObject.Find( "PatternRoot" ).transform );
+        uiPattern.GetComponent<RectTransform>().anchoredPosition = new Vector2( 0, 0 );
         uiPattern.name = "PatternUI";
 
         //플레이어 생성 및 초기화 
-        var player = GameObject.Instantiate(Resources.Load<GameObject> ("prefabs/player"));
-        var playerScript = player.GetComponent<PlayerControlScript> ();
+        var player = GameObject.Instantiate( Resources.Load<GameObject>( "prefabs/player" ) );
+        var playerScript = player.GetComponent<PlayerControlScript>();
         playerScript.stageRoot = mapGameObject;
-        playerScript.soundController = new PlayerSoundController (player);
+        playerScript.soundController = new PlayerSoundController( player );
 
         Invoke( "Set_ItemValue", 0.2f );
     }
-	
-    void Set_ItemValue() {
-        GetComponent<ItemManager>().Set_InitSpringCount( SpringCount );
-    }
 
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    void Set_ItemValue() {
+        Dictionary<string, int> temp = new Dictionary<string, int>();
+        GetComponent<ItemManager>().Set_InitSpringCount( SpringCount );
+        temp = map.glassAvailable;
+        GetComponent<ItemManager>().Set_Glassinfo( temp );
+        GetComponent<ItemManager>().Set_Mapinfo( this.map );
+    }
 }

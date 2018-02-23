@@ -78,6 +78,7 @@ public class PlayerControlScript : MonoBehaviour
         {
             BacktoMain.GetComponent<Reset>().Pressed = false;
         }   
+        //WASD로 자신의 상하좌우 중 한칸에 현재 선택한 유리를 설치 가능.
     }
 
     public void Set_SpringState(bool On) {

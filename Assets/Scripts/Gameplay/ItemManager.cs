@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Core.Data;
 /*
  * ItemManager Class
  * 아이템을 맵에 배치하는 것, 아이템이 플레이어와 충돌하면 아이템을 인벤토리에 추가하는 것
@@ -12,31 +13,76 @@ public class ItemManager : MonoBehaviour {
 
     public bool Spring = false;
     GameObject Player;
+    Map map;
     int SpringCount;
     int Init_SpringCount;
-    Text Temp_SpringCount;
+    static readonly int GLASS_VARIATION = 4;
+    Dictionary<string, int> Init_GlassCount = new Dictionary<string, int>();
+    Dictionary<string, int> GlassCount = new Dictionary<string, int>();
+    Text SpringCount_Text;
+    Text[] GlassCount_Text = new Text[GLASS_VARIATION];
+    string[] FlowerType = { "A", "B", "C", "D", "E", "F" };
 
+    public string Queued_Glass;
 
 	// Use this for initialization
 	void Start () {
         Spring = false;
         Player = GameObject.FindWithTag( "Player" );
         Set_Spring( false );
-        Temp_SpringCount = GameObject.Find( "Temp_SpringCount" ).GetComponent<Text>();
-	}
 
+        SpringCount_Text = GameObject.Find( "SpringCount_Text" ).GetComponent<Text>();
+
+        for(int i=0;i<GLASS_VARIATION;i++) {
+            GlassCount_Text[ i ] = GameObject.Find( "GlassCount_Text_" + FlowerType[i] ).GetComponent<Text>();
+        }
+	}
+    
     private void Update() {
-        Temp_SpringCount.text = SpringCount.ToString();
+        Text_Updater();
+    }
+    public void Set_Mapinfo(Map map_data) {
+        map = map_data;
+    }
+    public void Text_Updater() {
+        SpringCount_Text.text = SpringCount.ToString();
+        for( int i = 0; i < GLASS_VARIATION; i++ ) {
+            GlassCount_Text[ i ].text = FlowerType[ i ] + " : " + GlassCount[FlowerType[i]].ToString();
+        }
     }
 
-    //스프링 아이템 (기능) 관련 함수
+    //색유리 아이템 관련 함수
 
+    //유리의 초기 정보(각 유리별 사용 가능 개수)
+    public void Set_Glassinfo(Dictionary<string,int> Info) {
+        Init_GlassCount = Info;
+        GlassCount = Init_GlassCount;
+
+    }
+    
+    //유리 쓸 수 있나요?(쓸 개수가 남아있나요)
+    public bool Is_GlassAvailable(string FlowerType) {
+        if( !GlassCount.ContainsKey( FlowerType ) || GlassCount[ FlowerType ] <= 0 )
+            return false;
+        else
+            return true;
+    }
+
+    //모든 유리를 비활성화 상태로 만들어 줍니다
+    public void TurnOff_Glass() {
+        Queued_Glass = null;
+    }
+    public void Toggle_Glass( string FlowerType ) {
+        Queued_Glass = FlowerType;
+    }
+
+
+
+
+    //스프링 아이템 (기능) 관련 함수
     public void Temp_Onclick_ToggleSpring() {
         GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>().Toggle_Spring();
     }
-    
-
-
     public void Set_InitSpringCount(int value) {
         
         Init_SpringCount = value;
