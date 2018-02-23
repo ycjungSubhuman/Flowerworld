@@ -62,7 +62,7 @@ public class StageScript : MonoBehaviour {
     /** pos에 있는 Cell의 Stomp 애니메이션을 시작한다 */
     public void AnimateCellStomp(Vector2Int pos)
     {
-        mapAnimationController.SetTrigger (pos, "Stomp");
+        //mapAnimationController.SetTrigger (pos, "Stomp");
     }
     /** position에 플레이어가 갔을 때 스테이지를 업데이트한다 */
     public void UpdateStage(Vector2Int position)
