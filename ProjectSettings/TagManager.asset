@@ -39,6 +39,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG
+    uniqueID: 448350735
+    locked: 0
   - name: Cell
     uniqueID: 1672664477
     locked: 0

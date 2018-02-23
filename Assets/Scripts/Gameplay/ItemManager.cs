@@ -16,7 +16,7 @@ public class ItemManager : MonoBehaviour {
     Map map;
     int SpringCount;
     int Init_SpringCount;
-    static readonly int GLASS_VARIATION = 4;
+    static readonly int GLASS_VARIATION = 3;
     SortedList<string, int> Init_GlassCount = new SortedList<string, int>();
     SortedList<string, int> GlassCount = new SortedList<string, int>();
     Text SpringCount_Text;
@@ -56,7 +56,7 @@ public class ItemManager : MonoBehaviour {
         SpringCount_Text.text = SpringCount.ToString ();
         for ( int i = 0; i < GLASS_VARIATION; i++ )
         {
-            GlassCount_Text [i].text = FlowerType [i] + " : " + GlassCount [FlowerType [i]].ToString ();
+            GlassCount_Text [i].text = GlassCount [FlowerType [i]].ToString ();
         }
     }
 
