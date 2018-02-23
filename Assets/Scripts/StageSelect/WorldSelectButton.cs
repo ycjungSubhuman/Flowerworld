@@ -25,7 +25,6 @@ public class WorldSelectButton : MonoBehaviour {
     {
         WorldName = W;
         WorldList = S;
-
         Set_Text(W);
     }
 
