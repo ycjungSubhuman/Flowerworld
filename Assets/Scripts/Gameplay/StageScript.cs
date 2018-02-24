@@ -73,6 +73,10 @@ public class StageScript : MonoBehaviour {
     {
         updateCellColor (position, Delta);
     }
+    //유리 하이라이팅
+    public void UpdateGlassHighlight( Vector2Int position, int Delta ) {
+        updateGlassColor( position, Delta );
+    }
     /** position에 플레이어가 갔을 때 스테이지를 업데이트한다 */
     public void UpdateStage(Vector2Int position,int Delta)
     {
@@ -97,7 +101,20 @@ public class StageScript : MonoBehaviour {
     {
         patternIndex = (patternIndex + 1) % map.pattern.Count;
     }
+    private void updateGlassColor( Vector2Int position, int Delta ) {
 
+        var newAvailabePositions = map.PositionsOf( Label.ANY );
+        foreach( var go in MapGameObjectUtil.GetAllCells( gameObject ) ) {
+            go.GetComponent<Animator>().SetBool( "Onoff", false );
+        }
+        foreach( var pos in newAvailabePositions ) {
+            //이 셀의 상하좌우 중 한칸에 플레이어가 있을 때만
+            if( ( ( pos.x - position.x ) * ( pos.x - position.x ) == Delta * Delta || ( pos.y - position.y ) * ( pos.y - position.y ) == Delta * Delta ) && ( pos.x - position.x ) * ( pos.y - position.y ) == 0 ) {
+                GameObject go = MapGameObjectUtil.GetCellGameObject( gameObject, pos );
+                go.GetComponent<Animator>().SetBool( "Onoff", true );
+            }
+        }
+    }
     private void updateCellColor(Vector2Int position,int Delta)
     {
         var newAvailabePositions = map.PositionsOf (map.pattern [patternIndex]);

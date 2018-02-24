@@ -9,54 +9,44 @@ public class CellScript : MonoBehaviour {
 
     public int index;
     public int Maxindex;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-    void Pos_Reset()
-    {
+    float X_Ratio = 1f;
+    float Y_Ratio = 0f;
+
+    void Pos_Reset() {
+
         Vector2 currScenePos = gameObject.transform.localPosition;
         Vector2 newScenePos;
-        if (index == 0)
-             newScenePos = new Vector2((index + 0.2f)* 0.8f,( index - 1f) * -0.2f);
+        if( index == 0 )
+            newScenePos = new Vector2( ( index + 0.2f ) * X_Ratio, ( index - 1f ) * Y_Ratio );
         else
-             newScenePos = new Vector2 ((index+ 1.5f) * 0.8f, (index+ 2f) * -0.2f);
-        if (this.index == 0)
-            gameObject.GetComponent<Animator>().SetBool("Onoff", true);
+            newScenePos = new Vector2( ( index + 1.5f ) * X_Ratio, ( index + 2f ) * Y_Ratio );
+        if( this.index == 0 )
+            gameObject.GetComponent<Animator>().SetBool( "Onoff", true );
         else
-            gameObject.GetComponent<Animator>().SetBool("Onoff", false);
-        StartCoroutine(Move.QuadOut(gameObject, currScenePos, newScenePos, 0.5f));
+            gameObject.GetComponent<Animator>().SetBool( "Onoff", false );
+        StartCoroutine( Move.QuadOut( gameObject, currScenePos, newScenePos, 0.5f ) );
     }
-    void SetOnoff(int index)
-    {
-        if ( index == this.index )
-        {
-            gameObject.GetComponent<Animator> ().SetBool ("Onoff", true);
-        }
-        else
-        {
-            gameObject.GetComponent<Animator> ().SetBool ("Onoff", false);
+    void SetOnoff( int index ) {
+        if( index == this.index ) {
+            gameObject.GetComponent<Animator>().SetBool( "Onoff", true );
+        } else {
+            gameObject.GetComponent<Animator>().SetBool( "Onoff", false );
         }
 
-        StopAllCoroutines ();
+        StopAllCoroutines();
         Vector2 currScenePos = gameObject.transform.localPosition;
         Vector2 newScenePos;
-        if ( index <= this.index )
-            if ( this.index - index == 0 )
-                newScenePos = new Vector2 ((this.index - index + 0.2f) * 0.8f, (this.index - index - 1f) * -0.2f);
+        if( index <= this.index )
+            if( this.index - index == 0 )
+                newScenePos = new Vector2( ( this.index - index + 0.2f ) * X_Ratio, ( this.index - index - 1f ) * Y_Ratio );
             else
-                newScenePos = new Vector2 ((this.index - index+ 2f) * 0.8f, (this.index - index+ 2f) * -0.2f);
+                newScenePos = new Vector2( ( this.index - index ) * X_Ratio, ( this.index - index ) * Y_Ratio );
         else
-           if ( Maxindex + this.index - index == 0 )
-            newScenePos = new Vector2 ((Maxindex + this.index - index + 0.2f) * 0.8f, (Maxindex + this.index - index -1) * -0.2f);
+           if( Maxindex + this.index - index == 0 )
+            newScenePos = new Vector2( ( Maxindex + this.index - index + 0.2f ) * X_Ratio, ( Maxindex + this.index - index - 1 ) * Y_Ratio );
         else
-            newScenePos = new Vector2 ((Maxindex + this.index - index+ 2f) * 0.8f, (Maxindex + this.index - index+ 2f) * -0.2f);
-        StartCoroutine (Move.QuadOut (gameObject, currScenePos, newScenePos, 0.5f));
+            newScenePos = new Vector2( ( Maxindex + this.index - index  ) * X_Ratio, ( Maxindex + this.index - index  ) * Y_Ratio );
+        StartCoroutine( Move.QuadOut( gameObject, currScenePos, newScenePos, 0.5f ) );
 
     }
 
