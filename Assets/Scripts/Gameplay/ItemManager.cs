@@ -17,12 +17,15 @@ public class ItemManager : MonoBehaviour {
     int SpringCount;
     int Init_SpringCount;
     static readonly int GLASS_VARIATION = 3;
+    static readonly int ITEM_VARIATION = 4;
     SortedList<string, int> Init_GlassCount = new SortedList<string, int>();
     SortedList<string, int> GlassCount = new SortedList<string, int>();
     Text SpringCount_Text;
     Text[] GlassCount_Text = new Text[ GLASS_VARIATION ];
     string[] FlowerType = { "A", "B", "C", "D", "E", "F" };
 
+    Animator[] LightBox_Anim = new Animator[ ITEM_VARIATION ];
+    string[] LightBox_Name = { "A", "S", "D", "F" };
     GameObject[] Glass_UI;
 
     public string Queued_Glass;
@@ -34,14 +37,35 @@ public class ItemManager : MonoBehaviour {
         Spring = false;
         Player = GameObject.FindWithTag ("Player");
         Set_Spring (false);
+        Debug.Log( "LightBox_" + LightBox_Name[ 0 ] );
+        for(int i=0;i< ITEM_VARIATION;i++) {
+            Debug.Log( "LightBox_" + LightBox_Name[ i ] );
+            LightBox_Anim[ i ] = GameObject.Find( "LightBox_" + LightBox_Name[ i ] ).GetComponent<Animator>();
+            LightBox_Anim[ i ].SetBool( "On", false );
+        }
     }
 
     void Update() {
-
+        Item_StateUpdater();
         //Text_Updater ();
     }
     public void Set_Mapinfo( Map map_data ) {
         map = map_data;
+    }
+
+    //아이템이 있으면 Lightbox를 꺼주는 역할
+    void Item_StateUpdater() {
+        if( LightBox_Anim[ 0] == null) {
+            for( int i = 0; i < ITEM_VARIATION; i++ ) {
+                Debug.Log( "LightBox_" + LightBox_Name[ i ] );
+                LightBox_Anim[ i ] = GameObject.Find( "LightBox_" + LightBox_Name[ i ] ).GetComponent<Animator>();
+                LightBox_Anim[ i ].GetComponent<Animator>().SetBool( "On", false );
+            }
+        }
+        LightBox_Anim[ 0 ].SetBool( "On", SpringCount <= 0 );
+        LightBox_Anim[ 1 ].SetBool( "On", GlassCount[ "A" ] <= 0 );
+        LightBox_Anim[ 2 ].SetBool( "On", GlassCount[ "B" ] <= 0 );
+        LightBox_Anim[ 3 ].SetBool( "On", GlassCount[ "C" ] <= 0 );
     }
 
     public void Text_Updater()
