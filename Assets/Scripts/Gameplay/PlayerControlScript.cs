@@ -18,6 +18,8 @@ public class PlayerControlScript : MonoBehaviour
     [HideInInspector]
     public GameObject stageRoot;
 
+    private GameObject GlassDeploy_Barrier;
+
     private Vector2Int pos;
     private StageScript stage;
 
@@ -34,6 +36,8 @@ public class PlayerControlScript : MonoBehaviour
 
     void Start()
     {
+        GlassDeploy_Barrier = GameObject.Find( "GlassDeploy_Barrier" );
+        GlassDeploy_Barrier.SetActive( false );
         Reset = GameObject.Find("ResetIndicator");
         BacktoMain = GameObject.Find("BacktoMainIndicator");
         IM = GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>();
@@ -73,15 +77,19 @@ public class PlayerControlScript : MonoBehaviour
         {
             IM.Onclick_ToggleSpring ();
         }
-        if ( Input.GetKeyUp (KeyCode.S) )
+        if ( Input.GetKeyDown (KeyCode.S) )
         {
-            Glass_Selecting = true;
+            Toggle_Glass();
         }
+
+
         if ( Glass_Deploying )
         {
+            stage.UpdateGlassHighlight( pos, PosDelta );
+            GlassDeploy_Barrier.SetActive( true );
             if ( Input.GetKeyDown (KeyCode.S) )
             {
-                Glass_Selecting = false;
+                Toggle_Glass();
                 Glass_Deploying = false;
             }
             else if ( Input.GetKeyDown (KeyCode.UpArrow) )
@@ -125,9 +133,11 @@ public class PlayerControlScript : MonoBehaviour
                             temp = Label.D;
                         stage.map.Deploy_Glass (glassPos, temp);
                         Current_ItemManager.Use_Glass (Current_Glass_Name);
+                        
                         Already_Deployed = true;
                         Glass_Selecting = false;
                         Glass_Deploying = false;
+                        stage.UpdateMapHighlight( pos, PosDelta );
                     }
                 }
             }
@@ -135,6 +145,7 @@ public class PlayerControlScript : MonoBehaviour
 
         if ( Glass_Selecting)
         {
+            GlassDeploy_Barrier.SetActive( true );
             if(Input.GetKeyDown(KeyCode.Alpha1))
             {
                 IM.Toggle_Glass ("A");
@@ -156,15 +167,16 @@ public class PlayerControlScript : MonoBehaviour
                 Glass_Deploying = true;
 
             }
-            else if(Input.GetKeyDown(KeyCode.S))
+            else if(Input.GetKeyDown( KeyCode.S))
             {
-                Glass_Selecting = false;
                 Glass_Deploying = false;
             }
 
         }
+        if( !( Glass_Deploying || Glass_Selecting ) )
+            GlassDeploy_Barrier.SetActive( false );
 
-        updatePlayerPosition (newPos);
+        updatePlayerPosition( newPos);
 
         if (Input.GetKey(KeyCode.R))
         {
@@ -183,6 +195,11 @@ public class PlayerControlScript : MonoBehaviour
             BacktoMain.GetComponent<Reset>().Pressed = false;
         }   
         //WASD로 자신의 상하좌우 중 한칸에 현재 선택한 유리를 설치 가능.
+    }
+
+
+    void Toggle_Glass() {
+        Glass_Selecting = !Glass_Selecting;
     }
 
     public void Set_SpringState(bool On) {
