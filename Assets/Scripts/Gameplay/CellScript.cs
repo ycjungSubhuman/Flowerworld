@@ -9,17 +9,21 @@ public class CellScript : MonoBehaviour {
 
     public int index;
     public int Maxindex;
-    float X_Ratio = 1f;
+    float X_Ratio = 1.2f;
     float Y_Ratio = 0f;
-
+    float Pos_Calib;
+    private void Start() {
+        Pos_Calib = ( Maxindex - 5 ) * ( -0.5f ) * X_Ratio;
+    }
     void Pos_Reset() {
+       
 
         Vector2 currScenePos = gameObject.transform.localPosition;
         Vector2 newScenePos;
         if( index == 0 )
-            newScenePos = new Vector2( ( index + 0.2f ) * X_Ratio, ( index - 1f ) * Y_Ratio );
+            newScenePos = new Vector2( (index) * X_Ratio + Pos_Calib, ( index - 1f ) * Y_Ratio );
         else
-            newScenePos = new Vector2( ( index + 1.5f ) * X_Ratio, ( index + 2f ) * Y_Ratio );
+            newScenePos = new Vector2( ( index + 1.5f ) * X_Ratio + Pos_Calib, ( index + 2f ) * Y_Ratio );
         if( this.index == 0 )
             gameObject.GetComponent<Animator>().SetBool( "Onoff", true );
         else
@@ -38,14 +42,14 @@ public class CellScript : MonoBehaviour {
         Vector2 newScenePos;
         if( index <= this.index )
             if( this.index - index == 0 )
-                newScenePos = new Vector2( ( this.index - index + 0.2f ) * X_Ratio, ( this.index - index - 1f ) * Y_Ratio );
+                newScenePos = new Vector2( ( this.index - index ) * X_Ratio + Pos_Calib, ( this.index - index - 1f ) * Y_Ratio );
             else
-                newScenePos = new Vector2( ( this.index - index ) * X_Ratio, ( this.index - index ) * Y_Ratio );
+                newScenePos = new Vector2( ( this.index - index ) * X_Ratio + Pos_Calib, ( this.index - index ) * Y_Ratio );
         else
            if( Maxindex + this.index - index == 0 )
-            newScenePos = new Vector2( ( Maxindex + this.index - index + 0.2f ) * X_Ratio, ( Maxindex + this.index - index - 1 ) * Y_Ratio );
+            newScenePos = new Vector2( ( Maxindex + this.index - index ) * X_Ratio + Pos_Calib, ( Maxindex + this.index - index - 1 ) * Y_Ratio );
         else
-            newScenePos = new Vector2( ( Maxindex + this.index - index  ) * X_Ratio, ( Maxindex + this.index - index  ) * Y_Ratio );
+            newScenePos = new Vector2( ( Maxindex + this.index - index  ) * X_Ratio + Pos_Calib, ( Maxindex + this.index - index  ) * Y_Ratio );
         StartCoroutine( Move.QuadOut( gameObject, currScenePos, newScenePos, 0.5f ) );
 
     }

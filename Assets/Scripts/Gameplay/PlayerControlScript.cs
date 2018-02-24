@@ -200,6 +200,7 @@ public class PlayerControlScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             Reset.GetComponent<Reset>().Pressed = true;
+            PosDelta = 1;
         }
         else
         {
@@ -227,6 +228,7 @@ public class PlayerControlScript : MonoBehaviour
             PosDelta = 2;
         else
             PosDelta = 1;
+        
         stage.UpdateMapHighlight (pos, PosDelta);
     }
     public void onGotoStageSelect()
@@ -308,6 +310,7 @@ public class PlayerControlScript : MonoBehaviour
 
         this.pos = newPos;
         gameObject.GetComponent<Animator> ().SetTrigger ("Move");
+        gameObject.GetComponent<Animator>().SetBool( "SpringOn", false );
         stage.AnimateCellStomp (newPos);
     }
 

@@ -55,8 +55,7 @@ public class StageSelectionInitializerScript : MonoBehaviour {
         Create_WorldSelect(WorldList);
 
 
-
-        /* 레거시 코드 */
+        /*
 
         GameObject mapSelection = GameObject.Find("MapSelection");
         GameObject startButton = GameObject.Find("StartButton");
@@ -74,6 +73,7 @@ public class StageSelectionInitializerScript : MonoBehaviour {
         }
         dropdown.value = 0;
         dropdown.RefreshShownValue ();
+        */
 	}
     public void OnClick_WorldButton(string WorldName)
     {
