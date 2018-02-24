@@ -39,6 +39,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG
+    uniqueID: 448350735
+    locked: 0
+  - name: Cell
+    uniqueID: 1672664477
+    locked: 0
+  - name: GlassCell
+    uniqueID: 2568136109
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: GoalMarker
+    uniqueID: 1582669559
     locked: 0

@@ -1,0 +1,6 @@
+title World 1-1
+goalcount 9
+pattern B,B,A,A
+block 
+        B | B | B | B | B,$ |
+        A,^ | A | A | A | A |
