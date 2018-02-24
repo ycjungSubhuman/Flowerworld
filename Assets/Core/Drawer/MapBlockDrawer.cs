@@ -26,21 +26,23 @@ namespace Assets.Core.Drawer
 
         public GameObject Draw(MapBlock m)
         {
-            GameObject rootGameObject = new GameObject ();
+            GameObject rootGameObject = GameObject.Find ("Cell_Head");
             for (int i=0; i<m.mat.Count; i++)
             {
                 var row = m.mat [i];
                 var rowGameObject = new GameObject ();
+                rowGameObject.name = "Cell_Row_" + i.ToString();
                 rowGameObject.transform.parent = rootGameObject.transform;
                 rowGameObject.transform.localPosition = 
-                    new Vector2 (0, -i*(cellHeight+verticalSpace));
+                    new Vector2 (0, ((m.mat.Count / 2) - i)*(cellHeight+verticalSpace));
                 for (int j=0; j<row.Count; j++)
                 {
                     var cell = row [j];
                     var cellGameObject = cellDrawer.Draw (cell);
+                    cellGameObject.name = "Cell_Column_" + j.ToString();
                     cellGameObject.transform.parent = rowGameObject.transform;
                     cellGameObject.transform.localPosition = 
-                        new Vector2 (j*(cellWidth+horitozontalSpace), 0);
+                        new Vector2 (( -1 * (row.Count / 2) +j) *(cellWidth+horitozontalSpace), 0);
                 }
             }
 

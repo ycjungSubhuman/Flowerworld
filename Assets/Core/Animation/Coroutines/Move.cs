@@ -25,11 +25,11 @@ namespace Assets.Core.Animation.Coroutines
             {
                 time += Time.deltaTime;
                 t = time / duration;
-                gameObject.transform.position = Vector2.Lerp (start, goal, tModifier(t));
+                gameObject.transform.localPosition = Vector2.Lerp (start, goal, tModifier(t));
                 yield return null;
             }
 
-            gameObject.transform.position = goal;
+            gameObject.transform.localPosition = goal;
         }
     }
 }

@@ -19,6 +19,7 @@ public class StageScript : MonoBehaviour {
     private int patternIndex = -1;
     private int moveCount = 0;
 
+
 	// Use this for initialization
 	void Start () {
         initGoalCount ();
@@ -48,6 +49,10 @@ public class StageScript : MonoBehaviour {
     {
         return map.IsInside (newPos) && checkLogic (newPos);
     }
+    public bool IsValidGlassPos(Vector2Int newPos) {
+        return map.IsInside( newPos ) && map.IsGlassDeployed(newPos);
+    }
+
     /** 
      * 그래픽 상으로 나타나는 Cell의 Transform Position을 불러온다. 
      * TODO : 추후에 Logic과 분리 필요
@@ -61,13 +66,18 @@ public class StageScript : MonoBehaviour {
     /** pos에 있는 Cell의 Stomp 애니메이션을 시작한다 */
     public void AnimateCellStomp(Vector2Int pos)
     {
-        mapAnimationController.SetTrigger (pos, "Stomp");
+        //mapAnimationController.SetTrigger (pos, "Stomp");
+    }
+    //플레이어의 위치는 그대로인데 스테이지 하이라이팅만 바꿔야 할 떄 호출한다.
+    public void UpdateMapHighlight(Vector2Int position, int Delta)
+    {
+        updateCellColor (position, Delta);
     }
     /** position에 플레이어가 갔을 때 스테이지를 업데이트한다 */
-    public void UpdateStage(Vector2Int position)
+    public void UpdateStage(Vector2Int position,int Delta)
     {
         updatePattern();
-        updateCellColor();
+        updateCellColor(position,Delta);
         updateUI ();
 
         updateMoveCount ();
@@ -87,7 +97,7 @@ public class StageScript : MonoBehaviour {
     {
         patternIndex = (patternIndex + 1) % map.pattern.Count;
     }
-    private void updateCellColor()
+    private void updateCellColor(Vector2Int position,int Delta)
     {
         var newAvailabePositions = map.PositionsOf (map.pattern [patternIndex]);
         foreach (var go in MapGameObjectUtil.GetAllCells (gameObject))
@@ -96,8 +106,12 @@ public class StageScript : MonoBehaviour {
         }
         foreach(var pos in newAvailabePositions)
         {
-            var go = MapGameObjectUtil.GetCellGameObject (gameObject, pos);
-            go.GetComponent<Animator> ().SetBool ("Onoff", true);
+            //이 셀의 상하좌우 중 한칸에 플레이어가 있을 때만
+            if ( ((pos.x - position.x) * (pos.x - position.x) == Delta * Delta || (pos.y - position.y) * (pos.y - position.y) == Delta * Delta ) && (pos.x - position.x) * (pos.y - position.y) == 0)
+            {
+                var go = MapGameObjectUtil.GetCellGameObject (gameObject, pos);
+                go.GetComponent<Animator> ().SetBool ("Onoff", true);
+            }
         }
     }
     private void updateUI()
@@ -121,11 +135,13 @@ public class StageScript : MonoBehaviour {
         var validLabel = map.pattern [patternIndex];//다음에 갈 수 있는 칸
 
         var actualLabel = map.LabelOf (newPos);//플레이어가 입력한 칸(여기로 가고 싶어요)
+        var glassLabel = map.GlassLabelOf( newPos );
 
-        //마법신발이 있으면 True를 리턴
+        if( glassLabel.Value == Label.ANY.Value )
+            return actualLabel.FallIn( validLabel );
+        else
+            return glassLabel.FallIn( validLabel );
 
-        //아니면 두개를 비교한다.
-        return actualLabel.FallIn (validLabel);
     }
     void initGoalCount()
     {
