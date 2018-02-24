@@ -23,9 +23,9 @@ public class CellScript : MonoBehaviour {
         Vector2 currScenePos = gameObject.transform.localPosition;
         Vector2 newScenePos;
         if (index == 0)
-             newScenePos = new Vector2((index + 0.2f )* 0.8f,( index - 1f) * -0.2f);
+             newScenePos = new Vector2((index + 0.2f)* 0.8f,( index - 1f) * -0.2f);
         else
-             newScenePos = new Vector2 ((index+1.5f) * 0.8f, (index+ 2f) * -0.2f);
+             newScenePos = new Vector2 ((index+ 1.5f) * 0.8f, (index+ 2f) * -0.2f);
         if (this.index == 0)
             gameObject.GetComponent<Animator>().SetBool("Onoff", true);
         else

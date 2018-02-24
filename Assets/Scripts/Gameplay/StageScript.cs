@@ -50,7 +50,7 @@ public class StageScript : MonoBehaviour {
         return map.IsInside (newPos) && checkLogic (newPos);
     }
     public bool IsValidGlassPos(Vector2Int newPos) {
-        return map.IsInside( newPos ) && map.IsGlassDeployed(newPos);
+        return ((map.IsInside( newPos ) && map.IsGlassDeployed(newPos)) && !map.IsEmpty(newPos));
     }
 
     /** 
@@ -97,6 +97,7 @@ public class StageScript : MonoBehaviour {
     {
         patternIndex = (patternIndex + 1) % map.pattern.Count;
     }
+
     private void updateCellColor(Vector2Int position,int Delta)
     {
         var newAvailabePositions = map.PositionsOf (map.pattern [patternIndex]);
@@ -109,8 +110,15 @@ public class StageScript : MonoBehaviour {
             //이 셀의 상하좌우 중 한칸에 플레이어가 있을 때만
             if ( ((pos.x - position.x) * (pos.x - position.x) == Delta * Delta || (pos.y - position.y) * (pos.y - position.y) == Delta * Delta ) && (pos.x - position.x) * (pos.y - position.y) == 0)
             {
-                var go = MapGameObjectUtil.GetCellGameObject (gameObject, pos);
-                go.GetComponent<Animator> ().SetBool ("Onoff", true);
+                GameObject go;
+
+                   go = MapGameObjectUtil.GetCellGameObject (gameObject, pos);
+
+                if( map.GlassLabelOf( pos ).Value == Label.ANY.Value)
+                   go.GetComponent<Animator> ().SetBool ("Onoff", true);
+                else if(map.GlassLabelOf( pos ).Value == map.pattern[ patternIndex ].Value )
+                   go.GetComponent<Animator>().SetBool( "Onoff", true );
+
             }
         }
     }
