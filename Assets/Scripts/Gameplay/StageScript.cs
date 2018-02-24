@@ -105,13 +105,16 @@ public class StageScript : MonoBehaviour {
 
         var newAvailabePositions = map.PositionsOf( Label.ANY );
         foreach( var go in MapGameObjectUtil.GetAllCells( gameObject ) ) {
+            go.GetComponent<Animator>().SetBool( "Glass", false);
             go.GetComponent<Animator>().SetBool( "Onoff", false );
         }
         foreach( var pos in newAvailabePositions ) {
             //이 셀의 상하좌우 중 한칸에 플레이어가 있을 때만
             if( ( ( pos.x - position.x ) * ( pos.x - position.x ) == Delta * Delta || ( pos.y - position.y ) * ( pos.y - position.y ) == Delta * Delta ) && ( pos.x - position.x ) * ( pos.y - position.y ) == 0 ) {
                 GameObject go = MapGameObjectUtil.GetCellGameObject( gameObject, pos );
+
                 go.GetComponent<Animator>().SetBool( "Onoff", true );
+                go.GetComponent<Animator>().SetBool( "Glass", true );
             }
         }
     }
@@ -120,6 +123,7 @@ public class StageScript : MonoBehaviour {
         var newAvailabePositions = map.PositionsOf (map.pattern [patternIndex]);
         foreach (var go in MapGameObjectUtil.GetAllCells (gameObject))
         {
+            go.GetComponent<Animator>().SetBool( "Glass", false );
             go.GetComponent<Animator> ().SetBool ("Onoff", false);
         }
         foreach(var pos in newAvailabePositions)
@@ -170,8 +174,8 @@ public class StageScript : MonoBehaviour {
     }
     void initGoalCount()
     {
-        var text = GameObject.Find ("GoalCountText").GetComponent<Text>();
-        text.text = map.goalCount.ToString ();
+       // var text = GameObject.Find ("GoalCountText").GetComponent<Text>();
+        //text.text = map.goalCount.ToString ();
     }
     void updateMoveCount()
     {

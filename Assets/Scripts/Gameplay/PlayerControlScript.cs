@@ -76,23 +76,40 @@ public class PlayerControlScript : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.A))
         {
             IM.Onclick_ToggleSpring ();
+
+            if( PosDelta == 1 )
+                gameObject.GetComponent<Animator>().SetBool( "SpringOn", false );
+            else
+                gameObject.GetComponent<Animator>().SetBool( "SpringOn", true );
         }
         if ( Input.GetKeyDown (KeyCode.S) )
         {
-            Toggle_Glass();
+            if( IM.Is_GlassAvailable( "A" ) ) {
+                IM.Toggle_Glass( "A" );
+                Toggle_Glass();
+            }
+        }
+        if( Input.GetKeyDown( KeyCode.D ) ) {
+            if( IM.Is_GlassAvailable( "B" ) ) {
+                IM.Toggle_Glass( "B" );
+                Toggle_Glass();
+            }
+        }
+        if( Input.GetKeyDown( KeyCode.F ) ) {
+            if( IM.Is_GlassAvailable( "C" ) ) {
+                IM.Toggle_Glass( "C" );
+                Toggle_Glass();
+            }
         }
 
 
-        if ( Glass_Deploying )
+        //if ( Glass_Deploying )
+        if(Glass_Selecting)
         {
             stage.UpdateGlassHighlight( pos, PosDelta );
             GlassDeploy_Barrier.SetActive( true );
-            if ( Input.GetKeyDown (KeyCode.S) )
-            {
-                Toggle_Glass();
-                Glass_Deploying = false;
-            }
-            else if ( Input.GetKeyDown (KeyCode.UpArrow) )
+
+            if ( Input.GetKeyDown (KeyCode.UpArrow) )
             {
                 glassPos += new Vector2Int (PosDelta * -1, 0);
             }
@@ -142,7 +159,7 @@ public class PlayerControlScript : MonoBehaviour
                 }
             }
         }
-
+        /*
         if ( Glass_Selecting)
         {
             GlassDeploy_Barrier.SetActive( true );
@@ -173,12 +190,14 @@ public class PlayerControlScript : MonoBehaviour
             }
 
         }
-        if( !( Glass_Deploying || Glass_Selecting ) )
+       
+        */
+        if(!Glass_Selecting )
             GlassDeploy_Barrier.SetActive( false );
 
         updatePlayerPosition( newPos);
 
-        if (Input.GetKey(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R))
         {
             Reset.GetComponent<Reset>().Pressed = true;
         }
@@ -186,7 +205,7 @@ public class PlayerControlScript : MonoBehaviour
         {
             Reset.GetComponent<Reset>().Pressed = false;
         }
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             BacktoMain.GetComponent<Reset>().Pressed = true;
         }
@@ -200,6 +219,7 @@ public class PlayerControlScript : MonoBehaviour
 
     void Toggle_Glass() {
         Glass_Selecting = !Glass_Selecting;
+        stage.UpdateMapHighlight( pos, PosDelta );
     }
 
     public void Set_SpringState(bool On) {

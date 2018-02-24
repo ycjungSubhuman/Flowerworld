@@ -12,7 +12,8 @@ public class Reset : MonoBehaviour
     public bool Is_Reset;
     public bool Is_BacktoMain;
 
-    Slider ResetProgress;
+    //Slider ResetProgress;
+    float ResetValue=0.0f;
 
     public GameObject Player;
 
@@ -22,30 +23,33 @@ public class Reset : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        ResetProgress = transform.Find("ProgressBar").GetComponent<Slider>();
-        SLIDER_DELTA = 2f;
+        //ResetProgress = transform.Find("ProgressBar").GetComponent<Slider>();
+        SLIDER_DELTA = 1f;
        // StartCoroutine(DetectMouseHovering());
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log( ResetValue );
         if (Player == null)
             Player = GameObject.FindWithTag("Player");
+
         if (Pressed || Hovered)
         {
-            ResetProgress.value += SLIDER_DELTA * Time.deltaTime;
-            if (ResetProgress.value > 1f)
-                ResetProgress.value = 1f;
+            ResetValue += SLIDER_DELTA;
+            if (ResetValue > 1f)
+                ResetValue = 1f;
         }
         else
         {
-            ResetProgress.value -= SLIDER_DELTA * Time.deltaTime;
-            if (ResetProgress.value < 0)
-                ResetProgress.value = 0;
+            ResetValue -= SLIDER_DELTA;
+            if (ResetValue < 0)
+                ResetValue = 0;
         }
-        if (ResetProgress.value >= 1f)
+        if (ResetValue >= 1f)
         {
+            Hovered = false;
             if( Is_Reset ) {
                 Player.GetComponent<PlayerControlScript>().onResetKey();
       
@@ -55,18 +59,16 @@ public class Reset : MonoBehaviour
             }
             if (Is_BacktoMain)
                 Player.GetComponent<PlayerControlScript>().onGotoStageSelect();
-            ResetProgress.value = 0;
+            ResetValue = 0;
         }
 
-
-    }
-    private void OnMouseOver()
-    {
-        Hovered = true;
-    }
-    private void OnMouseExit()
-    {
-        Hovered = false;
+        if( Input.GetMouseButtonDown( 0 ) ) {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
+            if( Physics.Raycast( ray, out hit, 100.0f ) ) {
+                Hovered = true;
+            }
+        }
     }
     //호버링 감지 방식 변경중(Legacy)
     /*
