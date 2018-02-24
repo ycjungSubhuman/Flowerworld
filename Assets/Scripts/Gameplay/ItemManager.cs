@@ -23,6 +23,8 @@ public class ItemManager : MonoBehaviour {
     Text[] GlassCount_Text = new Text[ GLASS_VARIATION ];
     string[] FlowerType = { "A", "B", "C", "D", "E", "F" };
 
+    GameObject[] Glass_UI;
+
     public string Queued_Glass;
 
     // Use this for initialization
@@ -69,6 +71,11 @@ public class ItemManager : MonoBehaviour {
             GlassCount.Add( GlassInfo.Key, GlassInfo.Value );
         }
 
+        //플레이어의 머리 위에 유리 UI를 띄워준다.
+        Glass_UI = new GameObject[ GLASS_VARIATION ];
+        for(int i = 0; i < GLASS_VARIATION; i++ ) {
+
+        }
     }
 
     public void Reset_Glassinfo() {
