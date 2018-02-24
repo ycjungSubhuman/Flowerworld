@@ -38,7 +38,7 @@ public class ItemManager : MonoBehaviour {
 
     void Update() {
 
-        Text_Updater ();
+        //Text_Updater ();
     }
     public void Set_Mapinfo( Map map_data ) {
         map = map_data;
@@ -56,8 +56,10 @@ public class ItemManager : MonoBehaviour {
         }
 
         SpringCount_Text.text = SpringCount.ToString ();
+
         for ( int i = 0; i < GLASS_VARIATION; i++ )
         {
+            if(GlassCount.ContainsKey( FlowerType[ i ] ) )
             GlassCount_Text [i].text = GlassCount [FlowerType [i]].ToString ();
         }
     }
