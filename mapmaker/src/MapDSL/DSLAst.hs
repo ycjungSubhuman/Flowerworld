@@ -21,4 +21,6 @@ module MapDSL.DSLAst where
                 | EMPTY
                 | ANY
                 | GOAL
+                | Ga | Gb | Gc | Gd 
+                | Sp
                 deriving (Eq, Show)

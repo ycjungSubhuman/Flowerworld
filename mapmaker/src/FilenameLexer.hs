@@ -12,8 +12,8 @@ module FilenameLexer (lexFilename) where
     lexer :: CharParser st (String, String)
     lexer = do
         string "map-"
-        world <- many1 digit
+        world <- many1 alphaNum
         string "-"
-        stage <- many1 digit
+        stage <- many1 alphaNum
         return (world, stage)
 

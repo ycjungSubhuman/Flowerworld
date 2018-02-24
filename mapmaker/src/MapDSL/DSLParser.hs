@@ -117,6 +117,11 @@ module MapDSL.DSLParser(
         <|> F <$ string "F"
         <|> GOAL <$ try (string "$")
         <|> G <$ string "G"
+        <|> Ga <$ string "Ga"
+        <|> Gb <$ string "Gb"
+        <|> Gc <$ string "Gc"
+        <|> Gd <$ string "Gd"
+        <|> Sp <$ string "Sp"
 
 
 

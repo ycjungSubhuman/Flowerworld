@@ -103,4 +103,9 @@ module MapData(src2map) where
           Ast.ANY -> sum $ (\x -> 2 ^ x) `map` range
                     where range = [1..7]
           Ast.GOAL -> 2 ^ 30
+          Ast.Ga -> (2 ^ 22) + (2 ^ 12)
+          Ast.Gb -> (2 ^ 22) + (2 ^ 13)
+          Ast.Gc -> (2 ^ 22) + (2 ^ 14)
+          Ast.Gd -> (2 ^ 22) + (2 ^ 15) 
+          Ast.Sp -> (2 ^ 21)
 
