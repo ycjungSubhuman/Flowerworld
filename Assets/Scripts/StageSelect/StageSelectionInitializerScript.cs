@@ -84,7 +84,8 @@ public class StageSelectionInitializerScript : MonoBehaviour {
         //위치를 지정한다.
         float WorldButtonWidth = WorldScrollContentRect.rect.height * 0.8f;
         float WorldScrollX = WorldScroll.transform.Find("Viewport").Find("Content").gameObject.GetComponent<RectTransform>().rect.x;
-        StageScroll.GetComponent<RectTransform>().anchoredPosition = new Vector2(WorldScrollX + (16 + WorldButtonWidth) * i + 16, 0f);
+        
+StageScroll.GetComponent<RectTransform>().anchoredPosition = new Vector2(WorldScrollX + (16 + WorldButtonWidth) * i + 16, StageScroll.GetComponent<RectTransform>().anchoredPosition.y);
         Debug.Log(i);
         Debug.Log((16 + WorldButtonWidth) * i + 16);
         //버튼을 만들어준다.
@@ -125,7 +126,7 @@ public class StageSelectionInitializerScript : MonoBehaviour {
                 //부모를 설정하고
                 temp.transform.SetParent(StageScrollContentRect.gameObject.transform);
                 //버튼의 크기를 계산한 뒤
-                float ButtonHeight = StageScrollContentRect.rect.width * 0.45f;
+                float ButtonHeight = StageScrollContentRect.rect.width * 0.2f;
                 float ButtonWIdth = StageScrollContentRect.rect.width * 0.8f;
                 //Recttransform을 설정하고
                 tempRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ButtonWIdth);
