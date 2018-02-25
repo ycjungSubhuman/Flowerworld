@@ -1,7 +1,8 @@
 title World 1-3
 goalcount 10
 pattern B,A,A
-block 
+item 0/(0,0,0,0)/0
+block
         A | B,$ |
         A | B |
         A | A |

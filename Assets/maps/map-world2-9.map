@@ -1,0 +1,10 @@
+title World 1-9
+goalcount 17
+pattern A,B,B,C,A
+item 1/(0,0,0,0)/0
+block
+        B | B | C | A | B,$ |
+        A | B | B | C | B |
+        A | C | A | A | B |
+        B | B | B | C | B |
+        A,^ | A | C | A | A |

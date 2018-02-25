@@ -1,9 +1,0 @@
-title Practice 2
-goalcount 24
-pattern C,B,D,A,B 
-block 
-         A | B | C | C | B | D | A,$ |
-         C | B | D | * | B | D | D | 
-         D | B | A | C |   | A | B |
-         C | * | D | B | A | D | C |
-         C,^ | B | C | B | D | C | B |

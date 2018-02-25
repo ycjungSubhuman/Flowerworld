@@ -58,7 +58,7 @@ public class PlayerControlScript : MonoBehaviour
         Vector2Int glassPos = pos;
 
         if( !StageScript.Cleared ) {
-            if( !Glass_Deploying ) {
+            if( !Glass_Selecting ) {
                 if( Input.GetKeyDown( KeyCode.UpArrow ) ) {
                     newPos += new Vector2Int( PosDelta * -1, 0 );
                 } else if( Input.GetKeyDown( KeyCode.DownArrow ) ) {
@@ -102,13 +102,13 @@ public class PlayerControlScript : MonoBehaviour
                 stage.UpdateGlassHighlight( pos, PosDelta );
                 GlassDeploy_Barrier.SetActive( true );
 
-                if( Input.GetKeyDown( KeyCode.UpArrow ) ) {
+                if( Input.GetKeyUp( KeyCode.UpArrow ) ) {
                     glassPos += new Vector2Int( PosDelta * -1, 0 );
-                } else if( Input.GetKeyDown( KeyCode.DownArrow ) ) {
+                } else if( Input.GetKeyUp( KeyCode.DownArrow ) ) {
                     glassPos += new Vector2Int( PosDelta, 0 );
-                } else if( Input.GetKeyDown( KeyCode.RightArrow ) ) {
+                } else if( Input.GetKeyUp( KeyCode.RightArrow ) ) {
                     glassPos += new Vector2Int( 0, PosDelta );
-                } else if( Input.GetKeyDown( KeyCode.LeftArrow ) ) {
+                } else if( Input.GetKeyUp( KeyCode.LeftArrow ) ) {
                     glassPos += new Vector2Int( 0, PosDelta * -1 );
                 }
 
