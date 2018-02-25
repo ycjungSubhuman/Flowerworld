@@ -40,25 +40,11 @@ namespace Assets.Core.Drawer
                 cellGameObject.GetComponent<SpriteRenderer>().sprite = sprite;
 
                 if( cell.label.FallIn( Label.GOAL ) ) {
-                    var goalMarker = GameObject.Instantiate( cellGameObject );
-                    var goalMarkerMaterial = Resources.Load<Material>( "materials/BorderMaterial" );
-                    goalMarker.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>( "Sprite/CellFlower/" + "GOAL" );
+                    var goalMarker = GameObject.Instantiate( Resources.Load<GameObject>("prefabs/Goal") );
                     goalMarker.transform.parent = cellGameObject.transform;
-                    goalMarker.GetComponent<SpriteRenderer>().sortingLayerName = "GoalMarker";
-                    goalMarker.transform.Find ("Lightbox").gameObject.SetActive (false);
-                    // goalMarker.GetComponent<MeshRenderer>().material = goalMarkerMaterial;
-                    // goalMarker.transform.parent = cellGameObject.transform;
+                    var lp = goalMarker.transform.localPosition;
+                    goalMarker.transform.localPosition = new Vector3 (0, 0, lp.z);
                 }
-                /*
-                if( cell.label.FallIn( Label.START ) ) {
-                    var goalMarker = GameObject.Instantiate( cellGameObject );
-                    var goalMarkerMaterial = Resources.Load<Material>( "materials/BorderMaterial" );
-                    goalMarker.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>( "Sprite/CellFlower/" + "START" );
-                    goalMarker.transform.parent = cellGameObject.transform;
-                    goalMarker.GetComponent<SpriteRenderer>().sortingLayerName = "GoalMarker";
-                    // goalMarker.GetComponent<MeshRenderer>().material = goalMarkerMaterial;
-                    // goalMarker.transform.parent = cellGameObject.transform;
-                }*/
                 cellGameObject.GetComponent<SpriteRenderer>().sortingLayerName = "Cell";
             }
             return cellGameObject;
