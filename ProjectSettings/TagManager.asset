@@ -51,6 +51,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: ForeGround
+    uniqueID: 679287825
+    locked: 0
   - name: GoalMarker
     uniqueID: 1582669559
     locked: 0

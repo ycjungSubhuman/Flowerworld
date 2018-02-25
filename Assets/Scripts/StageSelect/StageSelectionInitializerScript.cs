@@ -6,9 +6,13 @@ using UnityEngine.SceneManagement;
 using Assets.Util;
 using Assets;
 using UnityEngine.Events;
+using Assets.Core.Animation.Coroutines;
+using System;
+using Assets.Scripts;
 
 // 디버그용 스테이지 선택 씬 초기화 스크립트 (main 씬)
-public class StageSelectionInitializerScript : MonoBehaviour {
+public class StageSelectionInitializerScript : MonoBehaviour
+{
 
     List<TextAsset> mapList = new List<TextAsset> ();
     Dropdown dropdown;
@@ -21,76 +25,55 @@ public class StageSelectionInitializerScript : MonoBehaviour {
     GameObject StageButtonTemplate;
     GameObject Protector;
 
-    List<GameObject> Prv_StageButton = new List<GameObject>();
+    List<GameObject> Prv_StageButton = new List<GameObject> ();
 
     float WorldScrollRect_Height;
 
-    SortedList<string, List<TextAsset>> WorldList = new SortedList<string, List<TextAsset>>();
+    SortedList<string, List<TextAsset>> WorldList = new SortedList<string, List<TextAsset>> ();
+    public Action Restore = () => { };
 
+    void Start()
+    {
 
-    // Use this for initialization
-    void Start () {
+        Prv_StageButton.Clear ();
+        WorldScrollContentRect = WorldScroll.transform.GetChild (0).GetChild (0).GetComponent<RectTransform> ();
+        StageScrollContentRect = StageScroll.transform.GetChild (0).GetChild (0).GetComponent<RectTransform> ();
 
-        Prv_StageButton.Clear();
-        WorldScrollContentRect = WorldScroll.transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
-        StageScrollContentRect = StageScroll.transform.GetChild(0).GetChild(0).GetComponent<RectTransform>();
+        StageButtonTemplate = StageScrollContentRect.gameObject.transform.Find ("Button").gameObject;
+        StageButtonTemplate.SetActive (false);
 
-        StageButtonTemplate = StageScrollContentRect.gameObject.transform.Find("Button").gameObject;
-        StageButtonTemplate.SetActive(false);
+        Protector = GameObject.Find ("Protector");
+        Protector.SetActive (false);
 
-        Protector = GameObject.Find("Protector");
-        Protector.SetActive(false);
-
-        StageScroll.SetActive(false);
+        StageScroll.SetActive (false);
 
         WorldScrollRect_Height = WorldScrollContentRect.rect.height;
-        //미리 저장된 Map 파일을 읽은 뒤 분류한다
-        List<TextAsset> mapSources = MapFileUtil.GetAllMapSources();
+        List<TextAsset> mapSources = MapFileUtil.GetAllMapSources ();
 
-        Classify_Map(out WorldList, mapSources);
-        //Scrollrect의 사이즈를 조절한다
-        WorldScrollContentRect.sizeDelta = new Vector2(WorldScrollRect_Height * (WorldList.Count + 0.1f), WorldScrollContentRect.sizeDelta.y);
+        Classify_Map (out WorldList, mapSources);
+        WorldScrollContentRect.sizeDelta = new Vector2 (WorldScrollRect_Height * (WorldList.Count + 0.1f), WorldScrollContentRect.sizeDelta.y);
 
-        //이제 대분류 버튼을 만들어 보자.
-        Create_WorldSelect(WorldList);
-
-
-
-        /* 레거시 코드 */
-
-        GameObject mapSelection = GameObject.Find("MapSelection");
-        GameObject startButton = GameObject.Find("StartButton");
-        Button button = startButton.GetComponent<Button>();
-        dropdown = mapSelection.GetComponent<Dropdown>();
-
-
-        //Dropbox에 넣어준다
-        foreach (TextAsset mapSource in mapSources)
-        {
-            var title = MapFileUtil.mapTitleOfFile (mapSource);
-            dropdown.options.Add (new Dropdown.OptionData(title));
-            mapList.Add (mapSource);
-            button.onClick.AddListener (StartStage);
-        }
-        dropdown.value = 0;
-        dropdown.RefreshShownValue ();
-	}
+        Create_WorldSelect (WorldList);
+    }
     public void OnClick_WorldButton(string WorldName)
     {
-        int i = WorldList.IndexOfKey(WorldName);
-        Protector.SetActive(true);
-        //Debug.Log(WorldName + " Pressed");
-        StageScroll.SetActive(true);
+        int i = WorldList.IndexOfKey (WorldName);
+        Protector.SetActive (true);
+
+        StageScroll.SetActive (true);
         //위치를 지정한다.
         float WorldButtonWidth = WorldScrollContentRect.rect.height * 0.8f;
-        float WorldScrollX = WorldScroll.transform.Find("Viewport").Find("Content").gameObject.GetComponent<RectTransform>().rect.x;
-        StageScroll.GetComponent<RectTransform>().anchoredPosition = new Vector2(WorldScrollX + (16 + WorldButtonWidth) * i + 16, 0f);
-        Debug.Log(i);
-        Debug.Log((16 + WorldButtonWidth) * i + 16);
-        //버튼을 만들어준다.
-        Create_StageSelect(WorldName);
+        float WorldScrollX = WorldScroll.transform.Find ("Viewport").Find ("Content").gameObject.GetComponent<RectTransform> ().rect.x;
 
+        StageScroll.GetComponent<RectTransform> ().anchoredPosition = 
+            new Vector2 (
+                WorldScrollContentRect.transform.GetChild(i+1).GetComponent<RectTransform>().anchoredPosition.x + 380f, 
+                StageScroll.GetComponent<RectTransform>().anchoredPosition.y-80f);
+        Debug.Log (i);
+        Debug.Log ((16 + WorldButtonWidth) * i + 16);
+        Create_StageSelect (WorldName);
     }
+
 
 
 
@@ -99,90 +82,150 @@ public class StageSelectionInitializerScript : MonoBehaviour {
     {
 
 
-        if (WorldList.ContainsKey(World))
+        if ( WorldList.ContainsKey (World) )
         {
             //이미 만들어진 버튼을 비활성화 한다.
-            if( Prv_StageButton.Count != 0 ) {
-                for( int j = 0; j < Prv_StageButton.Count; j++ ) {
-                    Destroy( Prv_StageButton[ j ] );
+            if ( Prv_StageButton.Count != 0 )
+            {
+                for ( int j = 0; j < Prv_StageButton.Count; j++ )
+                {
+                    Destroy (Prv_StageButton [j]);
                 }
             }
-            Prv_StageButton.Clear();
+            Prv_StageButton.Clear ();
 
-            //월드 정보를 받아온다.
-            List<TextAsset> StageList = WorldList[World];
+
+            List<TextAsset> StageList = WorldList [World];
+            ResetButtonPositions ();
+            StopAllCoroutines ();
+
             int i = 0;
-            //각 스테이지 정보 별로 버튼을 만들어준다.
-            foreach(TextAsset Stage in StageList)
+            foreach ( TextAsset Stage in StageList )
             {
-                //버튼의 이름
-                string title = MapFileUtil.mapTitleOfFile(Stage);
+                string title = MapFileUtil.mapTitleOfFile (Stage);
 
-                GameObject temp = Instantiate(StageButtonTemplate);
-                temp.SetActive(true);
-                RectTransform tempRect = temp.GetComponent<RectTransform>();
+                GameObject temp = Instantiate (StageButtonTemplate);
+                temp.SetActive (true);
+                RectTransform tempRect = temp.GetComponent<RectTransform> ();
 
-                //부모를 설정하고
-                temp.transform.SetParent(StageScrollContentRect.gameObject.transform);
-                //버튼의 크기를 계산한 뒤
-                float ButtonHeight = StageScrollContentRect.rect.width * 0.45f;
-                float ButtonWIdth = StageScrollContentRect.rect.width * 0.8f;
-                //Recttransform을 설정하고
-                tempRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ButtonWIdth);
-                tempRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ButtonHeight);
-                tempRect.pivot = new Vector2(0.5f, 1f);
-                tempRect.anchoredPosition = new Vector2(0f, ((8 + ButtonHeight) * i + 8) * -1f);
-                //활성화 시켜준 뒤
-                tempRect.gameObject.SetActive(true);
-                //Init을 실행한다.
-                temp.GetComponent<StageSelectButton>().Init(title,Stage);
 
-                UnityAction Call = delegate { StartStage(Stage);  };
-                temp.GetComponent<Button>().onClick.AddListener(Call);
+                temp.transform.SetParent (StageScrollContentRect.gameObject.transform);
+                float ButtonHeight = 80f;
+                float ButtonWIdth = 250f;
+                tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, ButtonWIdth);
+                tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, ButtonHeight);
+                tempRect.pivot = new Vector2 (0.5f, 1f);
+
+
+
+
+                StartCoroutine (
+                    Move.QuadOut (
+                        (v) => { tempRect.anchoredPosition = v; },
+                        new Vector2 (0f, 0f),
+                        new Vector2 (0f, ((8 + ButtonHeight) * i + 8) * -1f),
+                        0.5f)
+                    );
+
+                // 0번 인덱스는 템플릿 버튼이 차지하고 있기 때문에 1을 더했다.
+                GameObject worldButton = WorldScrollContentRect.gameObject.transform.GetChild (WorldList.IndexOfKey (World) + 1).gameObject;
+                float worldButtonXPos = worldButton.GetComponent<RectTransform> ().anchoredPosition.x;
+                float worldButtonYPos = worldButton.GetComponent<RectTransform> ().anchoredPosition.y;
+                StartCoroutine (
+                    Move.QuadOut (
+                        (v) => { worldButton.GetComponent<RectTransform>().anchoredPosition = v; },
+                        new Vector2 (worldButtonXPos, 0f),
+                        new Vector2 (worldButtonXPos, 150f),
+                        0.5f)
+                );
+                float stageScrollXPos = StageScroll.GetComponent<RectTransform> ().anchoredPosition.x;
+                float stageScrollYPos = StageScroll.GetComponent<RectTransform> ().anchoredPosition.y;
+                StartCoroutine (
+                    Move.QuadOut (
+                        (v) => { StageScroll.GetComponent<RectTransform>().anchoredPosition = v; },
+                        new Vector2 (stageScrollXPos, stageScrollYPos),
+                        new Vector2 (stageScrollXPos, stageScrollYPos + 180f),
+                        0.5f)
+                );
+
+                Restore = () =>
+                {
+                    float _stageScrollXPos = StageScroll.GetComponent<RectTransform> ().anchoredPosition.x;
+                    float _stageScrollYPos = StageScroll.GetComponent<RectTransform> ().anchoredPosition.y;
+                    StartCoroutine (
+                        Move.QuadOut (
+                            (v) => { StageScroll.GetComponent<RectTransform> ().anchoredPosition = v; },
+                            new Vector2 (_stageScrollXPos, _stageScrollYPos),
+                            new Vector2 (_stageScrollXPos, 0f),
+                            0.5f)
+                    );
+
+                    // 0번 인덱스는 템플릿 버튼이 차지하고 있기 때문에 1을 더했다.
+                    float _worldButtonXPos = worldButton.GetComponent<RectTransform> ().anchoredPosition.x;
+                    float _worldButtonYPos = worldButton.GetComponent<RectTransform> ().anchoredPosition.y;
+                    StartCoroutine (
+                        Move.QuadOut (
+                            (v) => { worldButton.GetComponent<RectTransform> ().anchoredPosition = v; },
+                            new Vector2 (_worldButtonXPos, _worldButtonYPos),
+                            new Vector2 (_worldButtonXPos, 0f),
+                            0.5f)
+                    );
+                };
+
+                tempRect.gameObject.SetActive (true);
+                temp.GetComponent<StageSelectButton> ().Init (title, Stage);
+
+                UnityAction Call = delegate { StartStage (Stage); TitleMusicScript.Instance.StopMusic (); };
+                
+                temp.GetComponent<Button> ().onClick.AddListener (Call);
                 i++;
 
-                //버튼 리스트에 추가한다.
-                Prv_StageButton.Add( temp );
+                Prv_StageButton.Add (temp);
             }
-  
+
         }
         else
         {
-            Debug.Log("Selected World (" + World + ") isn't Exist!");
+            Debug.Log ("Selected World (" + World + ") does not Exist!");
+        }
+    }
+
+    void ResetButtonPositions()
+    {
+        var stageScrollRect = StageScroll.GetComponent<RectTransform> ();
+        stageScrollRect.anchoredPosition = new Vector2 (stageScrollRect.anchoredPosition.x, 0);
+        for ( int i = 1; i < WorldScrollContentRect.transform.childCount; i++ )
+        {
+            var worldButtonRect = WorldScrollContentRect.transform.GetChild (i).GetComponent<RectTransform> ();
+            worldButtonRect.anchoredPosition = new Vector2 (worldButtonRect.anchoredPosition.x, 0);
         }
     }
 
     void Create_WorldSelect(SortedList<string, List<TextAsset>> WorldList)
     {
         //맵 상에 있는 대분류 버튼을 찾는다.
-        GameObject WorldButtonTemplate = WorldScrollContentRect.gameObject.transform.Find("Button").gameObject;
-        //비활성화한다.
-        if (WorldButtonTemplate != null)
-        { 
+        GameObject WorldButtonTemplate = WorldScrollContentRect.gameObject.transform.Find ("Button").gameObject;
+
+        if ( WorldButtonTemplate != null )
+        {
             int i = 0;
-            WorldButtonTemplate.SetActive(false);
-            foreach (KeyValuePair<string, List<TextAsset>> Stage in WorldList)
+            WorldButtonTemplate.SetActive (false);
+            foreach ( KeyValuePair<string, List<TextAsset>> Stage in WorldList )
             {
-                GameObject temp = Instantiate(WorldButtonTemplate);
-                RectTransform tempRect = temp.GetComponent<RectTransform>();
-                //부모를 설정하고
-                temp.transform.SetParent(WorldScrollContentRect.gameObject.transform);
-                //버튼의 크기를 계산한 뒤
+                GameObject temp = Instantiate (WorldButtonTemplate);
+                RectTransform tempRect = temp.GetComponent<RectTransform> ();
+                temp.transform.SetParent (WorldScrollContentRect.gameObject.transform);
                 float ButtonHeight = WorldScrollContentRect.rect.height * 0.8f;
-                //Recttransform을 설정하고
-                tempRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, ButtonHeight);
-                tempRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, ButtonHeight);
-                tempRect.pivot = new Vector2(0, 0.5f);
-                tempRect.anchoredPosition = new Vector2((16 + ButtonHeight) * i + 16, 0f);
-                //활성화 시켜준 뒤
-                tempRect.gameObject.SetActive(true);
-                //Init을 실행한다.
-                temp.GetComponent<WorldSelectButton>().Init(Stage.Key, Stage.Value);
+                tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, ButtonHeight);
+                tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, ButtonHeight);
+                tempRect.pivot = new Vector2 (0.5f, 0.5f);
+                tempRect.anchoredPosition = new Vector2 ((300f) * (i-1), 0f);
+                tempRect.gameObject.SetActive (true);
+                temp.GetComponent<WorldSelectButton> ().Init (Stage.Key, Stage.Value);
 
+                UnityAction Call = delegate { OnClick_WorldButton (Stage.Key); };
+                temp.GetComponent<Button> ().onClick.AddListener (Call);
 
-                UnityAction Call = delegate { OnClick_WorldButton(Stage.Key); };
-                temp.GetComponent<Button>().onClick.AddListener(Call);
-                
                 i++;
             }
         }
@@ -191,51 +234,25 @@ public class StageSelectionInitializerScript : MonoBehaviour {
 
     void Classify_Map(out SortedList<string, List<TextAsset>> WorldList, List<TextAsset> mapSources)
     {
-        SortedList<string, List<TextAsset>> tempWorldList = new SortedList<string, List<TextAsset>>();
+        SortedList<string, List<TextAsset>> tempWorldList = new SortedList<string, List<TextAsset>> ();
         //파일 명: map-(대분류)-(소분류)
         //KeyValueSortedList 만들어서 쓰자
         //string : 대분류를 나타내는 문자열
         //맵들을 대분류에 맞게 분류한다.
-        foreach (TextAsset mapSource in mapSources)
+        foreach ( TextAsset mapSource in mapSources )
         {
-            //맵을 찾았다
-            string World = MapFileUtil.mapWorld(mapSource);
-           // bool Make_New = true;
+            string World = MapFileUtil.mapWorld (mapSource);
 
-            //대분류에 해당하는 Pair가 리스트에 있는가?
-            if(tempWorldList.ContainsKey(World))
+            if ( tempWorldList.ContainsKey (World) )
             {
-                //있으면 그 리스트에 추가하고 종료
-                tempWorldList[World].Add(mapSource);
+                tempWorldList [World].Add (mapSource);
             }
             else
             {
-                //새로운 Pair를 만든다. 그리고 첫번째 원소를 넣어준다.
-                List<TextAsset> temp = new List<TextAsset>();
-                temp.Add(mapSource);
-                tempWorldList.Add(World, temp);
+                List<TextAsset> temp = new List<TextAsset> ();
+                temp.Add (mapSource);
+                tempWorldList.Add (World, temp);
             }
-            /*
-            foreach (KeyValuePair<string, List<TextAsset>> Pair in tempWorldList)
-            {
-                if (Pair.Key == World)
-                {
-                    //있으면 그 리스트에 추가하고 종료
-                    Pair.Value.Add(mapSource);
-                    Make_New = false;
-                    break;
-
-                }
-            }
-            //리스트를 뒤져봤지만 대분류에 해당하는 Pair가 없다
-            if (Make_New)
-            {
-                //새로운 Pair를 만든다. 그리고 첫번째 원소를 넣어준다.
-                KeyValuePair<string, List<TextAsset>> temp = new KeyValuePair<string, List<TextAsset>>(World, new List<TextAsset>());
-                temp.Value.Add(mapSource);
-                tempWorldList.Add(temp);
-            }
-            */
         }
         WorldList = tempWorldList;
     }
@@ -243,7 +260,7 @@ public class StageSelectionInitializerScript : MonoBehaviour {
     void StartStage(TextAsset selection)
     {
         Configuration.Instance.activatedMapSource = selection;
-        SceneManager.LoadScene("GameplayScene");
+        SceneManager.LoadScene ("GameplayScene");
     }
 
     void StartStage()

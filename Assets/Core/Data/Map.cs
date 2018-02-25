@@ -121,6 +121,7 @@ namespace Assets.Core.Data
         /** l 레이블을 가지는 cell들의 position을 리턴 */
         public IEnumerable<Vector2Int> PositionsOf(Label l)
         {
+   
             return main.PositionsOf (l);
         }
 
@@ -139,6 +140,9 @@ namespace Assets.Core.Data
         }
         public bool IsGlassDeployed( Vector2Int pos ) {
             return Glass[ pos.x ][ pos.y ].Value == Label.ANY.Value;
+        }
+        public bool IsEmpty( Vector2Int pos ) {
+            return main.mat[ pos.x ][ pos.y ].label.Value == Label.EMPTY.Value;
         }
     }
 }

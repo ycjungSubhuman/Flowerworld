@@ -34,7 +34,7 @@ namespace Assets.Core.Drawer
                 rowGameObject.name = "Cell_Row_" + i.ToString();
                 rowGameObject.transform.parent = rootGameObject.transform;
                 rowGameObject.transform.localPosition = 
-                    new Vector2 (0, ((m.mat.Count / 2) - i)*(cellHeight+verticalSpace));
+                    new Vector2 (0, ((m.mat.Count / 2f) - i)*(cellHeight+verticalSpace));
                 for (int j=0; j<row.Count; j++)
                 {
                     var cell = row [j];
@@ -42,7 +42,7 @@ namespace Assets.Core.Drawer
                     cellGameObject.name = "Cell_Column_" + j.ToString();
                     cellGameObject.transform.parent = rowGameObject.transform;
                     cellGameObject.transform.localPosition = 
-                        new Vector2 (( -1 * (row.Count / 2) +j) *(cellWidth+horitozontalSpace), 0);
+                        new Vector2 (( -1 * (row.Count / 2f) + j + 0.5f) *(cellWidth+horitozontalSpace), 0);
                 }
             }
 

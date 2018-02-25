@@ -19,6 +19,7 @@ public class StageScript : MonoBehaviour {
     private int patternIndex = -1;
     private int moveCount = 0;
 
+    static public bool Cleared = false;
 
 	// Use this for initialization
 	void Start () {
@@ -50,7 +51,7 @@ public class StageScript : MonoBehaviour {
         return map.IsInside (newPos) && checkLogic (newPos);
     }
     public bool IsValidGlassPos(Vector2Int newPos) {
-        return map.IsInside( newPos ) && map.IsGlassDeployed(newPos);
+        return ((map.IsInside( newPos ) && map.IsGlassDeployed(newPos)) && !map.IsEmpty(newPos));
     }
 
     /** 
@@ -73,6 +74,10 @@ public class StageScript : MonoBehaviour {
     {
         updateCellColor (position, Delta);
     }
+    //유리 하이라이팅
+    public void UpdateGlassHighlight( Vector2Int position, int Delta ) {
+        updateGlassColor( position, Delta );
+    }
     /** position에 플레이어가 갔을 때 스테이지를 업데이트한다 */
     public void UpdateStage(Vector2Int position,int Delta)
     {
@@ -84,6 +89,9 @@ public class StageScript : MonoBehaviour {
         moveCount++;
         if(checkGoal (position))
         {
+            Cleared = true;
+            GameObject.Find( "Clear_Notification" ).GetComponent<Animator>().SetBool( "On", true );
+
             //TODO : 게임 끝났을 때 할 것 
             Debug.Log ("GOAL");
         }
@@ -97,11 +105,29 @@ public class StageScript : MonoBehaviour {
     {
         patternIndex = (patternIndex + 1) % map.pattern.Count;
     }
+    private void updateGlassColor( Vector2Int position, int Delta ) {
+
+        var newAvailabePositions = map.PositionsOf( Label.ANY );
+        foreach( var go in MapGameObjectUtil.GetAllCells( gameObject ) ) {
+            go.GetComponent<Animator>().SetBool( "Glass", false);
+            go.GetComponent<Animator>().SetBool( "Onoff", false );
+        }
+        foreach( var pos in newAvailabePositions ) {
+            //이 셀의 상하좌우 중 한칸에 플레이어가 있을 때만
+            if( ( ( pos.x - position.x ) * ( pos.x - position.x ) == Delta * Delta || ( pos.y - position.y ) * ( pos.y - position.y ) == Delta * Delta ) && ( pos.x - position.x ) * ( pos.y - position.y ) == 0 ) {
+                GameObject go = MapGameObjectUtil.GetCellGameObject( gameObject, pos );
+
+                go.GetComponent<Animator>().SetBool( "Onoff", true );
+                go.GetComponent<Animator>().SetBool( "Glass", true );
+            }
+        }
+    }
     private void updateCellColor(Vector2Int position,int Delta)
     {
         var newAvailabePositions = map.PositionsOf (map.pattern [patternIndex]);
         foreach (var go in MapGameObjectUtil.GetAllCells (gameObject))
         {
+            go.GetComponent<Animator>().SetBool( "Glass", false );
             go.GetComponent<Animator> ().SetBool ("Onoff", false);
         }
         foreach(var pos in newAvailabePositions)
@@ -109,8 +135,15 @@ public class StageScript : MonoBehaviour {
             //이 셀의 상하좌우 중 한칸에 플레이어가 있을 때만
             if ( ((pos.x - position.x) * (pos.x - position.x) == Delta * Delta || (pos.y - position.y) * (pos.y - position.y) == Delta * Delta ) && (pos.x - position.x) * (pos.y - position.y) == 0)
             {
-                var go = MapGameObjectUtil.GetCellGameObject (gameObject, pos);
-                go.GetComponent<Animator> ().SetBool ("Onoff", true);
+                GameObject go;
+
+                   go = MapGameObjectUtil.GetCellGameObject (gameObject, pos);
+
+                if( map.GlassLabelOf( pos ).Value == Label.ANY.Value)
+                   go.GetComponent<Animator> ().SetBool ("Onoff", true);
+                else if(map.GlassLabelOf( pos ).Value == map.pattern[ patternIndex ].Value )
+                   go.GetComponent<Animator>().SetBool( "Onoff", true );
+
             }
         }
     }
@@ -145,8 +178,8 @@ public class StageScript : MonoBehaviour {
     }
     void initGoalCount()
     {
-        var text = GameObject.Find ("GoalCountText").GetComponent<Text>();
-        text.text = map.goalCount.ToString ();
+       // var text = GameObject.Find ("GoalCountText").GetComponent<Text>();
+        //text.text = map.goalCount.ToString ();
     }
     void updateMoveCount()
     {

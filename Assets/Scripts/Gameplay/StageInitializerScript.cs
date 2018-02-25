@@ -59,10 +59,12 @@ public class StageInitializerScript : MonoBehaviour {
 
         //플레이어 생성 및 초기화 
         var player = GameObject.Instantiate( Resources.Load<GameObject>( "prefabs/player" ) );
+        player.name = "Player";
         var playerScript = player.GetComponent<PlayerControlScript>();
         playerScript.stageRoot = mapGameObject;
         playerScript.soundController = new PlayerSoundController( player );
 
+  
         Invoke( "Set_ItemValue", 0.2f );
     }
 

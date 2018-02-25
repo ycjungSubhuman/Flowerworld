@@ -1,5 +1,0 @@
-title World 1-2
-goalcount 8
-pattern A,A,A,B
-block 
-        A,^ | A | B | A | A | A | B,$ |

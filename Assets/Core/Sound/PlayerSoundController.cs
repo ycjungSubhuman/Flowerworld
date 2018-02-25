@@ -29,6 +29,8 @@ namespace Assets.Core.Sound
         private AudioClip G;
         private AudioClip Refuse;
         private AudioClip Restart;
+        private AudioClip GlassCreate;
+        private AudioClip GlassDestroy;
 
         public PlayerSoundController(GameObject gameObject)
         {
@@ -44,6 +46,8 @@ namespace Assets.Core.Sound
             G = Resources.Load<AudioClip> ("sounds/G");
             Refuse = Resources.Load<AudioClip> ("sounds/refuse");
             Restart = Resources.Load<AudioClip> ("sounds/restart");
+            GlassCreate = Resources.Load<AudioClip> ("sounds/replace");
+            GlassDestroy = Resources.Load<AudioClip> ("sounds/glass_break");
 
             soundMap = new Dictionary<int, AudioClip> ()
             {
@@ -55,6 +59,16 @@ namespace Assets.Core.Sound
                 {Label.F.Value,  F},
                 {Label.G.Value,  G},
             };
+        }
+
+        public void OnGlassCreate()
+        {
+            audioSource.PlayOneShot (GlassCreate);
+        }
+
+        public void OnGlassDestroy()
+        {
+            audioSource.PlayOneShot (GlassDestroy);
         }
 
         public void OnLabelSound(Label l)
