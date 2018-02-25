@@ -51,7 +51,7 @@ public class StageScript : MonoBehaviour {
         return map.IsInside (newPos) && checkLogic (newPos);
     }
     public bool IsValidGlassPos(Vector2Int newPos) {
-        return ((map.IsInside( newPos ) && map.IsGlassDeployed(newPos)) && !map.IsEmpty(newPos));
+        return ((map.IsInside( newPos ) && map.IsGlassNotDeployed(newPos)) && !map.IsEmpty(newPos));
     }
 
     /** 

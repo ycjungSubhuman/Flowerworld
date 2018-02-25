@@ -120,6 +120,7 @@ public class PlayerControlScript : MonoBehaviour
                         ItemManager Current_ItemManager = GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>();
                         //ItemManager에게 지금 활성화된 유리를 받아온다
                         string Current_Glass_Name = Current_ItemManager.Current_Glass();
+                        soundController.OnGlassCreate ();
 
                         if( Current_ItemManager.Is_GlassAvailable( Current_Glass_Name ) ) {
                             //유리를 놓는 함수를 호출한다(현재 켜진 유리를 Deploy하는 함수)
@@ -143,39 +144,6 @@ public class PlayerControlScript : MonoBehaviour
                     }
                 }
             }
-            /*
-            if ( Glass_Selecting)
-            {
-                GlassDeploy_Barrier.SetActive( true );
-                if(Input.GetKeyDown(KeyCode.Alpha1))
-                {
-                    IM.Toggle_Glass ("A");
-                    Glass_Selecting = false;
-                    Glass_Deploying = true;
-
-                }
-                else if ( Input.GetKeyDown (KeyCode.Alpha2) )
-                {
-                    IM.Toggle_Glass ("B");
-                    Glass_Selecting = false;
-                    Glass_Deploying = true;
-
-                }
-                else if ( Input.GetKeyDown (KeyCode.Alpha3) )
-                {
-                    IM.Toggle_Glass ("C");
-                    Glass_Selecting = false;
-                    Glass_Deploying = true;
-
-                }
-                else if(Input.GetKeyDown( KeyCode.S))
-                {
-                    Glass_Deploying = false;
-                }
-
-            }
-
-            */
             if( !Glass_Selecting )
                 GlassDeploy_Barrier.SetActive( false );
 
@@ -256,6 +224,10 @@ public class PlayerControlScript : MonoBehaviour
 
 
         if(IsValidPos || isReset) {           
+
+            if ( !stage.map.IsGlassNotDeployed (newPos) ) {
+                soundController.OnGlassDestroy ();
+            }
            
             //현재 위치에 유리가 있다면 깨부순다
             stage.map.Remove_Glass( pos );
@@ -270,7 +242,8 @@ public class PlayerControlScript : MonoBehaviour
             }
 
             //움직인 위치에 유리가 있다면 이미지를 바꿔준다
-            stage.map.Crack_Glass( pos );
+            stage.map.Crack_Glass (pos);
+
 
             //유리를 다시 설치할 수 있게 바꿔준다
             Already_Deployed = false;
