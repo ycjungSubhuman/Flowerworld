@@ -19,6 +19,7 @@ public class StageScript : MonoBehaviour {
     private int patternIndex = -1;
     private int moveCount = 0;
 
+    static public bool Cleared = false;
 
 	// Use this for initialization
 	void Start () {
@@ -88,6 +89,9 @@ public class StageScript : MonoBehaviour {
         moveCount++;
         if(checkGoal (position))
         {
+            Cleared = true;
+            GameObject.Find( "Clear_Notification" ).GetComponent<Animator>().SetBool( "On", true );
+
             //TODO : 게임 끝났을 때 할 것 
             Debug.Log ("GOAL");
         }
