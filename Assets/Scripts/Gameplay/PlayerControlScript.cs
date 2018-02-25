@@ -176,8 +176,11 @@ public class PlayerControlScript : MonoBehaviour
             PosDelta = 2;
         else
             PosDelta = 1;
-        
-        stage.UpdateMapHighlight (pos, PosDelta);
+
+        if ( stage != null )
+        {
+            stage.UpdateMapHighlight (pos, PosDelta);
+        }
     }
     public void onGotoStageSelect()
     {
