@@ -1,7 +1,10 @@
 title World 1-4
-goalcount 8
-pattern A,B,B
-item 1/(0,0,0,0)/0
+goalcount 10
+pattern B,A,A
+item 0/(0,0,0,0)/0
 block
-        B,^ | B | * | A | A |
-        A | B |   | A | B,$ |
+        B | B,$ |
+        A | * |
+        A | A |
+        A | A |
+        B | B,^ |

@@ -1,7 +1,6 @@
 title Tutorial 4
-goalcount 6
-pattern B,B,A
+goalcount 5
+pattern B,B,C
 item 1/(0,0,0,0)/0
 block
-        A,^ | A |   | B | A |
-        B | B |   | B | A,$ |
+        C,^ | B | B |  | C | B | B,$ |
