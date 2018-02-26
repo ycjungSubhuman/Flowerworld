@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Linq;
 using Assets.Util;
 using Assets;
 using UnityEngine.Events;
 using Assets.Core.Animation.Coroutines;
 using System;
 using Assets.Scripts;
+using System.Text.RegularExpressions;
 
 // 디버그용 스테이지 선택 씬 초기화 스크립트 (main 씬)
 public class StageSelectionInitializerScript : MonoBehaviour
@@ -93,9 +95,42 @@ public class StageSelectionInitializerScript : MonoBehaviour
                 }
             }
             Prv_StageButton.Clear ();
+            var StageList = WorldList [World];
+            StageList.Sort ((t1, t2) =>
+            {
+                var title1 = MapFileUtil.mapTitleOfFile (t1);
+                var title2 = MapFileUtil.mapTitleOfFile (t2);
+                Func<String, KeyValuePair<int, int>> extract = (title) =>
+                {
+                    var regex = @"(World\s(\d+)-(\d+))|(Tutorial (\d+))";
+                    var match = Regex.Match (title, regex);
+                    if ( match.Groups [1].Success )
+                    {
+                        return new KeyValuePair<int, int> (int.Parse (match.Groups [2].Value), int.Parse (match.Groups [3].Value));
+                    }
+                    else
+                    {
+                        return new KeyValuePair<int, int> (0, int.Parse (match.Groups [5].Value));
+                    }
+                };
 
+                var p1 = extract (title1);
+                var p2 = extract (title2);
+                var world1 = p1.Key;
+                var world2 = p2.Key;
+                var stage1 = p1.Value;
+                var stage2 = p2.Value;
 
-            List<TextAsset> StageList = WorldList [World];
+                if (world1 != world2)
+                {
+                    return world1.CompareTo (world2);
+                }
+                else
+                {
+                    return stage1.CompareTo (stage2);
+                }
+                
+            });
             ResetButtonPositions ();
             StopAllCoroutines ();
 
@@ -111,7 +146,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
 
                 temp.transform.SetParent (StageScrollContentRect.gameObject.transform);
                 float ButtonHeight = 60f;
-                float ButtonWIdth = 220f;
+                float ButtonWIdth = 240f;
                 tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, ButtonWIdth);
                 tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, ButtonHeight);
                 tempRect.pivot = new Vector2 (0.5f, 1f);
