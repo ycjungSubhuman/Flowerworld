@@ -46,6 +46,13 @@ module MapDSL.DSLAstHelper where
 
     titleOf :: Expr a -> Title
     titleOf expr = extractSingleField stmtToTitle expr
+    commentOf :: Expr a -> Comment
+    commentOf expr =
+        let comments = extractMultipleField stmtToComment expr
+        in let lineCount = length comments
+        in case lineCount of
+            0 -> ""
+            _ -> head comments
 
     patternOf :: Expr a -> Pattern
     patternOf expr = extractSingleField stmtToPattern expr

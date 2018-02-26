@@ -7,7 +7,6 @@ using Assets.Core.Data;
 using Assets.Util;
 using Assets.Core.Sound;
 using Assets.Core.Animation.Coroutines;
-using Assets.Scripts;
 
 /**
  * 플레이어의 컨트롤에 대한 반응을 처리하는 스크립트
@@ -215,7 +214,6 @@ public class PlayerControlScript : MonoBehaviour
     {
         onResetKey();
         StartCoroutine(LoadYourAsyncScene());
-        TitleMusicScript.Instance.PlayMusic ();
     }
     IEnumerator LoadYourAsyncScene()
     {

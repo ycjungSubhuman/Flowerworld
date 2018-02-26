@@ -8,7 +8,6 @@ using Assets;
 using UnityEngine.Events;
 using Assets.Core.Animation.Coroutines;
 using System;
-using Assets.Scripts;
 
 // 디버그용 스테이지 선택 씬 초기화 스크립트 (main 씬)
 public class StageSelectionInitializerScript : MonoBehaviour
@@ -175,8 +174,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
                 tempRect.gameObject.SetActive (true);
                 temp.GetComponent<StageSelectButton> ().Init (title, Stage);
 
-                UnityAction Call = delegate { StartStage (Stage); TitleMusicScript.Instance.StopMusic (); };
-                
+                UnityAction Call = delegate { StartStage (Stage); };
                 temp.GetComponent<Button> ().onClick.AddListener (Call);
                 i++;
 
