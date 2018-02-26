@@ -1,9 +1,7 @@
 title World 1-5
-goalcount 15
-pattern A,B,A,B,B
+goalcount 9
+pattern A,A,B
 item 0/(0,0,0,0)/0
 block
-        B,$ | B | A | B |
-        B | B | B | B |
-        B | B | A | B |
-        A,^ | A | B | A |
+        A,^ | B |   |   |   |
+        A | * | A | A | B,$ |

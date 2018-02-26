@@ -1,7 +1,6 @@
 title World 1-3
 goalcount 8
-pattern A,B,B
-item 1/(0,0,0,0)/0
+pattern A,A,A,B
+item 0/(0,0,0,0)/0
 block
-        B,^ | B | * | A | A |
-        A | B |   | A | B,$ |
+        A,^ | A | B | A | A | A | B,$ |

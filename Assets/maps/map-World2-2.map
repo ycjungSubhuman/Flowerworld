@@ -1,0 +1,10 @@
+title World 2-2
+goalcount 30
+pattern A,B,C,C,B
+item 0/(0,0,0,0)/0
+block
+        A | A | C | B | A |
+        B | B | B | C | C |
+        C | C | C,^ | A | B |
+        C | B | B | C | A |
+        B,$ | C | A | C | B |

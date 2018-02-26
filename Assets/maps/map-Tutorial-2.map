@@ -1,0 +1,7 @@
+title Tutorial 2
+goalcount 7
+pattern B,A
+item 0/(0,0,0,0)/0
+block
+        A,^ | B | A |   | A | B,$ |
+          |   | B | A | B |   | 

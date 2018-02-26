@@ -6,7 +6,7 @@ using System.Linq;
 using Assets.Core.Data;
 using Assets.Util;
 using Assets.Core.Animation;
-
+using Assets;
 /**
  * 스테이지의 로직과 스테이지 로직 상태에 따른 그래픽 이벤트 발생을 관리하는 스크립트
  */
@@ -90,10 +90,22 @@ public class StageScript : MonoBehaviour {
         if(checkGoal (position))
         {
             Cleared = true;
-            GameObject.Find( "Clear_Notification" ).GetComponent<Animator>().SetBool( "On", true );
 
-            //TODO : 게임 끝났을 때 할 것 
-            Debug.Log ("GOAL");
+            int CurrentIndex = Configuration.List.IndexOf( Configuration.Instance.activatedMapSource );
+
+            if( CurrentIndex < Configuration.List.Count() - 1 ) {
+                GameObject.Find( "Clear_Notification" ).GetComponent<Image>().sprite = Resources.Load<Sprite>( "Sprite/UI/clear_new" );
+            }
+            else {
+                GameObject.Find( "Clear_Notification" ).GetComponent<Image>().sprite = Resources.Load<Sprite>( "Sprite/UI/clear_new_NoNext" );
+            }
+                GameObject.Find( "Clear_Notification" ).GetComponent<Animator>().SetBool( "On", true );
+
+
+
+            Debug.Log( "GOAL" );
+
+
         }
     }
     /** 현재 패턴에서 활성화된 레이블을 가져온다 */ 

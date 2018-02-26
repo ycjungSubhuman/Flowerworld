@@ -26,6 +26,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
     RectTransform StageScrollContentRect;
     GameObject StageButtonTemplate;
     GameObject Protector;
+    
 
     List<GameObject> Prv_StageButton = new List<GameObject> ();
 
@@ -139,6 +140,8 @@ public class StageSelectionInitializerScript : MonoBehaviour
             int i = 0;
             foreach ( TextAsset Stage in StageList )
             {
+
+
                 string title = MapFileUtil.mapTitleOfFile (Stage);
 
                 GameObject temp = Instantiate (StageButtonTemplate);
@@ -147,8 +150,8 @@ public class StageSelectionInitializerScript : MonoBehaviour
 
 
                 temp.transform.SetParent (StageScrollContentRect.gameObject.transform);
-                float ButtonHeight = 60f;
-                float ButtonWIdth = 240f;
+                float ButtonHeight = 80f;
+                float ButtonWIdth = 300f;
                 tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, ButtonWIdth);
                 tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, ButtonHeight);
                 tempRect.pivot = new Vector2 (0.5f, 1f);
@@ -160,7 +163,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
                     Move.QuadOut (
                         (v) => { tempRect.anchoredPosition = v; },
                         new Vector2 (0f, 0f),
-                        new Vector2 (0f, ((8 + ButtonHeight) * i + 8) * -1f),
+                        new Vector2 (0f, ((24 + ButtonHeight) * i + 24) * -1f),
                         0.5f)
                     );
 
@@ -212,12 +215,14 @@ public class StageSelectionInitializerScript : MonoBehaviour
                 tempRect.gameObject.SetActive (true);
                 temp.GetComponent<StageSelectButton> ().Init (title, Stage);
 
-                UnityAction Call = delegate { StartStage (Stage); TitleMusicScript.Instance.StopMusic (); };
+                //현재 Stage를 호출한다
+                UnityAction Call = delegate { StartStage (StageList, StageList.IndexOf( Stage ) ); TitleMusicScript.Instance.StopMusic (); };
 
                 temp.GetComponent<Button> ().onClick.AddListener (Call);
-                i++;
+
 
                 Prv_StageButton.Add (temp);
+                i++;
             }
 
         }
@@ -255,8 +260,8 @@ public class StageSelectionInitializerScript : MonoBehaviour
                 float ButtonHeight = WorldScrollContentRect.rect.height * 0.8f;
                 tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, ButtonHeight);
                 tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, ButtonHeight);
-                tempRect.pivot = new Vector2 (0.5f, 0.5f);
-                tempRect.anchoredPosition = new Vector2 ((400f) * (i - 1), 0f);
+                tempRect.pivot = new Vector2 (0.5f, 0.55f);
+                tempRect.anchoredPosition = new Vector2 ((600f) * (i - 1), 0f);
                 tempRect.gameObject.SetActive (true);
                 temp.GetComponent<WorldSelectButton> ().Init (Stage.Key, Stage.Value);
 
@@ -294,9 +299,11 @@ public class StageSelectionInitializerScript : MonoBehaviour
         WorldList = tempWorldList;
     }
 
-    void StartStage(TextAsset selection)
+    void StartStage(List<TextAsset> selection,int index)
     {
-        Configuration.Instance.activatedMapSource = selection;
+        Configuration.Instance.activatedMapSource = selection[index];
+        Configuration.List = selection;
+
         SceneManager.LoadScene ("GameplayScene");
     }
 

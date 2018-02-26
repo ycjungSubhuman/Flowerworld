@@ -4,4 +4,4 @@ pattern A,B,A
 item 0/(0,0,0,0)/0
 block
         A,^ | B | A | B | A | B |
-        A | B | A | B | A | B.$ |
+        A | B | A | B | A | B,$ |

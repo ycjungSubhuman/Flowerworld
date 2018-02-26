@@ -1,0 +1,9 @@
+title World 2-1
+goalcount 15
+pattern A,B,A,B,B
+item 0/(0,0,0,0)/0
+block
+        B,$ | B | A | B |
+        B | B | B | B |
+        B | B | A | B |
+        A,^ | A | B | A |

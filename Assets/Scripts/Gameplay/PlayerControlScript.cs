@@ -4,10 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Core.Data;
+using Assets;
 using Assets.Util;
 using Assets.Core.Sound;
 using Assets.Core.Animation.Coroutines;
-
+using UnityEngine.SceneManagement;
 /**
  * 플레이어의 컨트롤에 대한 반응을 처리하는 스크립트
  */
@@ -193,7 +194,25 @@ public class PlayerControlScript : MonoBehaviour
         } else {
             BacktoMain.GetComponent<Reset>().Pressed = false;
         }
-        //WASD로 자신의 상하좌우 중 한칸에 현재 선택한 유리를 설치 가능.
+        //WASD로 자신의 상하좌우 중 한칸에 현재 선택한 유리를 설치 가능.\
+
+
+
+
+        //Space
+        if( Input.GetKeyDown( KeyCode.Space ) && StageScript.Cleared ) {
+            int CurrentIndex = Configuration.List.IndexOf( Configuration.Instance.activatedMapSource );
+
+            if( CurrentIndex < Configuration.List.Count() - 1 ) {
+                Configuration.Instance.activatedMapSource = Configuration.List[ CurrentIndex + 1 ];
+                StageScript.Cleared = false;
+                SceneManager.LoadScene( "GameplayScene" );
+            } else {
+                BacktoMain.GetComponent<Reset>().Pressed = true;
+            }
+        }
+
+            //TODO : 게임 끝났을 때 할 것 
     }
 
 

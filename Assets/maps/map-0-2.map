@@ -1,6 +1,0 @@
-title Tutorial 2
-goalcount 8
-pattern A,B
-block
-      A,^ | B | A |   | A | B,$ |
-        |   | B | A | B |  |

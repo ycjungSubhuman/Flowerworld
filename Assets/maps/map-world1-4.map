@@ -1,10 +1,10 @@
 title World 1-4
 goalcount 10
-pattern B,A,A
+pattern C,A,A
 item 0/(0,0,0,0)/0
 block
-        B | B,$ |
-        A | * |
+        A | C,$ |
+        A | C |
         A | A |
         A | A |
-        B | B,^ |
+        C | C,^ |
