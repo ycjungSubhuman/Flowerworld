@@ -19,6 +19,7 @@ namespace Assets.Core.Data
 
         public List<Label> pattern = new List<Label>();
         public string title { get; set; }
+        public string comment;
         public int goalCount;
 
         public int springsAvailable;

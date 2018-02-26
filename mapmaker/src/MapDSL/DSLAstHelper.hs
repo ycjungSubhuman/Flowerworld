@@ -8,6 +8,12 @@ module MapDSL.DSLAstHelper where
             TitleStmt title -> Just title
             _ -> Nothing
 
+    stmtToComment :: Stmt -> Maybe Comment
+    stmtToComment stmt = 
+        case stmt of
+            CommentStmt comment -> Just comment
+            _ -> Nothing
+
     stmtToPattern :: Stmt -> Maybe Pattern
     stmtToPattern stmt = 
         case stmt of
@@ -46,6 +52,9 @@ module MapDSL.DSLAstHelper where
 
     titleOf :: Expr a -> Title
     titleOf expr = extractSingleField stmtToTitle expr
+
+    commentOf :: Expr a -> Comment
+    commentOf expr = extractSingleField stmtToComment expr
 
     patternOf :: Expr a -> Pattern
     patternOf expr = extractSingleField stmtToPattern expr

@@ -34,7 +34,7 @@ module MapDSL.DSLParser(
     singleStmtParser :: CharParser st Stmt
     singleStmtParser = 
         try titleStmtParser <|> try goalCountStmtParser <|> try patternStmtParser <|> try blockStmtParser
-            <|> try itemStmtParser
+            <|> try itemStmtParser <|> try commentStmtParser
         <?> "single statement"
 
     simpleFieldParser :: String -> (forall st. CharParser st b) -> (b -> Stmt) -> CharParser st Stmt
@@ -59,6 +59,8 @@ module MapDSL.DSLParser(
             return (springs, glassCounts, watches)
 
     titleStmtParser = simpleFieldParser "title" (many $ noneOf "\r\n") (\title -> TitleStmt title)
+
+    commentStmtParser = simpleFieldParser "comment" (many $ noneOf "\r\n") (\comment -> CommentStmt comment)
 
     goalCountStmtParser = simpleFieldParser "goalcount" goalCountParser (\gc -> GoalCountStmt gc)
     goalCountParser :: CharParser st Int

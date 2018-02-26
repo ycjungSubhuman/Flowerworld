@@ -3,6 +3,7 @@ module MapDSL.DSLAst where
 
     newtype Expr a = Expr [Stmt]
     data Stmt = TitleStmt Title
+                | CommentStmt Comment
                 | GoalCountStmt GoalCount
                 | PatternStmt Pattern
                 | ItemStmt Items
@@ -11,6 +12,7 @@ module MapDSL.DSLAst where
 
     type GoalCount = Int
     type Title = String
+    type Comment = String
     type Block = [[Cell]]
     type Items = (Int, [Int], Int)
     type Cell = [Label]
