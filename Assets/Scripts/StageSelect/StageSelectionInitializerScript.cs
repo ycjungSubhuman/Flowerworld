@@ -53,6 +53,8 @@ public class StageSelectionInitializerScript : MonoBehaviour
         List<TextAsset> mapSources = MapFileUtil.GetAllMapSources ();
 
         Classify_Map (out WorldList, mapSources);
+
+
         WorldScrollContentRect.sizeDelta = new Vector2 (WorldScrollRect_Height * (WorldList.Count + 0.1f), WorldScrollContentRect.sizeDelta.y);
 
         Create_WorldSelect (WorldList);

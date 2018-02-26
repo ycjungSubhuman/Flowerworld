@@ -18,7 +18,7 @@ public class TitleScript : MonoBehaviour {
             if( Input.anyKey ) {
                 if(Title_Shown) {
 
-                    GameObject.Find( "Title_BackGround" ).SetActive( false );
+                    GameObject.Find( "Title" ).SetActive( false );
                     Title_Shown = false;
                 }
                 else
