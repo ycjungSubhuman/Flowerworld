@@ -4,10 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TitleScript : MonoBehaviour {
-	
-	// Update is called once per frame
-	void Update () {
+
+    private void Start() {
         StartCoroutine( KeyChecker() );
+    }
+
+    // Update is called once per frame
+    void Update () {
+        //StartCoroutine( KeyChecker() );
     }
     IEnumerator KeyChecker() {
 
@@ -15,16 +19,16 @@ public class TitleScript : MonoBehaviour {
 
 
         while(true) {
-            if( Input.anyKey ) {
-                if(Title_Shown) {
+            if( Input.anyKeyDown ) {
+                if( GameObject.Find( "Title" ) ) {
 
                     GameObject.Find( "Title" ).SetActive( false );
-                    Title_Shown = false;
-                }
-                else
+                    //Title_Shown = false;
+                } else {
                     SceneManager.LoadScene( "main" );
+                }
             }
-            yield return new WaitForSeconds( 0.05f );
+            yield return new WaitForFixedUpdate();
         }
     }
 }

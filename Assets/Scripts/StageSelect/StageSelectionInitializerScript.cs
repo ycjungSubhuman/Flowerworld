@@ -175,7 +175,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
                     Move.QuadOut (
                         (v) => { worldButton.GetComponent<RectTransform> ().anchoredPosition = v; },
                         new Vector2 (worldButtonXPos, 0f),
-                        new Vector2 (worldButtonXPos, 150f),
+                        new Vector2 (worldButtonXPos, (worldButton.GetComponentInChildren<Text>().text == "Tutorial" ? 150f : 300f)),
                         0.5f)
                 );
                 float stageScrollXPos = StageScroll.GetComponent<RectTransform> ().anchoredPosition.x;
@@ -184,7 +184,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
                     Move.QuadOut (
                         (v) => { StageScroll.GetComponent<RectTransform> ().anchoredPosition = v; },
                         new Vector2 (stageScrollXPos, stageScrollYPos),
-                        new Vector2 (stageScrollXPos, stageScrollYPos + 140f),
+                        new Vector2 (stageScrollXPos, stageScrollYPos + ( worldButton.GetComponentInChildren<Text>().text == "Tutorial" ? 140f : 235f ) ),
                         0.5f)
                 );
 

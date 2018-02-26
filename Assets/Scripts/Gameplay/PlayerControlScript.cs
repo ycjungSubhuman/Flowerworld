@@ -25,6 +25,7 @@ public class PlayerControlScript : MonoBehaviour
     private StageScript stage;
 
     private GameObject Reset, BacktoMain;
+    private Text tutorialText;
     private ItemManager IM;
 
     private bool Glass_Selecting = false;
@@ -51,6 +52,8 @@ public class PlayerControlScript : MonoBehaviour
         Vector2 initScenepos = stage.ScenePosOf (pos);
         gameObject.transform.localPosition = initScenepos;
         stage.UpdateStage (pos,1);
+
+        tutorialText = GameObject.Find("Tutorial").GetComponent<Text>();
     }
 
     void Update()
@@ -59,6 +62,7 @@ public class PlayerControlScript : MonoBehaviour
         Vector2Int glassPos = pos;
 
         if( !StageScript.Cleared ) {
+            tutorialText.enabled = true;
             if( !Glass_Selecting ) {
                 if( Input.GetKeyDown( KeyCode.UpArrow ) ) {
                     newPos += new Vector2Int( PosDelta * -1, 0 );
@@ -181,6 +185,8 @@ public class PlayerControlScript : MonoBehaviour
 
             updatePlayerPosition( newPos );
 
+        } else {
+            tutorialText.enabled = false;
         }
 
         if( Input.GetKeyDown( KeyCode.R ) ) {

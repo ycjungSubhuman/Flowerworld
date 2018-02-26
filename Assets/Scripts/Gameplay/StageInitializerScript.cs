@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 using Newtonsoft.Json;
 using Assets.Core.Data;
 using Assets.Core.Drawer;
@@ -56,6 +57,11 @@ public class StageInitializerScript : MonoBehaviour {
         uiPattern.transform.SetParent( GameObject.Find( "PatternRoot" ).transform );
         uiPattern.GetComponent<RectTransform>().anchoredPosition = new Vector2( 0, 0 );
         uiPattern.name = "PatternUI";
+
+
+        Text Tutorial = GameObject.Find( "Tutorial" ).GetComponent<Text>();
+        Tutorial.text = map.comment;
+
 
         //플레이어 생성 및 초기화 
         var player = GameObject.Instantiate( Resources.Load<GameObject>( "prefabs/player" ) );

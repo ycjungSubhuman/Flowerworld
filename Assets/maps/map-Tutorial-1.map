@@ -2,5 +2,6 @@ title Tutorial 1
 goalcount 10
 pattern A,A,B
 item 0/(0,0,0,0)/0
+comment asdf
 block
         B,^ | A | A | B | A | A | B | A | A | B | A | A,$ |

@@ -32,6 +32,7 @@ namespace Assets.Core.Data
         public int watchesAvailable;
         public string world;
         public string stage;
+        public string comment;
 
         public Map()
         {
