@@ -8,6 +8,7 @@ using Assets;
 using UnityEngine.Events;
 using Assets.Core.Animation.Coroutines;
 using System;
+using Assets.Scripts;
 
 // 디버그용 스테이지 선택 씬 초기화 스크립트 (main 씬)
 public class StageSelectionInitializerScript : MonoBehaviour
@@ -64,10 +65,10 @@ public class StageSelectionInitializerScript : MonoBehaviour
         float WorldButtonWidth = WorldScrollContentRect.rect.height * 0.8f;
         float WorldScrollX = WorldScroll.transform.Find ("Viewport").Find ("Content").gameObject.GetComponent<RectTransform> ().rect.x;
 
-        StageScroll.GetComponent<RectTransform> ().anchoredPosition = 
+        StageScroll.GetComponent<RectTransform> ().anchoredPosition =
             new Vector2 (
-                WorldScrollContentRect.transform.GetChild(i+1).GetComponent<RectTransform>().anchoredPosition.x + 430f, 
-                StageScroll.GetComponent<RectTransform>().anchoredPosition.y-80f);
+                WorldScrollContentRect.transform.GetChild (i + 1).GetComponent<RectTransform> ().anchoredPosition.x + 340f,
+                StageScroll.GetComponent<RectTransform> ().anchoredPosition.y - 80f);
         Debug.Log (i);
         Debug.Log ((16 + WorldButtonWidth) * i + 16);
         Create_StageSelect (WorldName);
@@ -109,8 +110,8 @@ public class StageSelectionInitializerScript : MonoBehaviour
 
 
                 temp.transform.SetParent (StageScrollContentRect.gameObject.transform);
-                float ButtonHeight = StageScrollContentRect.rect.width * 0.2f;
-                float ButtonWIdth = StageScrollContentRect.rect.width * 0.8f;
+                float ButtonHeight = 60f;
+                float ButtonWIdth = 220f;
                 tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, ButtonWIdth);
                 tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, ButtonHeight);
                 tempRect.pivot = new Vector2 (0.5f, 1f);
@@ -132,7 +133,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
                 float worldButtonYPos = worldButton.GetComponent<RectTransform> ().anchoredPosition.y;
                 StartCoroutine (
                     Move.QuadOut (
-                        (v) => { worldButton.GetComponent<RectTransform>().anchoredPosition = v; },
+                        (v) => { worldButton.GetComponent<RectTransform> ().anchoredPosition = v; },
                         new Vector2 (worldButtonXPos, 0f),
                         new Vector2 (worldButtonXPos, 150f),
                         0.5f)
@@ -141,9 +142,9 @@ public class StageSelectionInitializerScript : MonoBehaviour
                 float stageScrollYPos = StageScroll.GetComponent<RectTransform> ().anchoredPosition.y;
                 StartCoroutine (
                     Move.QuadOut (
-                        (v) => { StageScroll.GetComponent<RectTransform>().anchoredPosition = v; },
+                        (v) => { StageScroll.GetComponent<RectTransform> ().anchoredPosition = v; },
                         new Vector2 (stageScrollXPos, stageScrollYPos),
-                        new Vector2 (stageScrollXPos, stageScrollYPos + 180f),
+                        new Vector2 (stageScrollXPos, stageScrollYPos + 140f),
                         0.5f)
                 );
 
@@ -174,7 +175,8 @@ public class StageSelectionInitializerScript : MonoBehaviour
                 tempRect.gameObject.SetActive (true);
                 temp.GetComponent<StageSelectButton> ().Init (title, Stage);
 
-                UnityAction Call = delegate { StartStage (Stage); };
+                UnityAction Call = delegate { StartStage (Stage); TitleMusicScript.Instance.StopMusic (); };
+
                 temp.GetComponent<Button> ().onClick.AddListener (Call);
                 i++;
 
@@ -217,7 +219,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
                 tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, ButtonHeight);
                 tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, ButtonHeight);
                 tempRect.pivot = new Vector2 (0.5f, 0.5f);
-                tempRect.anchoredPosition = new Vector2 ((300f) * (i-1), 0f);
+                tempRect.anchoredPosition = new Vector2 ((400f) * (i - 1), 0f);
                 tempRect.gameObject.SetActive (true);
                 temp.GetComponent<WorldSelectButton> ().Init (Stage.Key, Stage.Value);
 
