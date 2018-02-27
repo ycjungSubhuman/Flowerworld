@@ -23,6 +23,7 @@ public class StageInitializerScript : MonoBehaviour {
     // Use this for initialization
     void Start() {
         // 맵 불러오기
+        StageScript.Cleared = false;
         TextAsset json = configuration.activatedMapSource;
         if( json == null ) {
             // 디버그용 (GameplayScene을 바로 플레이할 때)
