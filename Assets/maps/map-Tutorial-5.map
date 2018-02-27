@@ -1,6 +1,8 @@
-title Tutorial 5
+﻿title Tutorial 5
 goalcount 6
 pattern C,C,A
 item 0/(1,0,0,0)/0
+comment "S/D/F키를 눌러 유리판을 활성화하면 원하는 방향의 꽃을 한 번 바꿀 수 있습니다
+(같은 키를 눌러 취소할 수 있습니다)"
 block
         C,^ | C | C | C | C | C | A,$ |

@@ -1,7 +1,8 @@
-title Tutorial 2
+﻿title Tutorial 2
 goalcount 7
 pattern B,A
 item 0/(0,0,0,0)/0
+comment "바위는 지나갈 수 없습니다"
 block
         A,^ | B | A |   | A | B,$ |
           |   | B | A | B |   | 
