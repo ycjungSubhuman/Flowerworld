@@ -9,9 +9,10 @@ using Assets.Util;
 using Assets.Core.Sound;
 using Assets.Core.Animation.Coroutines;
 using UnityEngine.SceneManagement;
+using Assets.Scripts;
 /**
- * 플레이어의 컨트롤에 대한 반응을 처리하는 스크립트
- */
+* 플레이어의 컨트롤에 대한 반응을 처리하는 스크립트
+*/
 public class PlayerControlScript : MonoBehaviour
 {
     /* Initialize public members on instantiation */
@@ -32,9 +33,6 @@ public class PlayerControlScript : MonoBehaviour
     private bool Glass_Deploying = false;
 
     private bool Already_Deployed = false;
-
-
-
 
     int PosDelta;
 
@@ -102,7 +100,6 @@ public class PlayerControlScript : MonoBehaviour
             }
 
 
-            //if ( Glass_Deploying )
             if( Glass_Selecting ) {
                 stage.UpdateGlassHighlight( pos, PosDelta );
                 GlassDeploy_Barrier.SetActive( true );
@@ -119,7 +116,7 @@ public class PlayerControlScript : MonoBehaviour
 
                 //glassPos가 변경되었다 : 유리를 놓을 것이다.
                 if( glassPos != pos && !Already_Deployed ) {
-                    //놓을 수 있는 위치인가?
+                    soundController.OnGlassCreate ();
                     if( stage.IsValidGlassPos( glassPos ) ) {
                         ItemManager Current_ItemManager = GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>();
                         //ItemManager에게 지금 활성화된 유리를 받아온다
@@ -147,39 +144,6 @@ public class PlayerControlScript : MonoBehaviour
                     }
                 }
             }
-            /*
-            if ( Glass_Selecting)
-            {
-                GlassDeploy_Barrier.SetActive( true );
-                if(Input.GetKeyDown(KeyCode.Alpha1))
-                {
-                    IM.Toggle_Glass ("A");
-                    Glass_Selecting = false;
-                    Glass_Deploying = true;
-
-                }
-                else if ( Input.GetKeyDown (KeyCode.Alpha2) )
-                {
-                    IM.Toggle_Glass ("B");
-                    Glass_Selecting = false;
-                    Glass_Deploying = true;
-
-                }
-                else if ( Input.GetKeyDown (KeyCode.Alpha3) )
-                {
-                    IM.Toggle_Glass ("C");
-                    Glass_Selecting = false;
-                    Glass_Deploying = true;
-
-                }
-                else if(Input.GetKeyDown( KeyCode.S))
-                {
-                    Glass_Deploying = false;
-                }
-
-            }
-
-            */
             if( !Glass_Selecting )
                 GlassDeploy_Barrier.SetActive( false );
 
@@ -232,12 +196,15 @@ public class PlayerControlScript : MonoBehaviour
             PosDelta = 2;
         else
             PosDelta = 1;
-        
-        stage.UpdateMapHighlight (pos, PosDelta);
+
+        if ( stage != null )
+        {
+            stage.UpdateMapHighlight (pos, PosDelta);
+        }
     }
     public void onGotoStageSelect()
     {
-        onResetKey();
+        TitleMusicScript.Instance.PlayMusic ();
         StartCoroutine(LoadYourAsyncScene());
     }
     IEnumerator LoadYourAsyncScene()
@@ -280,7 +247,11 @@ public class PlayerControlScript : MonoBehaviour
 
 
         if(IsValidPos || isReset) {           
-           
+            if(!stage.map.IsGlassNotDeployed(newPos))
+            {
+                soundController.OnGlassDestroy ();
+            }
+
             //현재 위치에 유리가 있다면 깨부순다
             stage.map.Remove_Glass( pos );
 

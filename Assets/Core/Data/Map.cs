@@ -139,7 +139,7 @@ namespace Assets.Core.Data
                 && pos.y >= minY 
                 && pos.y < maxY;
         }
-        public bool IsGlassDeployed( Vector2Int pos ) {
+        public bool IsGlassNotDeployed( Vector2Int pos ) {
             return Glass[ pos.x ][ pos.y ].Value == Label.ANY.Value;
         }
         public bool IsEmpty( Vector2Int pos ) {

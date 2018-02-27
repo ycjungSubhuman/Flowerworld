@@ -19,7 +19,7 @@ public class ItemManager : MonoBehaviour {
     static readonly int GLASS_VARIATION = 3;
     static readonly int ITEM_VARIATION = 4;
     SortedList<string, int> Init_GlassCount = new SortedList<string, int>();
-    SortedList<string, int> GlassCount = new SortedList<string, int>();
+    SortedList<string, int> GlassCount = new SortedList<string, int> () { { "A", 0 }, { "B", 0 }, { "C", 0 } };
     Text SpringCount_Text;
     Text[] GlassCount_Text = new Text[ GLASS_VARIATION ];
     string[] FlowerType = { "A", "B", "C", "D", "E", "F" };
@@ -94,7 +94,7 @@ public class ItemManager : MonoBehaviour {
     public void Set_Glassinfo( SortedList<string, int> Info ) {
         foreach( KeyValuePair<string, int> GlassInfo in Info ) {
             Init_GlassCount.Add( GlassInfo.Key, GlassInfo.Value );
-            GlassCount.Add( GlassInfo.Key, GlassInfo.Value );
+            GlassCount[GlassInfo.Key] = GlassInfo.Value;
         }
 
         //플레이어의 머리 위에 유리 UI를 띄워준다.
