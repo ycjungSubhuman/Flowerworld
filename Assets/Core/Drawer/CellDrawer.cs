@@ -53,19 +53,31 @@ namespace Assets.Core.Drawer
         Sprite FlowerFetcher( Label label ) {
 
             string FlowerName;
-            if( label.FallIn(Label.A) ) {
+            if ( (label.Value & Label.ANY.Value) == Label.ANY.Value )
+            {
+                FlowerName = "ANY";
+            } 
+            else if ( label.FallIn (Label.A) )
+            {
                 FlowerName = "A";
-            } else if( label.FallIn( Label.B ) ) {
+            }
+            else if ( label.FallIn (Label.B) )
+            {
                 FlowerName = "B";
-            } else if( label.FallIn( Label.C ) ) {
+            }
+            else if ( label.FallIn (Label.C) )
+            {
                 FlowerName = "C";
-            } else if( label.FallIn( Label.D ) ) {
+            }
+            else if ( label.FallIn (Label.D) )
+            {
                 FlowerName = "D";
-            } else {
+            }
+            else
+            {
                 FlowerName = "NONE";
             }
-            if( label.Value == Label.ANY.Value )
-                FlowerName = "ANY";
+
             Sprite temp = Resources.Load<Sprite>( "Sprite/CellFlower/" + FlowerName );
 
             return temp;
