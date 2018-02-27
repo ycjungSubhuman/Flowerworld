@@ -25,6 +25,7 @@ module MapData(src2map) where
             main :: MapBlock,
             subMaps :: [MapBlock],
             title :: String,
+	    comment :: String,
             world :: String,
             stage :: String,
             goalCount :: Int,
@@ -49,6 +50,7 @@ module MapData(src2map) where
     expr2map :: (String,String) -> Ast.Expr Validated -> Map
     expr2map (world,stage) expr =
         let title = titleOf expr
+	in let comment = commentOf expr
         in let astPattern = patternOf expr
         in let astBlocks = blocksOf expr
         in let goalCount = goalCountOf expr
@@ -61,6 +63,7 @@ module MapData(src2map) where
             main = main,
             subMaps = submaps,
             title = title,
+	    comment = comment,
             world = world,
             stage = stage,
             springsAvailable = springsAvailable,
