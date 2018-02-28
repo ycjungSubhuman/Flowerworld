@@ -1,11 +1,11 @@
-title World 2-7
-goalcount 40
-pattern A,B,C,B,C,B,B
-item 0/(1,0,0,0)/0
+﻿title World 2-7
+goalcount 34
+pattern B,A,C,A,B
+item 1/(0,1,0,0)/0
 block
-        C | C | A | B | B | C,$ |
-        B | B | B | A | C | C |
-        C | A | C | C | B | B |
-        B | B | B | C | A | B |
-        A | C | B | B | C | C |
-        *,^ | B | A | B | C | B |
+        A,$ | C | C | C | C | C |
+        A | A | A |   | B | A |
+        B | C | C | C | C | B |
+        C | C | A | B | C | B |
+        B | A | A | B | B | A |
+        C,^ | B | C | C | A | C |

@@ -90,6 +90,7 @@ public class StageScript : MonoBehaviour {
         if(checkGoal (position))
         {
             Cleared = true;
+            GameObject.Find ("StageInitializer").GetComponent<AudioSource> ().Play ();
 
             int CurrentIndex = Configuration.List.IndexOf( Configuration.Instance.activatedMapSource );
 
