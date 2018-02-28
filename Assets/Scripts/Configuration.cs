@@ -38,6 +38,7 @@ namespace Assets
          * 로딩 후 해당 소스의 스테이지가 Scene에 나타나게 된다.
          */
         public TextAsset activatedMapSource;
+        public string mapName;
  
     }
 }

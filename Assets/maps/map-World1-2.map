@@ -1,0 +1,7 @@
+title World 1-2
+goalcount 6
+pattern B,B,C
+item 0/(0,0,0,0)/0
+block
+        A | A | C | A | A |
+        C,^ | B | B | B | C,$ |

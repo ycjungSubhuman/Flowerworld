@@ -73,6 +73,9 @@ public class StageInitializerScript : MonoBehaviour {
 
   
         Invoke( "Set_ItemValue", 0.2f );
+
+        //스테이지 이름
+        GameObject.Find ("StageName").GetComponent<Text> ().text = configuration.mapName;
     }
 
     void Set_ItemValue() {
