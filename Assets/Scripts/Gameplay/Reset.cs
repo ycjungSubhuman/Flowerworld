@@ -53,7 +53,7 @@ public class Reset : MonoBehaviour
             if( Is_Reset ) {
                 Player.GetComponent<PlayerControlScript>().onResetKey();
       
-                GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>().Reset_SpringCount();
+                GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>().Reset_Spring();
                 GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>().TurnOff_Glass();
          
             }

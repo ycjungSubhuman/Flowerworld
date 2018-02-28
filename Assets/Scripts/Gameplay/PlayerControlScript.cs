@@ -63,6 +63,7 @@ public class PlayerControlScript : MonoBehaviour
         if( !StageScript.Cleared ) {
             tutorialText.enabled = true;
             if( !Glass_Selecting ) {
+
                 if( Input.GetKeyDown( KeyCode.UpArrow ) ) {
                     newPos += new Vector2Int( PosDelta * -1, 0 );
                 } else if( Input.GetKeyDown( KeyCode.DownArrow ) ) {
@@ -76,10 +77,16 @@ public class PlayerControlScript : MonoBehaviour
             if( Input.GetKeyDown( KeyCode.A ) && !Glass_Selecting) {
                 IM.Onclick_ToggleSpring();
 
-                if( !Spring_Enabled )
-                    gameObject.GetComponent<Animator>().SetBool( "SpringOn", false );
-                else
-                    gameObject.GetComponent<Animator>().SetBool( "SpringOn", true );
+                if ( !Spring_Enabled && IM.SpringCount > 0 )
+                {
+                    soundController.OnSpringUnReady ();
+                    gameObject.GetComponent<Animator> ().SetBool ("SpringOn", false);
+                }
+                else if (Spring_Enabled)
+                {
+                    soundController.OnSpringReady ();
+                    gameObject.GetComponent<Animator> ().SetBool ("SpringOn", true);
+                }
             }
             if( Input.GetKeyDown( KeyCode.S ) && !Spring_Enabled) {
                 if( IM.Is_GlassAvailable( "A" ) ) {
@@ -190,6 +197,14 @@ public class PlayerControlScript : MonoBehaviour
 
     void Toggle_Glass() {
         Glass_Selecting = !Glass_Selecting;
+        if(Glass_Selecting)
+        {
+            soundController.OnGlassReady ();
+        }
+        if(!Glass_Selecting)
+        {
+            soundController.OnGlassUnReady ();
+        }
         stage.UpdateMapHighlight( pos, PosDelta );
     }
 
@@ -230,6 +245,8 @@ public class PlayerControlScript : MonoBehaviour
         stage.ResetStage ();
         stage.UpdateStage (pos,1);
         soundController.OnRestart ();
+        gameObject.GetComponent<Animator> ().SetBool ("SpringOn", false);
+        Glass_Selecting = false;
         //모든 유리를 철거한다.
         stage.map.Remove_All_Glass();
 
@@ -261,7 +278,8 @@ public class PlayerControlScript : MonoBehaviour
             stage.UpdateStage (newPos,1);
             movePlayer (newPos);
             //움직인 뒤에 스프링이 켜져있으면 끄고 1 차감한다.
-            if(PosDelta != 1 && !isReset) {
+            if(Spring_Enabled && !isReset) {
+                soundController.OnSpringUse ();
                 IM.Set_Spring( false );
                 IM.Change_SpringValue( -1 );
             }
