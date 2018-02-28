@@ -304,7 +304,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
     {
         Configuration.Instance.activatedMapSource = selection[index];
         Configuration.List = selection;
-
+        Configuration.Instance.mapName = MapFileUtil.mapTitleOfFile (selection[index]);
         SceneManager.LoadScene ("GameplayScene");
     }
 

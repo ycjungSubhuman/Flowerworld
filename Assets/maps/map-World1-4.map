@@ -1,0 +1,10 @@
+title World 1-4
+goalcount 10
+pattern C,A,A
+item 0/(0,0,0,0)/0
+block
+        A | C,$ |
+        A | C |
+        A | A |
+        A | A |
+        C | C,^ |
