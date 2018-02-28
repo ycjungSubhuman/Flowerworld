@@ -33,6 +33,7 @@ public class PlayerControlScript : MonoBehaviour
     private bool Glass_Deploying = false;
 
     private bool Already_Deployed = false;
+    private bool Spring_Enabled { get { return PosDelta != 1; } }
 
     int PosDelta;
 
@@ -72,27 +73,27 @@ public class PlayerControlScript : MonoBehaviour
                     newPos += new Vector2Int( 0, PosDelta * -1 );
                 }
             }
-            if( Input.GetKeyDown( KeyCode.A ) ) {
+            if( Input.GetKeyDown( KeyCode.A ) && !Glass_Selecting) {
                 IM.Onclick_ToggleSpring();
 
-                if( PosDelta == 1 )
+                if( !Spring_Enabled )
                     gameObject.GetComponent<Animator>().SetBool( "SpringOn", false );
                 else
                     gameObject.GetComponent<Animator>().SetBool( "SpringOn", true );
             }
-            if( Input.GetKeyDown( KeyCode.S ) ) {
+            if( Input.GetKeyDown( KeyCode.S ) && !Spring_Enabled) {
                 if( IM.Is_GlassAvailable( "A" ) ) {
                     IM.Toggle_Glass( "A" );
                     Toggle_Glass();
                 }
             }
-            if( Input.GetKeyDown( KeyCode.D ) ) {
+            if( Input.GetKeyDown( KeyCode.D ) && !Spring_Enabled) {
                 if( IM.Is_GlassAvailable( "B" ) ) {
                     IM.Toggle_Glass( "B" );
                     Toggle_Glass();
                 }
             }
-            if( Input.GetKeyDown( KeyCode.F ) ) {
+            if( Input.GetKeyDown( KeyCode.F ) && !Spring_Enabled) {
                 if( IM.Is_GlassAvailable( "C" ) ) {
                     IM.Toggle_Glass( "C" );
                     Toggle_Glass();
