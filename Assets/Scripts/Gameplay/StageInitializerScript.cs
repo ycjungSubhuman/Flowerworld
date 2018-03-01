@@ -85,7 +85,6 @@ public class StageInitializerScript : MonoBehaviour {
     IEnumerator iconRoutine(Sprite sprite, int pos)
     {
         const float duration = 1.5f;
-        const float postDelay = 1f;
         float t = 0f;
         var fg = GameObject.Find ("FG_Canvas");
         var icon = GameObject.Instantiate (Resources.Load<GameObject> ("prefabs/ItemIcon"));
@@ -96,15 +95,29 @@ public class StageInitializerScript : MonoBehaviour {
             t += Time.deltaTime;
             yield return null;
         }
+        while (true)
+        {
+            if (Input.anyKey || Input.GetMouseButton(0))
+            {
+                break;
+            }
+            yield return null;
+        }
         icon.GetComponent<Animator> ().SetInteger ("pos", pos);
         t = 0;
+        StartCoroutine (destroyDelay (icon));
+        yield return null;
+    }
+    IEnumerator destroyDelay(GameObject obj)
+    {
+        const float postDelay = 1f;
+        float t = 0;
         while ( t < postDelay )
         {
             t += Time.deltaTime;
             yield return null;
         }
-        Destroy (icon);
-        yield return null;
+        Destroy (obj);
     }
 
     IEnumerator springRoutine()
