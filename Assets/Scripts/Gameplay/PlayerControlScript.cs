@@ -36,6 +36,7 @@ public class PlayerControlScript : MonoBehaviour
     private bool Spring_Enabled { get { return PosDelta != 1; } }
 
     int PosDelta;
+    bool started = false;
 
     void Start()
     {
@@ -54,8 +55,15 @@ public class PlayerControlScript : MonoBehaviour
         tutorialText = GameObject.Find("Tutorial").GetComponent<Text>();
     }
 
+    public void StartControl()
+    {
+        started = true;
+    }
+
     void Update()
     {
+        if ( !started ) return;
+
         Vector2Int newPos = pos;
         Vector2Int glassPos = pos;
 
