@@ -98,7 +98,7 @@ namespace Assets.Core.Sound
 
         public void OnRefuse()
         {
-            audioSource.PlayOneShot (Refuse);
+            audioSource.PlayOneShot (Refuse, 0.7f);
         }
 
         public void OnRestart()
