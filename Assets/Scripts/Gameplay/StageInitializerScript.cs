@@ -138,6 +138,7 @@ public class StageInitializerScript : MonoBehaviour {
     }
     IEnumerator finishRoutine()
     {
+        Debug.Log ("Called");
         player.GetComponent<PlayerControlScript> ().StartControl ();
         GameObject.Find ("ItemBarrier").GetComponent<Animator> ().SetBool ("on", false);
         yield return null;
