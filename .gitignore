@@ -52,3 +52,4 @@ cmd = '<path to UnityYAMLMerge>' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
 
 # Map Compilation Results
 Assets/Resources/maps/*.json
+Assets/Resources/maps/*.meta
