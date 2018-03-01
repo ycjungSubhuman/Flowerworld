@@ -139,8 +139,8 @@ public class StageSelectionInitializerScript : MonoBehaviour
                 offsetMap [button] = -j * stagePanelMargin + stagePanelMarginOffset;
                 button.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, stagePanelInitOffset);
                 button.SetActive (false);
-
-                button.GetComponent<Button> ().onClick.AddListener (() => { StartStage (sources, j - 1); });
+                int ind = j;
+                button.GetComponent<Button> ().onClick.AddListener (() => { StartStage (sources, ind); });
             }
 
             parent.GetComponent<Button> ().onClick.AddListener (() => { OnClick_WorldButton (world); });
@@ -216,6 +216,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
         Configuration.Instance.activatedMapSource = selection[index];
         Configuration.List = selection;
         Configuration.Instance.mapName = MapFileUtil.mapTitleOfFile (selection[index]);
+        TitleMusicScript.Instance.StopMusic ();
         SceneManager.LoadScene ("GameplayScene");
     }
 }

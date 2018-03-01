@@ -77,6 +77,14 @@ public class StageInitializerScript : MonoBehaviour {
         //스테이지 이름
         GameObject.Find ("StageName").GetComponent<Text> ().text = configuration.mapName;
         GameObject.Find ("Clear_Notification").GetComponent<ClearNotification> ().DisableClearNotification ();
+
+        itemVisualization ();
+    }
+
+
+    void itemVisualization ()
+    {
+        
     }
 
     void Set_ItemValue() {

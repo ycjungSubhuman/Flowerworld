@@ -207,6 +207,20 @@ public class PlayerControlScript : MonoBehaviour
         }
     }
 
+    void processButtonPosException()
+    {
+        Debug.Log (Assets.Configuration.List.IndexOf (Assets.Configuration.Instance.activatedMapSource));
+        Debug.Log (Assets.Configuration.List.Count - 1);
+        if ( Assets.Configuration.List.IndexOf (Assets.Configuration.Instance.activatedMapSource) == Assets.Configuration.List.Count - 1 )
+        {
+            var rt1 = GameObject.Find ("ClearButton1").GetComponent<RectTransform> ();
+            rt1.anchoredPosition = new Vector2 (rt1.anchoredPosition.x - 70f, rt1.anchoredPosition.y);
+            var rt2 = GameObject.Find ("ClearButton2").GetComponent<RectTransform> ();
+            rt2.anchoredPosition = new Vector2 (rt2.anchoredPosition.x + 70f, rt2.anchoredPosition.y);
+            GameObject.Find ("ClearButton3").SetActive (false);
+        }
+    }
+
 
     void Toggle_Glass() {
         Glass_Selecting = !Glass_Selecting;
