@@ -32,7 +32,7 @@ public class StageScript : MonoBehaviour {
 	}
 
     /** 스테이지를 초기 상태로 되돌린다 */
-    public void ResetStage()
+    public void onReset()
     {
         patternIndex = -1;
         moveCount = 0;

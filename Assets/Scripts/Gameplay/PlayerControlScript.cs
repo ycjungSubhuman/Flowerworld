@@ -25,7 +25,7 @@ public class PlayerControlScript : MonoBehaviour
     private Vector2Int pos;
     private StageScript stage;
 
-    private GameObject Reset, BacktoMain;
+    private GameObject Reset;
     private Text tutorialText;
     private ItemManager IM;
 
@@ -41,8 +41,7 @@ public class PlayerControlScript : MonoBehaviour
     {
         GlassDeploy_Barrier = GameObject.Find( "GlassDeploy_Barrier" );
         GlassDeploy_Barrier.SetActive( false );
-        Reset = GameObject.Find("ResetIndicator");
-        BacktoMain = GameObject.Find("BacktoMainIndicator");
+        Reset = GameObject.Find("ResetIndicator").transform.Find("Button").gameObject;
         IM = GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>();
 
         Debug.Assert (stageRoot != null);
@@ -162,15 +161,10 @@ public class PlayerControlScript : MonoBehaviour
         }
 
         if( Input.GetKeyDown( KeyCode.R ) ) {
-            Reset.GetComponent<Reset>().Pressed = true;
-            PosDelta = 1;
-        } else {
-            Reset.GetComponent<Reset>().Pressed = false;
+            Reset.GetComponent<Reset>().onReset();
         }
         if( Input.GetKeyDown( KeyCode.Escape ) ) {
-            BacktoMain.GetComponent<Reset>().Pressed = true;
-        } else {
-            BacktoMain.GetComponent<Reset>().Pressed = false;
+            onGotoStageSelect ();
         }
         //WASD로 자신의 상하좌우 중 한칸에 현재 선택한 유리를 설치 가능.\
 
@@ -187,11 +181,9 @@ public class PlayerControlScript : MonoBehaviour
                 StageScript.Cleared = false;
                 SceneManager.LoadScene( "GameplayScene" );
             } else {
-                BacktoMain.GetComponent<Reset>().Pressed = true;
+                onGotoStageSelect ();
             }
         }
-
-            //TODO : 게임 끝났을 때 할 것 
     }
 
 
@@ -236,13 +228,14 @@ public class PlayerControlScript : MonoBehaviour
             yield return null;
         }
     }
-    public void onResetKey()
+    public void onReset()
     {
-        GameObject.Find( "Clear_Notification" ).GetComponent<Animator>().SetBool( "On", false );
+
         StageScript.Cleared = false;
-        GameObject.Find( "StageInitializer" ).GetComponent<ItemManager>().Reset_Glassinfo();
+        
         updatePlayerPosition (stage.GetInitPosition(), true);
-        stage.ResetStage ();
+        PosDelta = 1;
+        stage.onReset ();
         stage.UpdateStage (pos,1);
         soundController.OnRestart ();
         gameObject.GetComponent<Animator> ().SetBool ("SpringOn", false);

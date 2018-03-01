@@ -104,7 +104,14 @@ public class ItemManager : MonoBehaviour {
         }
     }
 
-    public void Reset_Glassinfo() {
+    public void onReset()
+    {
+        TurnOff_Glass ();
+        Reset_Spring ();
+        Reset_Glassinfo ();
+    }
+
+    void Reset_Glassinfo() {
         foreach( KeyValuePair<string, int> GlassInfo in Init_GlassCount ) {
             GlassCount[ GlassInfo.Key ] = GlassInfo.Value;
         }
@@ -152,7 +159,7 @@ public class ItemManager : MonoBehaviour {
         SpringCount = Init_SpringCount;
     }
 
-    public void Reset_Spring() {
+    void Reset_Spring() {
         SpringCount = Init_SpringCount;
         Spring = false;
         Player.GetComponent<PlayerControlScript> ().Set_SpringState (Spring);
