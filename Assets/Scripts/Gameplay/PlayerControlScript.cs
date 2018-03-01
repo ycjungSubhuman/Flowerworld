@@ -164,7 +164,20 @@ public class PlayerControlScript : MonoBehaviour
             Reset.GetComponent<Reset>().onReset();
         }
         if( Input.GetKeyDown( KeyCode.Escape ) ) {
-            onGotoStageSelect ();
+            if ( Spring_Enabled )
+            {
+                IM.Onclick_ToggleSpring ();
+                soundController.OnSpringUnReady ();
+                gameObject.GetComponent<Animator> ().SetBool ("SpringOn", false);
+            }
+            else if ( Glass_Selecting )
+            {
+                Toggle_Glass ();
+            }
+            else
+            {
+                onGotoStageSelect ();
+            }
         }
         //WASD로 자신의 상하좌우 중 한칸에 현재 선택한 유리를 설치 가능.\
 
