@@ -100,8 +100,7 @@ public class StageScript : MonoBehaviour {
             else {
                 GameObject.Find( "Clear_Notification" ).GetComponent<Image>().sprite = Resources.Load<Sprite>( "Sprite/UI/clear_new_NoNext" );
             }
-                GameObject.Find( "Clear_Notification" ).GetComponent<Animator>().SetBool( "On", true );
-
+            GameObject.Find ("Clear_Notification").GetComponent<ClearNotification> ().EnableClearNotification ();
 
 
             Debug.Log( "GOAL" );

@@ -173,16 +173,24 @@ public class PlayerControlScript : MonoBehaviour
 
         //Space
         if( Input.GetKeyDown( KeyCode.Space ) && StageScript.Cleared ) {
-            int CurrentIndex = Configuration.List.IndexOf( Configuration.Instance.activatedMapSource );
+            onNextStage ();
+        }
+    }
 
-            if( CurrentIndex < Configuration.List.Count() - 1 ) {
-                Configuration.Instance.mapName = MapFileUtil.mapTitleOfFile(Configuration.List[ CurrentIndex + 1]);
-                Configuration.Instance.activatedMapSource = Configuration.List[ CurrentIndex + 1 ];
-                StageScript.Cleared = false;
-                SceneManager.LoadScene( "GameplayScene" );
-            } else {
-                onGotoStageSelect ();
-            }
+    public void onNextStage()
+    {
+        int CurrentIndex = Configuration.List.IndexOf (Configuration.Instance.activatedMapSource);
+
+        if ( CurrentIndex < Configuration.List.Count () - 1 )
+        {
+            Configuration.Instance.mapName = MapFileUtil.mapTitleOfFile (Configuration.List [CurrentIndex + 1]);
+            Configuration.Instance.activatedMapSource = Configuration.List [CurrentIndex + 1];
+            StageScript.Cleared = false;
+            SceneManager.LoadScene ("GameplayScene");
+        }
+        else
+        {
+            onGotoStageSelect ();
         }
     }
 

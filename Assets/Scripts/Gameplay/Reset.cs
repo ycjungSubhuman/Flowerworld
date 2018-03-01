@@ -12,6 +12,7 @@ public class Reset : MonoBehaviour
         player.GetComponent<PlayerControlScript> ().onReset ();
 
         GameObject.Find ("StageInitializer").GetComponent<ItemManager> ().onReset ();
-        GameObject.Find ("Clear_Notification").GetComponent<Animator> ().SetBool ("On", false);
+        GameObject.Find ("Clear_Notification").GetComponent<ClearNotification> ().DisableClearNotification();
     }
+
 }
