@@ -2,8 +2,8 @@
 goalcount 5
 pattern C,C,B
 item 1/(0,0,0,0)/0
-comment "스프링 아이템을 가지고 있다면 A키를 눌러 활성화할 수 있습니다.
-이 상태에서는 한 칸을 뛰어넘어 이동할 수 있게 됩니다.
+comment "<color=#9b0000ff>스프링 아이템</color>을 가지고 있다면 <color=#9b0000ff>A키</color>를 눌러 활성화할 수 있습니다.
+이 상태에서는 <color=#a51c65>한 칸을 뛰어넘어</color> 이동할 수 있게 됩니다.
 
 
 

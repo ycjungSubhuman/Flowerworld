@@ -8,7 +8,7 @@ comment "이 꽃밭에서는 <color=#ff0000ff>위에 주어진 암호문</color>
 
 
 
-방향키를 이용해 암호문에 맞게 길 마지막까지 <color=#ffffffff>흰 공</color>을 움직여봅시다."
+<color=#ff0000ff>방향키</color>를 이용해 암호문에 맞게 길 마지막까지 <color=#ffffffff>흰 공</color>을 움직여봅시다."
 block
         C | C | B | A | A | B,$ |
         B,^ | A | A | A | C | C |
