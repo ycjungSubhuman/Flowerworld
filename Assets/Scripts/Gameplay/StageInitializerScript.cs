@@ -64,6 +64,7 @@ public class StageInitializerScript : MonoBehaviour {
 
         Text Tutorial = GameObject.Find( "Tutorial" ).GetComponent<Text>();
         Tutorial.text = map.comment;
+        
 
 
         //플레이어 생성 및 초기화 

@@ -1814,8 +1814,10 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: World 2
+    m_LineSpacing: 0.7
+  m_Text: 'World 2
+
+    <size=45>(HARD)</size>'
 --- !u!222 &1117986082
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2298,8 +2300,10 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: World 1
+    m_LineSpacing: 0.7
+  m_Text: 'World 1
+
+    <size=45>(NORMAL)</size>'
 --- !u!222 &1892220443
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2958,8 +2962,10 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: World 3
+    m_LineSpacing: 0.7
+  m_Text: 'World 3
+
+    <size=45>(EXTRA)</size>'
 --- !u!222 &2085546775
 CanvasRenderer:
   m_ObjectHideFlags: 0
