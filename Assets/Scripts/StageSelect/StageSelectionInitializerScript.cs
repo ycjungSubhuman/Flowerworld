@@ -9,8 +9,8 @@ using Assets;
 using UnityEngine.Events;
 using Assets.Core.Animation.Coroutines;
 using System;
-using Assets.Scripts;
 using System.Text.RegularExpressions;
+using Assets.Scripts;
 
 // 디버그용 스테이지 선택 씬 초기화 스크립트 (main 씬)
 public class StageSelectionInitializerScript : MonoBehaviour
