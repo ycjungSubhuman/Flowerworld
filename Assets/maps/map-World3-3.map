@@ -1,0 +1,11 @@
+title World 3-3
+goalcount 46
+pattern A,C,C,B,C,C,A
+item 0/(1,1,0,0)/0
+block
+        B | C | A | * | C | B,$ |
+        A | C | B |   | B | B |
+        B | C | A | A | C | C |
+        B | B | * | B | B | B |
+        C | A | A | C | C | C |
+        C,^ | A | B | C | A | A |

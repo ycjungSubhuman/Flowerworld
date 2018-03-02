@@ -1,9 +1,10 @@
 title World 2-4
-goalcount 21
-pattern B,A,B,C,B
-item 0/(0,0,0,0)/0
+goalcount 17
+pattern A,B,B,C,A
+item 1/(0,0,0,0)/0
 block
-        B | B | A | B | B,$ |
-        * | C | C | B | B |
-        B | B | B | A | * |
-        A,^ | B | C | C | C |
+        B | B | C | A | B,$ |
+        A | B | B | C | B |
+        A | C | B | A | B |
+        B | B | B | B | B |
+        A,^ | A | C | A | A |
