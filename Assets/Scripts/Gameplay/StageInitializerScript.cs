@@ -83,14 +83,17 @@ public class StageInitializerScript : MonoBehaviour {
 
         itemVisualization ();
     }
+
     IEnumerator iconRoutine(Sprite sprite, int pos)
     {
         const float duration = 1.5f;
         float t = 0f;
         var fg = GameObject.Find ("FG_Canvas");
         var icon = GameObject.Instantiate (Resources.Load<GameObject> ("prefabs/ItemIcon"));
+        var itemBarrierText = icon.transform.GetChild (0).gameObject;
         icon.GetComponent<Image> ().sprite = sprite;
         icon.transform.SetParent (fg.transform);
+        itemBarrierText.SetActive (true);
         while ( t < duration )
         {
             t += Time.deltaTime;
@@ -100,6 +103,7 @@ public class StageInitializerScript : MonoBehaviour {
         {
             if (Input.anyKey || Input.GetMouseButton(0))
             {
+                itemBarrierText.SetActive (false);
                 break;
             }
             yield return null;
@@ -142,6 +146,7 @@ public class StageInitializerScript : MonoBehaviour {
         Debug.Log ("Called");
         player.GetComponent<PlayerControlScript> ().StartControl ();
         GameObject.Find ("ItemBarrier").GetComponent<Animator> ().SetBool ("on", false);
+        
         yield return null;
     }
 
