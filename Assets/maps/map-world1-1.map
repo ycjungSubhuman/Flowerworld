@@ -1,7 +1,7 @@
 title World 1-1
-goalcount 7
-pattern A,B,C
+goalcount 8
+pattern A,B,A
 item 0/(0,0,0,0)/0
 block
-        A,^ | C | A | B | C |
-        A | B | B | A | A,$ |
+        A,^ | B | A | B | A | B |
+        A | B | A | B | A | B,$ |
