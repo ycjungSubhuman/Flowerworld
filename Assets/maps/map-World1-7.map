@@ -1,7 +1,0 @@
-title World 1-7
-goalcount 8
-pattern C,B,B
-item 1/(0,0,0,0)/0
-block
-        B,^ | B | * | C | C |
-        C | B |   | C | B,$ |

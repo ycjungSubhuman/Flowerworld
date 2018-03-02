@@ -9,6 +9,6 @@ namespace Assets.Core.Drawer
 {
     interface IUIPatternDrawer
     {
-        GameObject Draw(List<Label> pattern);
+        GameObject Draw(List<Label> pattern,int Maxindex);
     }
 }

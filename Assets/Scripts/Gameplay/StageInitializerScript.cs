@@ -56,7 +56,7 @@ public class StageInitializerScript : MonoBehaviour {
 
         //UI 생성
         var uiPatternDrawer = new UIPatternDrawer( new UICellDrawer() );
-        var uiPattern = uiPatternDrawer.Draw( map.pattern );
+        var uiPattern = uiPatternDrawer.Draw( map.pattern,map.pattern.Count() );
         uiPattern.transform.SetParent( GameObject.Find( "PatternRoot" ).transform );
         uiPattern.GetComponent<RectTransform>().anchoredPosition = new Vector2( 0, 0 );
         uiPattern.name = "PatternUI";
