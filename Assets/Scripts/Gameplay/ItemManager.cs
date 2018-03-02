@@ -14,7 +14,7 @@ public class ItemManager : MonoBehaviour {
     public bool Spring = false;
     GameObject Player;
     Map map;
-    int SpringCount;
+    public int SpringCount;
     int Init_SpringCount;
     static readonly int GLASS_VARIATION = 3;
     static readonly int ITEM_VARIATION = 4;
@@ -104,7 +104,14 @@ public class ItemManager : MonoBehaviour {
         }
     }
 
-    public void Reset_Glassinfo() {
+    public void onReset()
+    {
+        TurnOff_Glass ();
+        Reset_Spring ();
+        Reset_Glassinfo ();
+    }
+
+    void Reset_Glassinfo() {
         foreach( KeyValuePair<string, int> GlassInfo in Init_GlassCount ) {
             GlassCount[ GlassInfo.Key ] = GlassInfo.Value;
         }
@@ -152,8 +159,10 @@ public class ItemManager : MonoBehaviour {
         SpringCount = Init_SpringCount;
     }
 
-    public void Reset_SpringCount() {
+    void Reset_Spring() {
         SpringCount = Init_SpringCount;
+        Spring = false;
+        Player.GetComponent<PlayerControlScript> ().Set_SpringState (Spring);
     }
 
     //남은 스프링의 개수를 설정하는 Method

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
@@ -19,6 +20,7 @@ public class StageInitializerScript : MonoBehaviour {
     int SpringCount;
 
     Map map;
+    GameObject player;
 
     // Use this for initialization
     void Start() {
@@ -65,7 +67,7 @@ public class StageInitializerScript : MonoBehaviour {
 
 
         //플레이어 생성 및 초기화 
-        var player = GameObject.Instantiate( Resources.Load<GameObject>( "prefabs/player" ) );
+        player = GameObject.Instantiate( Resources.Load<GameObject>( "prefabs/player" ) );
         player.name = "Player";
         var playerScript = player.GetComponent<PlayerControlScript>();
         playerScript.stageRoot = mapGameObject;
@@ -76,6 +78,112 @@ public class StageInitializerScript : MonoBehaviour {
 
         //스테이지 이름
         GameObject.Find ("StageName").GetComponent<Text> ().text = configuration.mapName;
+        GameObject.Find ("Clear_Notification").GetComponent<ClearNotification> ().DisableClearNotification ();
+
+        itemVisualization ();
+    }
+    IEnumerator iconRoutine(Sprite sprite, int pos)
+    {
+        const float duration = 1.5f;
+        float t = 0f;
+        var fg = GameObject.Find ("FG_Canvas");
+        var icon = GameObject.Instantiate (Resources.Load<GameObject> ("prefabs/ItemIcon"));
+        icon.GetComponent<Image> ().sprite = sprite;
+        icon.transform.SetParent (fg.transform);
+        while ( t < duration )
+        {
+            t += Time.deltaTime;
+            yield return null;
+        }
+        while (true)
+        {
+            if (Input.anyKey || Input.GetMouseButton(0))
+            {
+                break;
+            }
+            yield return null;
+        }
+        icon.GetComponent<Animator> ().SetInteger ("pos", pos);
+        t = 0;
+        StartCoroutine (destroyDelay (icon));
+        yield return null;
+    }
+    IEnumerator destroyDelay(GameObject obj)
+    {
+        const float postDelay = 1f;
+        float t = 0;
+        while ( t < postDelay )
+        {
+            t += Time.deltaTime;
+            yield return null;
+        }
+        Destroy (obj);
+    }
+
+    IEnumerator springRoutine()
+    {
+        return iconRoutine (Resources.Load<Sprite>("Sprite/UI/Spring"), 1);
+    }
+    IEnumerator glassARoutine()
+    {
+        return iconRoutine (Resources.Load<Sprite> ("Sprite/UI/GlassA"), 2);
+    }
+    IEnumerator glassBRoutine()
+    {
+        return iconRoutine (Resources.Load<Sprite> ("Sprite/UI/GlassB"), 3);
+    }
+    IEnumerator glassCRoutine()
+    {
+        return iconRoutine (Resources.Load<Sprite> ("Sprite/UI/GlassC"), 4);
+    }
+    IEnumerator finishRoutine()
+    {
+        Debug.Log ("Called");
+        player.GetComponent<PlayerControlScript> ().StartControl ();
+        GameObject.Find ("ItemBarrier").GetComponent<Animator> ().SetBool ("on", false);
+        yield return null;
+    }
+
+    List<IEnumerator> genItemRoutines()
+    {
+        var li = new List<IEnumerator> ();
+        if(map.springsAvailable > 0)
+        {
+            li.Add (springRoutine());
+        }
+        if(map.glassAvailable["A"] > 0)
+        {
+            li.Add (glassARoutine ());
+        }
+        if ( map.glassAvailable ["B"] > 0 )
+        {
+            li.Add (glassBRoutine ());
+        }
+        if ( map.glassAvailable ["C"] > 0 )
+        {
+            li.Add (glassCRoutine ());
+        }
+        li.Add (finishRoutine ());
+        return li;
+    }
+
+    IEnumerator sequence(IEnumerator a, IEnumerator b)
+    {
+        while(a.MoveNext())
+        {
+            yield return null;
+        }
+        while(b.MoveNext ())
+        {
+            yield return null;
+        }
+    }
+
+    void itemVisualization ()
+    {
+        var itemRoutines = genItemRoutines ();
+        var seq = itemRoutines.Aggregate ((a, b) => { return sequence (a, b); });
+        StartCoroutine (seq);
     }
 
     void Set_ItemValue() {

@@ -1,7 +1,10 @@
 ﻿title Tutorial 1
-goalcount 10
+goalcount 6
 pattern A,A,B
 item 0/(0,0,0,0)/0
-comment "맵에 주어진 꽃 암호문에 맞춰 방향키를 이용해 움직여봅시다"
+comment "맵에 주어진 꽃 암호문에 맞춰 방향키를 이용해 움직여봅시다
+R키를 눌러 다시 시작할 수 있습니다"
 block
-        B,^ | A | A | B | A | A | B | A | A | B | A | A,$ |
+        C | C | C | C | C | C | C |
+        B,^ | A | A | B | A | A | B,$ |
+        C | C | C | C | C | C | C |

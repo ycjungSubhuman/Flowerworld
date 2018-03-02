@@ -32,7 +32,7 @@ public class StageScript : MonoBehaviour {
 	}
 
     /** 스테이지를 초기 상태로 되돌린다 */
-    public void ResetStage()
+    public void onReset()
     {
         patternIndex = -1;
         moveCount = 0;
@@ -90,6 +90,7 @@ public class StageScript : MonoBehaviour {
         if(checkGoal (position))
         {
             Cleared = true;
+            GameObject.Find ("StageInitializer").GetComponent<AudioSource> ().Play ();
 
             int CurrentIndex = Configuration.List.IndexOf( Configuration.Instance.activatedMapSource );
 
@@ -99,16 +100,34 @@ public class StageScript : MonoBehaviour {
             else {
                 GameObject.Find( "Clear_Notification" ).GetComponent<Image>().sprite = Resources.Load<Sprite>( "Sprite/UI/clear_new_NoNext" );
             }
-                GameObject.Find( "Clear_Notification" ).GetComponent<Animator>().SetBool( "On", true );
+            GameObject.Find ("Clear_Notification").GetComponent<ClearNotification> ().EnableClearNotification ();
 
-
+            processButtonPosException ();
 
             Debug.Log( "GOAL" );
 
 
         }
     }
-    /** 현재 패턴에서 활성화된 레이블을 가져온다 */ 
+    bool fixApplied = false;
+    void processButtonPosException()
+    {
+        Debug.Log (Assets.Configuration.List.IndexOf (Assets.Configuration.Instance.activatedMapSource));
+        Debug.Log (Assets.Configuration.List.Count - 1);
+        if ( Assets.Configuration.List.IndexOf (Assets.Configuration.Instance.activatedMapSource) == Assets.Configuration.List.Count - 1)
+        {
+            if ( !fixApplied )
+            {
+                fixApplied = true;
+                var rt1 = GameObject.Find ("ClearButton1").GetComponent<RectTransform> ();
+                rt1.anchoredPosition = new Vector2 (rt1.anchoredPosition.x + 73f, rt1.anchoredPosition.y);
+                var rt2 = GameObject.Find ("ClearButton2").GetComponent<RectTransform> ();
+                rt2.anchoredPosition = new Vector2 (rt2.anchoredPosition.x + 70f + 149f, rt2.anchoredPosition.y);
+            }
+            GameObject.Find ("ClearButton3").SetActive (false);
+        }
+    }
+    /** 현재 패턴에서 활성화된 레이블을 가져온다 */
     public Label CurrentPatternLabel()
     {
         return map.pattern [patternIndex];

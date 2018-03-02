@@ -17,271 +17,182 @@ public class StageSelectionInitializerScript : MonoBehaviour
 {
 
     List<TextAsset> mapList = new List<TextAsset> ();
-    Dropdown dropdown;
-
-    public GameObject WorldScroll;
-    public GameObject StageScroll;
-
-    RectTransform WorldScrollContentRect;
-    RectTransform StageScrollContentRect;
-    GameObject StageButtonTemplate;
     GameObject Protector;
-    
 
-    List<GameObject> Prv_StageButton = new List<GameObject> ();
-
-    float WorldScrollRect_Height;
-
-    SortedList<string, List<TextAsset>> WorldList = new SortedList<string, List<TextAsset>> ();
+    //string : 대분류를 나타내는 문자열
+    SortedList<string, List<TextAsset>> WorldDict;
     public Action Restore = () => { };
+
+    const float stagePanelMargin = 105.8f;
+    const float stagePanelMarginOffset = -16.6f;
+    const float stagePanelInitOffset = 100f;
+    const float stageTextXOffset = 35f;
+
+    float buttonSlideDelta(int childCount)
+    {
+        return 55f * childCount;
+    }
+
+    GameObject tutorialGameObject;
+    GameObject world1GameObject;
+    GameObject world2GameObject;
+    GameObject world3GameObject;
+    List<GameObject> worldButtons;
+
+    Dictionary<GameObject, float> offsetMap = new Dictionary<GameObject, float> ();
+    string currentOpenWorldName;
 
     void Start()
     {
-
-        Prv_StageButton.Clear ();
-        WorldScrollContentRect = WorldScroll.transform.GetChild (0).GetChild (0).GetComponent<RectTransform> ();
-        StageScrollContentRect = StageScroll.transform.GetChild (0).GetChild (0).GetComponent<RectTransform> ();
-
-        StageButtonTemplate = StageScrollContentRect.gameObject.transform.Find ("Button").gameObject;
-        StageButtonTemplate.SetActive (false);
-
+        tutorialGameObject = GameObject.Find ("WorldButton1");
+        world1GameObject = GameObject.Find ("WorldButton2");
+        world2GameObject = GameObject.Find ("WorldButton3");
+        world3GameObject = GameObject.Find ("WorldButton4");
         Protector = GameObject.Find ("Protector");
+        worldButtons = new List<GameObject> () { tutorialGameObject, world1GameObject, world2GameObject, world3GameObject };
+
         Protector.SetActive (false);
-
-        StageScroll.SetActive (false);
-
-        WorldScrollRect_Height = WorldScrollContentRect.rect.height;
         List<TextAsset> mapSources = MapFileUtil.GetAllMapSources ();
+        WorldDict = Classify_Map (mapSources);
+        genStageButtons ();
 
-        Classify_Map (out WorldList, mapSources);
+        Protector.GetComponent<Button> ().onClick.AddListener (() => { StopAllCoroutines (); RestoreButtonPositions (); });
+    }
 
+    private void RestoreButtonPositions()
+    {
+        var i = WorldDict.IndexOfKey (currentOpenWorldName);
+        var parentGameObject = worldButtons [i];
 
-        WorldScrollContentRect.sizeDelta = new Vector2 (WorldScrollRect_Height * (WorldList.Count + 0.1f), WorldScrollContentRect.sizeDelta.y);
+        animateButton (parentGameObject, 0f, true);
+        for ( int j = 1; j < parentGameObject.transform.childCount; j++ )
+        {
+            var child = parentGameObject.transform.GetChild (j).gameObject;
 
-        Create_WorldSelect (WorldList);
+            child.SetActive (false);
+            animateButton (child, stagePanelInitOffset, true);
+        }
+    }
+
+    private void sortSources(List<TextAsset> sources)
+    {
+        sources.Sort ((t1, t2) =>
+        {
+            var title1 = MapFileUtil.mapTitleOfFile (t1);
+            var title2 = MapFileUtil.mapTitleOfFile (t2);
+            Func<String, KeyValuePair<int, int>> extract = (title) =>
+            {
+                var regex = @"(World\s(\d+)-(\d+))|(Tutorial (\d+))";
+                var match = Regex.Match (title, regex);
+                if ( match.Groups [1].Success )
+                {
+                    return new KeyValuePair<int, int> (int.Parse (match.Groups [2].Value), int.Parse (match.Groups [3].Value));
+                }
+                else
+                {
+                    return new KeyValuePair<int, int> (0, int.Parse (match.Groups [5].Value));
+                }
+            };
+
+            var p1 = extract (title1);
+            var p2 = extract (title2);
+            var world1 = p1.Key;
+            var world2 = p2.Key;
+            var stage1 = p1.Value;
+            var stage2 = p2.Value;
+
+            if ( world1 != world2 )
+            {
+                return world1.CompareTo (world2);
+            }
+            else
+            {
+                return stage1.CompareTo (stage2);
+            }
+
+        });
+    }
+
+    private void genStageButtons()
+    {
+        foreach (var p in WorldDict)
+        {
+            var world = p.Key;
+            var sources = p.Value;
+            var i = WorldDict.IndexOfKey (world);
+            sortSources (sources);
+            
+            var stageNames = sources.Select (s => MapFileUtil.mapTitleOfFile (s)).ToList ();
+            var parent = worldButtons [i];
+
+            for ( int j = 0; j < stageNames.Count (); j++ )
+            {
+                var button = GameObject.Instantiate (Resources.Load<GameObject> ("prefabs/StagePanel"));
+                button.transform.parent = parent.transform;
+
+                var stageName = stageNames [j];
+                var text = GameObject.Instantiate (Resources.Load<GameObject> ("prefabs/StageText"));
+                text.GetComponent<Text> ().text = stageName;
+                text.transform.parent = button.transform;
+                text.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (stageTextXOffset, 0f);
+
+                offsetMap [button] = -j * stagePanelMargin + stagePanelMarginOffset;
+                button.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (0f, stagePanelInitOffset);
+                button.SetActive (false);
+                int ind = j;
+                button.GetComponent<Button> ().onClick.AddListener (() => { StartStage (sources, ind); });
+            }
+
+            parent.GetComponent<Button> ().onClick.AddListener (() => { OnClick_WorldButton (world); });
+        }
+    }
+
+    private void animateButton(GameObject button, float goalY, bool startFromCurrentPos, float startY=0f)
+    {
+        var currentPosition = button.GetComponent<RectTransform> ().anchoredPosition;
+        if(startFromCurrentPos)
+        {
+            startY = currentPosition.y;
+        }
+        StartCoroutine (
+            Move.QuadOut ((v) => { button.GetComponent<RectTransform> ().anchoredPosition = v; },
+            new Vector3 (currentPosition.x, startY, -10f),
+            new Vector3 (currentPosition.x, goalY, -10f),
+            0.5f
+            ));
     }
 
     public void OnClick_WorldButton(string WorldName)
     {
-        int i = WorldList.IndexOfKey (WorldName);
-        Protector.SetActive (true);
-
-        StageScroll.SetActive (true);
-        //위치를 지정한다.
-        float WorldButtonWidth = WorldScrollContentRect.rect.height * 0.8f;
-        float WorldScrollX = WorldScroll.transform.Find ("Viewport").Find ("Content").gameObject.GetComponent<RectTransform> ().rect.x;
-
-        StageScroll.GetComponent<RectTransform> ().anchoredPosition =
-            new Vector2 (
-                WorldScrollContentRect.transform.GetChild (i + 1).GetComponent<RectTransform> ().anchoredPosition.x + 340f,
-                StageScroll.GetComponent<RectTransform> ().anchoredPosition.y - 80f);
-        Debug.Log (i);
-        Debug.Log ((16 + WorldButtonWidth) * i + 16);
-        Create_StageSelect (WorldName);
-    }
-
-
-
-
-    //이미 만들어진 StageSelect 창을 버튼으로 채워주는 Method
-    void Create_StageSelect(string World)
-    {
-
-
-        if ( WorldList.ContainsKey (World) )
+        if ( currentOpenWorldName != null )
         {
-            //이미 만들어진 버튼을 비활성화 한다.
-            if ( Prv_StageButton.Count != 0 )
-            {
-                for ( int j = 0; j < Prv_StageButton.Count; j++ )
-                {
-                    Destroy (Prv_StageButton [j]);
-                }
-            }
-            Prv_StageButton.Clear ();
-            var StageList = WorldList [World];
-            StageList.Sort ((t1, t2) =>
-            {
-                var title1 = MapFileUtil.mapTitleOfFile (t1);
-                var title2 = MapFileUtil.mapTitleOfFile (t2);
-                Func<String, KeyValuePair<int, int>> extract = (title) =>
-                {
-                    var regex = @"(World\s(\d+)-(\d+))|(Tutorial (\d+))";
-                    var match = Regex.Match (title, regex);
-                    if ( match.Groups [1].Success )
-                    {
-                        return new KeyValuePair<int, int> (int.Parse (match.Groups [2].Value), int.Parse (match.Groups [3].Value));
-                    }
-                    else
-                    {
-                        return new KeyValuePair<int, int> (0, int.Parse (match.Groups [5].Value));
-                    }
-                };
-
-                var p1 = extract (title1);
-                var p2 = extract (title2);
-                var world1 = p1.Key;
-                var world2 = p2.Key;
-                var stage1 = p1.Value;
-                var stage2 = p2.Value;
-
-                if (world1 != world2)
-                {
-                    return world1.CompareTo (world2);
-                }
-                else
-                {
-                    return stage1.CompareTo (stage2);
-                }
-                
-            });
-            ResetButtonPositions ();
             StopAllCoroutines ();
-
-            int i = 0;
-            foreach ( TextAsset Stage in StageList )
-            {
-
-
-                string title = MapFileUtil.mapTitleOfFile (Stage);
-
-                GameObject temp = Instantiate (StageButtonTemplate);
-                temp.SetActive (true);
-                RectTransform tempRect = temp.GetComponent<RectTransform> ();
-
-
-                temp.transform.SetParent (StageScrollContentRect.gameObject.transform);
-                float ButtonHeight = 80f;
-                float ButtonWIdth = 300f;
-                tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, ButtonWIdth);
-                tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, ButtonHeight);
-                tempRect.pivot = new Vector2 (0.5f, 1f);
-
-
-
-
-                StartCoroutine (
-                    Move.QuadOut (
-                        (v) => { tempRect.anchoredPosition = v; },
-                        new Vector2 (0f, 0f),
-                        new Vector2 (0f, ((24 + ButtonHeight) * i + 24) * -1f),
-                        0.5f)
-                    );
-
-                // 0번 인덱스는 템플릿 버튼이 차지하고 있기 때문에 1을 더했다.
-                GameObject worldButton = WorldScrollContentRect.gameObject.transform.GetChild (WorldList.IndexOfKey (World) + 1).gameObject;
-                float worldButtonXPos = worldButton.GetComponent<RectTransform> ().anchoredPosition.x;
-                float worldButtonYPos = worldButton.GetComponent<RectTransform> ().anchoredPosition.y;
-                StartCoroutine (
-                    Move.QuadOut (
-                        (v) => { worldButton.GetComponent<RectTransform> ().anchoredPosition = v; },
-                        new Vector2 (worldButtonXPos, 0f),
-                        new Vector2 (worldButtonXPos, (worldButton.GetComponentInChildren<Text>().text == "Tutorial" ? 150f : 300f)),
-                        0.5f)
-                );
-                float stageScrollXPos = StageScroll.GetComponent<RectTransform> ().anchoredPosition.x;
-                float stageScrollYPos = StageScroll.GetComponent<RectTransform> ().anchoredPosition.y;
-                StartCoroutine (
-                    Move.QuadOut (
-                        (v) => { StageScroll.GetComponent<RectTransform> ().anchoredPosition = v; },
-                        new Vector2 (stageScrollXPos, stageScrollYPos),
-                        new Vector2 (stageScrollXPos, stageScrollYPos + ( worldButton.GetComponentInChildren<Text>().text == "Tutorial" ? 140f : 235f ) ),
-                        0.5f)
-                );
-
-                Restore = () =>
-                {
-                    float _stageScrollXPos = StageScroll.GetComponent<RectTransform> ().anchoredPosition.x;
-                    float _stageScrollYPos = StageScroll.GetComponent<RectTransform> ().anchoredPosition.y;
-                    StartCoroutine (
-                        Move.QuadOut (
-                            (v) => { StageScroll.GetComponent<RectTransform> ().anchoredPosition = v; },
-                            new Vector2 (_stageScrollXPos, _stageScrollYPos),
-                            new Vector2 (_stageScrollXPos, 0f),
-                            0.5f)
-                    );
-
-                    // 0번 인덱스는 템플릿 버튼이 차지하고 있기 때문에 1을 더했다.
-                    float _worldButtonXPos = worldButton.GetComponent<RectTransform> ().anchoredPosition.x;
-                    float _worldButtonYPos = worldButton.GetComponent<RectTransform> ().anchoredPosition.y;
-                    StartCoroutine (
-                        Move.QuadOut (
-                            (v) => { worldButton.GetComponent<RectTransform> ().anchoredPosition = v; },
-                            new Vector2 (_worldButtonXPos, _worldButtonYPos),
-                            new Vector2 (_worldButtonXPos, 0f),
-                            0.5f)
-                    );
-                };
-
-                tempRect.gameObject.SetActive (true);
-                temp.GetComponent<StageSelectButton> ().Init (title, Stage);
-
-                //현재 Stage를 호출한다
-                UnityAction Call = delegate { StartStage (StageList, StageList.IndexOf( Stage ) ); TitleMusicScript.Instance.StopMusic (); };
-
-                temp.GetComponent<Button> ().onClick.AddListener (Call);
-
-
-                Prv_StageButton.Add (temp);
-                i++;
-            }
-
+            RestoreButtonPositions ();
         }
-        else
+
+        int i = WorldDict.IndexOfKey (WorldName);
+        currentOpenWorldName = WorldName;
+        Protector.SetActive (true);
+        var buttonGameObject = worldButtons [i];
+        var childButtonCount = buttonGameObject.transform.childCount - 1; //The first GameObject is Test. Ommiting.
+        animateButton (buttonGameObject, buttonSlideDelta (childButtonCount), false, 0f);
+        for ( int j = 1; j < buttonGameObject.transform.childCount; j++ )
         {
-            Debug.Log ("Selected World (" + World + ") does not Exist!");
+            var child = buttonGameObject.transform.GetChild (j).gameObject;
+            child.SetActive (true);
+            animateButton (child, offsetMap [child], false, 0f);
         }
-    }
 
-    void ResetButtonPositions()
-    {
-        var stageScrollRect = StageScroll.GetComponent<RectTransform> ();
-        stageScrollRect.anchoredPosition = new Vector2 (stageScrollRect.anchoredPosition.x, 0);
-        for ( int i = 1; i < WorldScrollContentRect.transform.childCount; i++ )
-        {
-            var worldButtonRect = WorldScrollContentRect.transform.GetChild (i).GetComponent<RectTransform> ();
-            worldButtonRect.anchoredPosition = new Vector2 (worldButtonRect.anchoredPosition.x, 0);
-        }
-    }
-
-    void Create_WorldSelect(SortedList<string, List<TextAsset>> WorldList)
-    {
-        //맵 상에 있는 대분류 버튼을 찾는다.
-        GameObject WorldButtonTemplate = WorldScrollContentRect.gameObject.transform.Find ("Button").gameObject;
-
-        if ( WorldButtonTemplate != null )
-        {
-            int i = 0;
-            WorldButtonTemplate.SetActive (false);
-            foreach ( KeyValuePair<string, List<TextAsset>> Stage in WorldList )
-            {
-                GameObject temp = Instantiate (WorldButtonTemplate);
-                RectTransform tempRect = temp.GetComponent<RectTransform> ();
-                temp.transform.SetParent (WorldScrollContentRect.gameObject.transform);
-                float ButtonHeight = WorldScrollContentRect.rect.height * 0.8f;
-                tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, ButtonHeight);
-                tempRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, ButtonHeight);
-                tempRect.pivot = new Vector2 (0.5f, 0.55f);
-                tempRect.anchoredPosition = new Vector2 ((600f) * (i - 1), 0f);
-                tempRect.gameObject.SetActive (true);
-                temp.GetComponent<WorldSelectButton> ().Init (Stage.Key, Stage.Value);
-
-                UnityAction Call = delegate { OnClick_WorldButton (Stage.Key); };
-                temp.GetComponent<Button> ().onClick.AddListener (Call);
-
-                i++;
-            }
-        }
 
     }
 
-    void Classify_Map(out SortedList<string, List<TextAsset>> WorldList, List<TextAsset> mapSources)
+    SortedList<string, List<TextAsset>> Classify_Map(List<TextAsset> mapSources)
     {
         SortedList<string, List<TextAsset>> tempWorldList = new SortedList<string, List<TextAsset>> ();
         //파일 명: map-(대분류)-(소분류)
         //KeyValueSortedList 만들어서 쓰자
-        //string : 대분류를 나타내는 문자열
         //맵들을 대분류에 맞게 분류한다.
+
         foreach ( TextAsset mapSource in mapSources )
         {
             string World = MapFileUtil.mapWorld (mapSource);
@@ -297,7 +208,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
                 tempWorldList.Add (World, temp);
             }
         }
-        WorldList = tempWorldList;
+        return tempWorldList;
     }
 
     void StartStage(List<TextAsset> selection,int index)
@@ -305,13 +216,7 @@ public class StageSelectionInitializerScript : MonoBehaviour
         Configuration.Instance.activatedMapSource = selection[index];
         Configuration.List = selection;
         Configuration.Instance.mapName = MapFileUtil.mapTitleOfFile (selection[index]);
-        SceneManager.LoadScene ("GameplayScene");
-    }
-
-    void StartStage()
-    {
-        var selection = mapList [dropdown.value];
-        Configuration.Instance.activatedMapSource = selection;
+        TitleMusicScript.Instance.StopMusic ();
         SceneManager.LoadScene ("GameplayScene");
     }
 }

@@ -31,6 +31,11 @@ namespace Assets.Core.Sound
         private AudioClip Restart;
         private AudioClip GlassCreate;
         private AudioClip GlassDestroy;
+        private AudioClip GlassReady;
+        private AudioClip GlassUnReady;
+        private AudioClip SpringUse;
+        private AudioClip SpringReady;
+        private AudioClip SpringUnReady;
 
         public PlayerSoundController(GameObject gameObject)
         {
@@ -48,6 +53,11 @@ namespace Assets.Core.Sound
             Restart = Resources.Load<AudioClip> ("sounds/restart");
             GlassCreate = Resources.Load<AudioClip> ("sounds/replace");
             GlassDestroy = Resources.Load<AudioClip> ("sounds/glass_break");
+            GlassReady = Resources.Load<AudioClip> ("sounds/glass_ready");
+            GlassUnReady = Resources.Load<AudioClip> ("sounds/glass_unready");
+            SpringUse = Resources.Load<AudioClip> ("sounds/spring");
+            SpringReady = Resources.Load<AudioClip> ("sounds/spring_ready");
+            SpringUnReady = Resources.Load<AudioClip> ("sounds/spring_unready");
 
             soundMap = new Dictionary<int, AudioClip> ()
             {
@@ -71,6 +81,16 @@ namespace Assets.Core.Sound
             audioSource.PlayOneShot (GlassDestroy);
         }
 
+        public void OnGlassReady()
+        {
+            audioSource.PlayOneShot (GlassReady, 0.5f);
+        }
+
+        public void OnGlassUnReady()
+        {
+            audioSource.PlayOneShot (GlassUnReady);
+        }
+
         public void OnLabelSound(Label l)
         {
             audioSource.PlayOneShot (soundMap [l.Value]);
@@ -78,12 +98,27 @@ namespace Assets.Core.Sound
 
         public void OnRefuse()
         {
-            audioSource.PlayOneShot (Refuse);
+            audioSource.PlayOneShot (Refuse, 0.7f);
         }
 
         public void OnRestart()
         {
             audioSource.PlayOneShot (Restart);
+        }
+
+        public void OnSpringReady()
+        {
+            audioSource.PlayOneShot (SpringReady, 0.5f);
+        }
+
+        public void OnSpringUnReady()
+        {
+            audioSource.PlayOneShot (SpringUnReady, 0.5f);
+        }
+
+        public void OnSpringUse()
+        {
+            audioSource.PlayOneShot (SpringUse);
         }
     }
 }

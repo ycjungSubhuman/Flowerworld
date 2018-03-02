@@ -14,5 +14,10 @@ namespace Assets.Core.Sound
         void OnLabelSound(Label l);
         void OnGlassCreate();
         void OnGlassDestroy();
+        void OnGlassReady();
+        void OnGlassUnReady();
+        void OnSpringUse();
+        void OnSpringReady();
+        void OnSpringUnReady();
     }
 }

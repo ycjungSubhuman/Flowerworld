@@ -1,7 +1,8 @@
 ﻿title Tutorial 3
-goalcount 10
-pattern A,B,C
+goalcount 9
+pattern A,B,B
 item 0/(0,0,0,0)/0
 comment "풀밭은 언제든 지나갈 수 있습니다"
 block
-        A,^ | * | B | C | A | * | C | A | B | * | A,$ | 
+          |  |  | * |  |  |  |  |
+        A,^ | A | B | B | B | A | * | B,$ |
