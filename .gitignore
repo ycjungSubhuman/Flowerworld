@@ -51,4 +51,4 @@ cmd = '<path to UnityYAMLMerge>' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"
 # End of https://www.gitignore.io/api/unity
 
 # Map Compilation Results
-Assets/Resources/maps/*
+Assets/Resources/maps/*.json
