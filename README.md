@@ -15,3 +15,5 @@
 [게임 다운로드](https://postechackr.sharepoint.com/:u:/s/Gpos/EUH_7assvGtOi0Es6CdkZzMBMoBO5klTB0d6hnP3BKKHPw?e=zcow6g)
 
 (Links and descriptions are provided from GPos web page (https://gpos.postech.ac.kr)
+
+To edit and run the project, please run 'comipileAll.bat' before openning the project.
