@@ -1,6 +1,6 @@
 # 플라월드(Flowerworld)
 
-
+![image](flowerworld.png)
 
 주어진 암호문을 따라 꽃밭 미로를 빠져나가자!
 
